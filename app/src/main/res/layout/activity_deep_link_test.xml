@@ -8,9 +8,23 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context=".DeepLinkTestActivity">
 
-    <TextView
+    <EditText
             android:text="@string/hello_world"
+            android:id="@+id/deep_link_input"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:hint="Enter deep link"
+            />
+    <Button android:id="@+id/deep_link_action_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="fire deep link"
+            android:layout_below="@id/deep_link_input"
+            android:layout_centerHorizontal="true"
+            android:onClick="testDeepLink"
+            />
 
 </RelativeLayout>
