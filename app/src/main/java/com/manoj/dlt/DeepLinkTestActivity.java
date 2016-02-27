@@ -90,6 +90,6 @@ public class DeepLinkTestActivity extends AppCompatActivity
 
     private void raiseError(String errorText)
     {
-        Toast.makeText(this,errorText,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, errorText, Toast.LENGTH_LONG).show();
     }
 }
