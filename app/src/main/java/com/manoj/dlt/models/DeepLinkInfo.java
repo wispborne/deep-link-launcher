@@ -11,7 +11,7 @@ public class DeepLinkInfo
     private int _iconRes;
     private String _deepLink;
 
-    public DeepLinkInfo(String activityName, String activityLabel, String packageName, int iconRes, String deepLink)
+    public DeepLinkInfo(String deepLink, String activityName, String activityLabel, String packageName, int iconRes)
     {
         _activityName = activityName;
         _activitylabel = activityLabel;
@@ -78,7 +78,7 @@ public class DeepLinkInfo
             String activityLable = jsonObject.getString(JSON_KEYS.KEY_ACTIVITY_LABEL);
             String packageName = jsonObject.getString(JSON_KEYS.KEY_PACKAGE_NAME);
             int iconResId = jsonObject.getInt(JSON_KEYS.KEY_ICON_RESOURCE);
-            return new DeepLinkInfo(activityName,activityLable,packageName,iconResId,deepLink);
+            return new DeepLinkInfo(deepLink,activityName,activityLable,packageName,iconResId);
         }catch (JSONException jsonException)
         {
             return null;
