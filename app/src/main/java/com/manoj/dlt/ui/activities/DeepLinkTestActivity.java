@@ -1,31 +1,26 @@
 package com.manoj.dlt.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.manoj.dlt.R;
+import com.manoj.dlt.features.DeepLinkHistory;
+import com.manoj.dlt.models.DeepLinkInfo;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
 public class DeepLinkTestActivity extends AppCompatActivity
 {
     private AutoCompleteTextView _deepLinkInput;
+    private DeepLinkHistory _deepLinkHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,8 +28,18 @@ public class DeepLinkTestActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deep_link_test);
         initView();
+        _deepLinkHistory = new DeepLinkHistory(this);
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        List<String> array = _deepLinkHistory.getAllLinksSearched();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line,array);
+        _deepLinkInput.setAdapter(adapter);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -69,9 +74,12 @@ public class DeepLinkTestActivity extends AppCompatActivity
             Intent intent = new Intent();
             intent.setData(uri);
             intent.setAction(Intent.ACTION_VIEW);
-            if (canResolve(intent))
+            PackageManager pm = getPackageManager();
+            ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if (resolveInfo != null)
             {
                 startActivity(intent);
+                addResolvedInfoToHistory(deepLinkUri,resolveInfo);
             } else
             {
                 raiseError("No Activity found to resolve deep link");
@@ -85,23 +93,17 @@ public class DeepLinkTestActivity extends AppCompatActivity
     private void initView()
     {
         _deepLinkInput = (AutoCompleteTextView) findViewById(R.id.deep_link_input);
-        List<String> array = Arrays.asList("zophop","zopnow","asdafasfda");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line,array);
-        _deepLinkInput.setAdapter(adapter);
         _deepLinkInput.setThreshold(0);
     }
 
-    private boolean canResolve(Intent intent)
+    private void addResolvedInfoToHistory(String deepLink,ResolveInfo resolveInfo)
     {
-        PackageManager pm = getPackageManager();
-        if (pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
+        String packageName = resolveInfo.activityInfo.packageName;
+        String activityName = resolveInfo.activityInfo.targetActivity;
+        String activityLabel = resolveInfo.loadLabel(getPackageManager()).toString();
+        int iconRes = resolveInfo.getIconResource();
+        DeepLinkInfo deepLinkInfo = new DeepLinkInfo(activityName,activityLabel,packageName,iconRes,deepLink);
+        _deepLinkHistory.addLinkToHistory(deepLinkInfo);
     }
 
     private void raiseError(String errorText)
