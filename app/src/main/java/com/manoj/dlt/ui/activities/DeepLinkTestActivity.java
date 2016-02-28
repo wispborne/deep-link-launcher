@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -37,7 +39,7 @@ public class DeepLinkTestActivity extends AppCompatActivity
         super.onResume();
         List<String> array = _deepLinkHistory.getAllLinksSearched();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line,array);
+                android.R.layout.simple_dropdown_item_1line, array);
         _deepLinkInput.setAdapter(adapter);
     }
 
@@ -79,7 +81,7 @@ public class DeepLinkTestActivity extends AppCompatActivity
             if (resolveInfo != null)
             {
                 startActivity(intent);
-                addResolvedInfoToHistory(deepLinkUri,resolveInfo);
+                addResolvedInfoToHistory(deepLinkUri, resolveInfo);
             } else
             {
                 raiseError("No Activity found to resolve deep link");
@@ -96,13 +98,13 @@ public class DeepLinkTestActivity extends AppCompatActivity
         _deepLinkInput.setThreshold(0);
     }
 
-    private void addResolvedInfoToHistory(String deepLink,ResolveInfo resolveInfo)
+    private void addResolvedInfoToHistory(String deepLink, ResolveInfo resolveInfo)
     {
         String packageName = resolveInfo.activityInfo.packageName;
         String activityName = resolveInfo.activityInfo.targetActivity;
         String activityLabel = resolveInfo.loadLabel(getPackageManager()).toString();
         int iconRes = resolveInfo.getIconResource();
-        DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink,activityName,activityLabel,packageName,iconRes);
+        DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityName, activityLabel, packageName, iconRes);
         _deepLinkHistory.addLinkToHistory(deepLinkInfo);
     }
 

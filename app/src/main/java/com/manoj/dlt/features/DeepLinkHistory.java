@@ -21,7 +21,7 @@ public class DeepLinkHistory implements IDeepLinkHistory
     public List<DeepLinkInfo> getAllLinksSearchedInfo()
     {
         List<DeepLinkInfo> deepLinks = new ArrayList<DeepLinkInfo>();
-        for(String deepLinkInfoJson: _fileSystem.values())
+        for (String deepLinkInfoJson : _fileSystem.values())
         {
             deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
         }

@@ -19,6 +19,7 @@ public class DeepLinkInfo
         _iconRes = iconRes;
         _deepLink = deepLink;
     }
+
     //Deep link itself is the unique identifier for the model
     public String getId()
     {
@@ -61,8 +62,7 @@ public class DeepLinkInfo
             jsonObject.put(JSON_KEYS.KEY_PACKAGE_NAME, deepLinkInfo.getPackageName());
             jsonObject.put(JSON_KEYS.KEY_ICON_RESOURCE, deepLinkInfo.getIconRes());
             return jsonObject.toString();
-        }
-        catch (JSONException jsonException)
+        } catch (JSONException jsonException)
         {
             return deepLinkInfo.getId();
         }
@@ -78,8 +78,8 @@ public class DeepLinkInfo
             String activityLable = jsonObject.getString(JSON_KEYS.KEY_ACTIVITY_LABEL);
             String packageName = jsonObject.getString(JSON_KEYS.KEY_PACKAGE_NAME);
             int iconResId = jsonObject.getInt(JSON_KEYS.KEY_ICON_RESOURCE);
-            return new DeepLinkInfo(deepLink,activityName,activityLable,packageName,iconResId);
-        }catch (JSONException jsonException)
+            return new DeepLinkInfo(deepLink, activityName, activityLable, packageName, iconResId);
+        } catch (JSONException jsonException)
         {
             return null;
         }

@@ -2,7 +2,6 @@ package com.manoj.dlt.features;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.manoj.dlt.Constants;
 import com.manoj.dlt.interfaces.IFileSystem;
 
 import java.util.ArrayList;
@@ -14,16 +13,16 @@ public class FileSystem implements IFileSystem
     private SharedPreferences _preferences;
     private SharedPreferences.Editor _editor;
 
-    public FileSystem(Context context,String key)
+    public FileSystem(Context context, String key)
     {
-        _preferences = context.getSharedPreferences(key,Context.MODE_PRIVATE);
+        _preferences = context.getSharedPreferences(key, Context.MODE_PRIVATE);
         _editor = _preferences.edit();
     }
 
     @Override
     public void write(String key, String value)
     {
-        _editor.putString(key,value);
+        _editor.putString(key, value);
         _editor.commit();
     }
 
@@ -57,7 +56,7 @@ public class FileSystem implements IFileSystem
     public List<String> values()
     {
         List<String> values = new ArrayList<String>();
-        for(String key: keyList())
+        for (String key : keyList())
         {
             String value = read(key);
             values.add(value);
