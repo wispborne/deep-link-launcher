@@ -87,7 +87,7 @@ public class DeepLinkTestActivity extends AppCompatActivity
         List<String> array = Arrays.asList("zophop","zopnow","asdafasfda");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line,array);
-        _deepLinkInput.setAdapter(new AutoCompleteAdapter(this,android.R.layout.simple_dropdown_item_1line,array));
+        _deepLinkInput.setAdapter(adapter);
         _deepLinkInput.setThreshold(0);
     }
 
@@ -106,27 +106,5 @@ public class DeepLinkTestActivity extends AppCompatActivity
     private void raiseError(String errorText)
     {
         Toast.makeText(this, errorText, Toast.LENGTH_LONG).show();
-    }
-
-    private class AutoCompleteAdapter extends ArrayAdapter<String>
-    {
-        public AutoCompleteAdapter(Context context, int i, List<String> stringList)
-        {
-            super(context,i, stringList);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            TextView textView = new TextView(getContext());
-            String input = _deepLinkInput.getText().toString();
-            SpannableString inputHint = new SpannableString(input);
-            inputHint.setSpan(new ForegroundColorSpan(R.color.Blue), 0, inputHint.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textView.setText(inputHint);
-            SpannableString remtext = new SpannableString(getItem(position).replace(input,""));
-            remtext.setSpan(new ForegroundColorSpan(R.color.Black), 0, remtext.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textView.append(remtext);
-            return textView;
-        }
     }
 }
