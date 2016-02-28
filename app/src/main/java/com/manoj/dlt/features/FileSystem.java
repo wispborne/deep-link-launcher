@@ -11,9 +11,9 @@ public class FileSystem implements IFileSystem
     SharedPreferences _preferences;
     SharedPreferences.Editor _editor;
 
-    public FileSystem(Context context)
+    public FileSystem(Context context,String key)
     {
-        _preferences = context.getSharedPreferences(Constants.FILE_SYSTEM_KEY,Context.MODE_PRIVATE);
+        _preferences = context.getSharedPreferences(key,Context.MODE_PRIVATE);
         _editor = _preferences.edit();
     }
 
