@@ -5,11 +5,14 @@ import android.content.SharedPreferences;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.interfaces.IFileSystem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FileSystem implements IFileSystem
 {
 
-    SharedPreferences _preferences;
-    SharedPreferences.Editor _editor;
+    private SharedPreferences _preferences;
+    private SharedPreferences.Editor _editor;
 
     public FileSystem(Context context,String key)
     {
@@ -42,5 +45,23 @@ public class FileSystem implements IFileSystem
     {
         _editor.clear();
         _editor.commit();
+    }
+
+    @Override
+    public List<String> keyList()
+    {
+        return new ArrayList<String>(_preferences.getAll().keySet());
+    }
+
+    @Override
+    public List<String> values()
+    {
+        List<String> values = new ArrayList<String>();
+        for(String key: keyList())
+        {
+            String value = read(key);
+            values.add(value);
+        }
+        return values;
     }
 }
