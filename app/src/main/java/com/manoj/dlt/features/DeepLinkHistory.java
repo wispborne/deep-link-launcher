@@ -18,7 +18,7 @@ public class DeepLinkHistory implements IDeepLinkHistory
     }
 
     @Override
-    public List<DeepLinkInfo> getAllLinksSearched()
+    public List<DeepLinkInfo> getAllLinksSearchedInfo()
     {
         List<DeepLinkInfo> deepLinks = new ArrayList<DeepLinkInfo>();
         for(String deepLinkInfoJson: _fileSystem.values())
@@ -26,6 +26,12 @@ public class DeepLinkHistory implements IDeepLinkHistory
             deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
         }
         return deepLinks;
+    }
+
+    @Override
+    public List<String> getAllLinksSearched()
+    {
+        return _fileSystem.keyList();
     }
 
     @Override

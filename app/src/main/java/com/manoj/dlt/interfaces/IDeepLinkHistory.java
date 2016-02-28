@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface IDeepLinkHistory
 {
-    public List<DeepLinkInfo> getAllLinksSearched();
+    public List<DeepLinkInfo> getAllLinksSearchedInfo();
+
+    public List<String> getAllLinksSearched();
 
     public void addLinkToHistory(DeepLinkInfo deepLinkInfo);
 
