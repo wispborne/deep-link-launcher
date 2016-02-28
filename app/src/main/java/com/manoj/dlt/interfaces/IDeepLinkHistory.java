@@ -1,12 +1,14 @@
 package com.manoj.dlt.interfaces;
 
+import com.manoj.dlt.models.DeepLinkInfo;
+
 import java.util.List;
 
 public interface IDeepLinkHistory
 {
-    public List<String> getAllLinksSearched();
+    public List<DeepLinkInfo> getAllLinksSearched();
 
-    public void addLinkToHistory(String deepLink);
+    public void addLinkToHistory(DeepLinkInfo deepLinkInfo);
 
     public void removeLinkFromHistory(String deepLink);
 

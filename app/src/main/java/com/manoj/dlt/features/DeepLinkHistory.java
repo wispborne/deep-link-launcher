@@ -3,7 +3,9 @@ package com.manoj.dlt.features;
 import android.content.Context;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.interfaces.IDeepLinkHistory;
+import com.manoj.dlt.models.DeepLinkInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeepLinkHistory implements IDeepLinkHistory
@@ -16,26 +18,31 @@ public class DeepLinkHistory implements IDeepLinkHistory
     }
 
     @Override
-    public List<String> getAllLinksSearched()
+    public List<DeepLinkInfo> getAllLinksSearched()
     {
-        return null;
+        List<DeepLinkInfo> deepLinks = new ArrayList<DeepLinkInfo>();
+        for(String deepLinkInfoJson: _fileSystem.values())
+        {
+            deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
+        }
+        return deepLinks;
     }
 
     @Override
-    public void addLinkToHistory(String deepLink)
+    public void addLinkToHistory(DeepLinkInfo deepLinkInfo)
     {
-
+        _fileSystem.write(deepLinkInfo.getId(), DeepLinkInfo.toJson(deepLinkInfo));
     }
 
     @Override
     public void removeLinkFromHistory(String deepLink)
     {
-
+        _fileSystem.clear(deepLink);
     }
 
     @Override
     public void clearAllHistory()
     {
-
+        _fileSystem.clearAll();
     }
 }
