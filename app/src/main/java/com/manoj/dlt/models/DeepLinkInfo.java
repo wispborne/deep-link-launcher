@@ -1,5 +1,6 @@
 package com.manoj.dlt.models;
 
+import android.net.Uri;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,6 +11,7 @@ public class DeepLinkInfo
     private String _packageName;
     private int _iconRes;
     private String _deepLink;
+    private String _id;
 
     public DeepLinkInfo(String deepLink, String activityName, String activityLabel, String packageName, int iconRes)
     {
@@ -18,12 +20,13 @@ public class DeepLinkInfo
         _packageName = packageName;
         _iconRes = iconRes;
         _deepLink = deepLink;
+        _id = generateId();
     }
 
-    //Deep link itself is the unique identifier for the model
+    //Deep link without params itself is the unique identifier for the model
     public String getId()
     {
-        return _deepLink;
+        return _id;
     }
 
     public String getActivityName()
@@ -92,5 +95,20 @@ public class DeepLinkInfo
         public static String KEY_PACKAGE_NAME = "pacakage_name";
         public static String KEY_ACTIVITY_LABEL = "label";
         public static String KEY_ICON_RESOURCE = "icon_res";
+    }
+
+    private String generateId()
+    {
+        Uri uri = Uri.parse(_deepLink);
+        String id = uri.toString();
+        if (uri.getFragment() != null)
+        {
+            id = id.replace(uri.getFragment(), "").replace("#", "");
+        }
+        if (uri.getQuery() != null)
+        {
+            id = id.replace(uri.getQuery(), "").replace("?", "");
+        }
+        return id;
     }
 }
