@@ -60,12 +60,6 @@ public class AutoCompleteMatchArrayAdapter extends ArrayAdapter<String>
         return new Filter()
         {
             @Override
-            public CharSequence convertResultToString(Object resultValue)
-            {
-                return resultValue.toString();
-            }
-
-            @Override
             protected FilterResults performFiltering(CharSequence constraint)
             {
                 if (constraint != null)
@@ -94,11 +88,8 @@ public class AutoCompleteMatchArrayAdapter extends ArrayAdapter<String>
                 clear();
                 if (results != null && results.count > 0)
                 {
-                    ArrayList<String> filteredList = (ArrayList<String>) results.values;
+                    ArrayList<String> filteredList = new ArrayList<String>((List<String>) results.values);
                     addAll(filteredList);
-                } else
-                {
-                    addAll(_stringList);
                 }
                 notifyDataSetChanged();
             }
