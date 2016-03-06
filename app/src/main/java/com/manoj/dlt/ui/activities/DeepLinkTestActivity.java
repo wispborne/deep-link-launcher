@@ -101,31 +101,6 @@ public class DeepLinkTestActivity extends AppCompatActivity
         _deepLinkInput = (AutoCompleteTextView) findViewById(R.id.deep_link_input);
         _deepLinkInput.setAdapter(_adapter);
         _deepLinkInput.setThreshold(0);
-        _deepLinkInput.addTextChangedListener(getAutoCompleteTextChangedListener());
-    }
-
-    private TextWatcher getAutoCompleteTextChangedListener()
-    {
-        return new TextWatcher()
-        {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-            {
-                _adapter.setSearchString(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable)
-            {
-
-            }
-        };
     }
 
     private void addResolvedInfoToHistory(String deepLink, ResolveInfo resolveInfo)

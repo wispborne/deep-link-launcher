@@ -75,8 +75,11 @@ public class AutoCompleteMatchArrayAdapter extends ArrayAdapter<String>
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results)
             {
-                _searchString = constraint.toString();
                 clear();
+                if(constraint != null)
+                {
+                    _searchString = constraint.toString();
+                }
                 if (results != null && results.count > 0)
                 {
                     addAll((List<String>) results.values);
