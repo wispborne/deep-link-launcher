@@ -6,15 +6,17 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
+import com.manoj.dlt.ui.adapters.AutoCompleteMatchArrayAdapter;
 
 import java.util.List;
 
@@ -23,24 +25,28 @@ public class DeepLinkTestActivity extends AppCompatActivity
 {
     private AutoCompleteTextView _deepLinkInput;
     private DeepLinkHistory _deepLinkHistory;
+    private AutoCompleteMatchArrayAdapter _adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deep_link_test);
-        initView();
         _deepLinkHistory = new DeepLinkHistory(this);
+        initView();
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
-        List<String> array = _deepLinkHistory.getAllLinksSearched();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, array);
-        _deepLinkInput.setAdapter(adapter);
+        refreshAutoCompleteDeepLinks();
+    }
+
+    private void refreshAutoCompleteDeepLinks()
+    {
+        List<String> stringList = _deepLinkHistory.getAllLinksSearched();
+        _adapter.updateData(stringList);
     }
 
     @Override
@@ -94,8 +100,36 @@ public class DeepLinkTestActivity extends AppCompatActivity
 
     private void initView()
     {
+        List<String> stringList = _deepLinkHistory.getAllLinksSearched();
+        _adapter = new AutoCompleteMatchArrayAdapter(this, R.layout.autocomplete_textview, stringList);
         _deepLinkInput = (AutoCompleteTextView) findViewById(R.id.deep_link_input);
+        _deepLinkInput.setAdapter(_adapter);
         _deepLinkInput.setThreshold(0);
+        _deepLinkInput.addTextChangedListener(getAutoCompleteTextChangedListener());
+    }
+
+    private TextWatcher getAutoCompleteTextChangedListener()
+    {
+        return new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+                _adapter.setSearchString(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+
+            }
+        };
     }
 
     private void addResolvedInfoToHistory(String deepLink, ResolveInfo resolveInfo)
