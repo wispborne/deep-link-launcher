@@ -77,6 +77,7 @@ public class DeepLinkTestActivity extends AppCompatActivity
             Intent intent = new Intent();
             intent.setData(uri);
             intent.setAction(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PackageManager pm = getPackageManager();
             ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
             if (resolveInfo != null)
