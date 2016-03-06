@@ -4,7 +4,7 @@ import android.net.Uri;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DeepLinkInfo
+public class DeepLinkInfo implements Comparable
 {
     private String _activityName;
     private String _activitylabel;
@@ -12,14 +12,16 @@ public class DeepLinkInfo
     private int _iconRes;
     private String _deepLink;
     private String _id;
+    private long _updatedTime; //Milliseconds
 
-    public DeepLinkInfo(String deepLink, String activityName, String activityLabel, String packageName, int iconRes)
+    public DeepLinkInfo(String deepLink, String activityName, String activityLabel, String packageName, int iconRes, long updatedTime)
     {
         _activityName = activityName;
         _activitylabel = activityLabel;
         _packageName = packageName;
         _iconRes = iconRes;
         _deepLink = deepLink;
+        _updatedTime = updatedTime;
         _id = generateId();
     }
 
@@ -54,6 +56,11 @@ public class DeepLinkInfo
         return _iconRes;
     }
 
+    public long getUpdatedTime()
+    {
+        return _updatedTime;
+    }
+
     public static String toJson(DeepLinkInfo deepLinkInfo)
     {
         try
@@ -64,6 +71,7 @@ public class DeepLinkInfo
             jsonObject.put(JSON_KEYS.KEY_ACTIVITY_LABEL, deepLinkInfo.getActivityLabel());
             jsonObject.put(JSON_KEYS.KEY_PACKAGE_NAME, deepLinkInfo.getPackageName());
             jsonObject.put(JSON_KEYS.KEY_ICON_RESOURCE, deepLinkInfo.getIconRes());
+            jsonObject.put(JSON_KEYS.KEY_UPDATED_TIME, deepLinkInfo.getUpdatedTime());
             return jsonObject.toString();
         } catch (JSONException jsonException)
         {
@@ -81,20 +89,29 @@ public class DeepLinkInfo
             String activityLable = jsonObject.getString(JSON_KEYS.KEY_ACTIVITY_LABEL);
             String packageName = jsonObject.getString(JSON_KEYS.KEY_PACKAGE_NAME);
             int iconResId = jsonObject.getInt(JSON_KEYS.KEY_ICON_RESOURCE);
-            return new DeepLinkInfo(deepLink, activityName, activityLable, packageName, iconResId);
+            long updatedTime = jsonObject.getLong(JSON_KEYS.KEY_UPDATED_TIME);
+            return new DeepLinkInfo(deepLink, activityName, activityLable, packageName, iconResId, updatedTime);
         } catch (JSONException jsonException)
         {
             return null;
         }
     }
 
-    private static class JSON_KEYS
+    @Override
+    public int compareTo(Object o)
     {
-        public static String KEY_DEEP_LINK = "deep_link";
-        public static String KEY_ACTIVITY_NAME = "activity_name";
-        public static String KEY_PACKAGE_NAME = "pacakage_name";
-        public static String KEY_ACTIVITY_LABEL = "label";
-        public static String KEY_ICON_RESOURCE = "icon_res";
+        if (o == null || !(o instanceof DeepLinkInfo))
+        {
+            return -1;
+        }
+        DeepLinkInfo that = (DeepLinkInfo) o;
+        if (this.getUpdatedTime() < that.getUpdatedTime())
+        {
+            return -1;
+        } else
+        {
+            return 1;
+        }
     }
 
     private String generateId()
@@ -110,5 +127,15 @@ public class DeepLinkInfo
             id = id.replace(uri.getQuery(), "").replace("?", "");
         }
         return id;
+    }
+
+    private static class JSON_KEYS
+    {
+        public static String KEY_DEEP_LINK = "deep_link";
+        public static String KEY_ACTIVITY_NAME = "activity_name";
+        public static String KEY_PACKAGE_NAME = "pacakage_name";
+        public static String KEY_ACTIVITY_LABEL = "label";
+        public static String KEY_ICON_RESOURCE = "icon_res";
+        public static String KEY_UPDATED_TIME = "update_time";
     }
 }

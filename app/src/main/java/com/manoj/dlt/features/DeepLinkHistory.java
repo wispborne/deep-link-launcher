@@ -6,6 +6,8 @@ import com.manoj.dlt.interfaces.IDeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DeepLinkHistory implements IDeepLinkHistory
@@ -25,6 +27,7 @@ public class DeepLinkHistory implements IDeepLinkHistory
         {
             deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
         }
+        Collections.sort(deepLinks);
         return deepLinks;
     }
 
