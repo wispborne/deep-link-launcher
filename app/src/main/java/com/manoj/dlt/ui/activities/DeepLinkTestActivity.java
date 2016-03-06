@@ -109,7 +109,7 @@ public class DeepLinkTestActivity extends AppCompatActivity
         String activityName = resolveInfo.activityInfo.targetActivity;
         String activityLabel = resolveInfo.loadLabel(getPackageManager()).toString();
         int iconRes = resolveInfo.getIconResource();
-        DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityName, activityLabel, packageName, iconRes);
+        DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityName, activityLabel, packageName, iconRes, System.currentTimeMillis());
         _deepLinkHistory.addLinkToHistory(deepLinkInfo);
     }
 
