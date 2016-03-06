@@ -62,34 +62,24 @@ public class AutoCompleteMatchArrayAdapter extends ArrayAdapter<String>
             @Override
             protected FilterResults performFiltering(CharSequence constraint)
             {
+                FilterResults filterResults = new FilterResults();
                 if (constraint != null)
                 {
-                    ArrayList<String> stringResults = new ArrayList<>();
-                    for (String string : _stringList)
-                    {
-                        if (string.contains(constraint))
-                        {
-                            stringResults.add(string);
-                        }
-                    }
-                    FilterResults filterResults = new FilterResults();
-                    filterResults.values = stringResults;
-                    filterResults.count = stringResults.size();
-                    return filterResults;
-                } else
-                {
-                    return new FilterResults();
+                    List<String> resultList = getMatchingStrings(constraint);
+                    filterResults.values = resultList;
+                    filterResults.count = resultList.size();
                 }
+                return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results)
             {
+                _searchString = constraint.toString();
                 clear();
                 if (results != null && results.count > 0)
                 {
-                    ArrayList<String> filteredList = new ArrayList<String>((List<String>) results.values);
-                    addAll(filteredList);
+                    addAll((List<String>) results.values);
                 }
                 notifyDataSetChanged();
             }
@@ -102,8 +92,26 @@ public class AutoCompleteMatchArrayAdapter extends ArrayAdapter<String>
         notifyDataSetChanged();
     }
 
-    public void setSearchString(String searchString)
+    //Ordering of results are all prefix matches first, followed by all substring matches.
+    private List<String> getMatchingStrings(CharSequence constraint)
     {
-        _searchString = searchString;
+        ArrayList<String> prefixList = new ArrayList<>();
+        ArrayList<String> substringList = new ArrayList<>();
+        ArrayList<String> resultList = new ArrayList<>();
+        for (String string : _stringList)
+        {
+            if (string.startsWith(constraint.toString()))
+            {
+                prefixList.add(string);
+            }
+            else if(string.contains(constraint))
+            {
+                substringList.add(string);
+            }
+        }
+        resultList.addAll(prefixList);
+        resultList.addAll(substringList);
+        return resultList;
     }
+
 }

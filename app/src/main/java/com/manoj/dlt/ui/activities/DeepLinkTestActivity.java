@@ -12,8 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
 import com.manoj.dlt.R;
+import com.manoj.dlt.Utilities;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.ui.adapters.AutoCompleteMatchArrayAdapter;
@@ -86,11 +86,11 @@ public class DeepLinkTestActivity extends AppCompatActivity
                 addResolvedInfoToHistory(deepLinkUri, resolveInfo);
             } else
             {
-                raiseError("No Activity found to resolve deep link");
+                Utilities.raiseError(getString(R.string.error_no_activity_resolved), this);
             }
         } else
         {
-            raiseError("Uri is improperly formed");
+            Utilities.raiseError(getString(R.string.error_improper_uri), this);
         }
     }
 
@@ -138,8 +138,5 @@ public class DeepLinkTestActivity extends AppCompatActivity
         _deepLinkHistory.addLinkToHistory(deepLinkInfo);
     }
 
-    private void raiseError(String errorText)
-    {
-        Toast.makeText(this, errorText, Toast.LENGTH_LONG).show();
-    }
+
 }

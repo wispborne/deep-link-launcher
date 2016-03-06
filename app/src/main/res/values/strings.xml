@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="error_no_activity_resolved">"No activity found to resolve the given deep link"</string>
+    <string name="error_improper_uri">"Improper URI detected. please check again "</string>
 </resources>
