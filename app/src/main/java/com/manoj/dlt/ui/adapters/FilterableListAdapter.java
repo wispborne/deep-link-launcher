@@ -45,7 +45,6 @@ public abstract class FilterableListAdapter<T> extends BaseAdapter implements Fi
     {
         _originalList = baseData;
         updateResults(_searchString);
-        notifyDataSetChanged();
     }
 
     public void updateResults(CharSequence searchString)
