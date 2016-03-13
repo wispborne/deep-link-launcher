@@ -51,7 +51,6 @@ public abstract class FilterableListAdapter<T> extends BaseAdapter implements Fi
     public void updateResults(CharSequence searchString)
     {
         getFilter().filter(searchString);
-        notifyDataSetChanged();
     }
 
     @Override
@@ -75,6 +74,7 @@ public abstract class FilterableListAdapter<T> extends BaseAdapter implements Fi
             {
                 _searchString = charSequence.toString();
                 _resultList = (List<T>) filterResults.values;
+                notifyDataSetChanged();
             }
         };
     }
