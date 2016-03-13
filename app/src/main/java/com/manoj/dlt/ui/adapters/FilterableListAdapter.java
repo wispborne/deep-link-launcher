@@ -1,5 +1,6 @@
 package com.manoj.dlt.ui.adapters;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -29,23 +30,28 @@ public abstract class FilterableListAdapter<T> extends BaseAdapter implements Fi
     @Override
     public int getCount()
     {
+        Log.d("deep","size = "+_resultList.size());
         return _resultList.size();
     }
 
     @Override
     public Object getItem(int i)
     {
+        Log.d("deep","call for item "+i);
         return _resultList.get(i);
     }
 
     public void updateBaseData(List<T> baseData)
     {
         _originalList = baseData;
+        updateResults(_searchString);
+        notifyDataSetChanged();
     }
 
     public void updateResults(CharSequence searchString)
     {
         getFilter().filter(searchString);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -60,6 +66,7 @@ public abstract class FilterableListAdapter<T> extends BaseAdapter implements Fi
                 List<T> resultList = getMatchingResults(charSequence);
                 results.values = resultList;
                 results.count = resultList.size();
+                Log.d("deep","filtering, cnt  = "+resultList.size());
                 return results;
             }
 
