@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 import com.manoj.dlt.R;
-import com.manoj.dlt.Utilities;
+import com.manoj.dlt.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
