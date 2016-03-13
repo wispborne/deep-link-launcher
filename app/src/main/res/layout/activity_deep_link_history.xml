@@ -14,6 +14,7 @@
                 android:text="@string/hello_world"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:id="@+id/deep_link_input"
                 android:singleLine="false"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/activity_horizontal_large_margin"
@@ -24,12 +25,14 @@
                 android:layout_height="52dp"
                 android:background="@drawable/go"
                 android:gravity="center_vertical"
+                android:id="@+id/deep_link_fire"
                 android:layout_gravity="center_vertical"/>
     </LinearLayout>
     <ListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:id="@+id/deep_link_list_view"
             android:paddingLeft="@dimen/activity_horizontal_medium_margin"
             android:paddingRight="@dimen/activity_horizontal_medium_margin"
             android:divider="@color/Gray"/>
