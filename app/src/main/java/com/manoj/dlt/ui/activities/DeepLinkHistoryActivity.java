@@ -2,11 +2,12 @@ package com.manoj.dlt.ui.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.manoj.dlt.R;
 
-public class DeepLinkHistoryActivity extends ActionBarActivity
+public class DeepLinkHistoryActivity extends AppCompatActivity
 {
 
     @Override
