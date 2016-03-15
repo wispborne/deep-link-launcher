@@ -7,12 +7,15 @@ import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -38,6 +41,22 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     public void initView()
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
+        _deepLinkInput.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent)
+            {
+                if(actionId == EditorInfo.IME_ACTION_GO)
+                {
+                    testDeepLink();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        });
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
         _history = new DeepLinkHistory(this);
         _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(),this);

@@ -19,7 +19,8 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/activity_horizontal_large_margin"
                 android:textSize="@dimen/abc_text_size_large_material"
-                android:minHeight="64dp"/>
+                android:minHeight="64dp"
+                android:imeOptions="actionGo"/>
         <TextView
                 android:layout_width="52dp"
                 android:layout_height="52dp"
