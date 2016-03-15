@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
+import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
 import com.manoj.dlt.utils.TextChangedListener;
 import com.manoj.dlt.utils.Utilities;
@@ -40,6 +42,15 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         _history = new DeepLinkHistory(this);
         _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(),this);
         _listView.setAdapter(_adapter);
+        _listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+            {
+                DeepLinkInfo info = (DeepLinkInfo)_adapter.getItem(position);
+                _deepLinkInput.setText(info.getDeepLink());
+            }
+        });
         _deepLinkInput.addTextChangedListener(new TextChangedListener()
         {
             @Override
