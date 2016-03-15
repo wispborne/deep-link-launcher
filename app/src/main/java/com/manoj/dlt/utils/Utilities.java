@@ -13,12 +13,12 @@ import com.manoj.dlt.models.DeepLinkInfo;
 
 public class Utilities
 {
-    public static SpannableStringBuilder colorPartialString(String text, int startPos, int endPos, int color)
+    public static SpannableStringBuilder colorPartialString(String text, int startPos, int length, int color)
     {
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        SpannableString redSpannable = new SpannableString(text);
-        redSpannable.setSpan(new ForegroundColorSpan(color), startPos, endPos, 0);
-        builder.append(redSpannable);
+        SpannableString spannable = new SpannableString(text);
+        spannable.setSpan(new ForegroundColorSpan(color), startPos, startPos + length, 0);
+        builder.append(spannable);
         return builder;
     }
 
