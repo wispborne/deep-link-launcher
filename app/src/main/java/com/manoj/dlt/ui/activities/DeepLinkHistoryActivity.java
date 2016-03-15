@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -46,12 +45,11 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent)
             {
-                if(actionId == EditorInfo.IME_ACTION_GO)
+                if (actionId == EditorInfo.IME_ACTION_GO)
                 {
                     testDeepLink();
                     return true;
-                }
-                else
+                } else
                 {
                     return false;
                 }
@@ -59,14 +57,14 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         });
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
         _history = new DeepLinkHistory(this);
-        _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(),this);
+        _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(), this);
         _listView.setAdapter(_adapter);
         _listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
-                DeepLinkInfo info = (DeepLinkInfo)_adapter.getItem(position);
+                DeepLinkInfo info = (DeepLinkInfo) _adapter.getItem(position);
                 _deepLinkInput.setText(info.getDeepLink());
             }
         });
