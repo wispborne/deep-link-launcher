@@ -9,6 +9,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
         <EditText
                 android:layout_width="0dp"
@@ -21,12 +22,12 @@
                 android:minHeight="64dp"
                 android:imeOptions="actionGo"/>
         <TextView
-                android:layout_width="52dp"
-                android:layout_height="52dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
                 android:background="@drawable/go"
                 android:gravity="center_vertical"
-                android:id="@+id/deep_link_fire"
-                android:layout_gravity="center_vertical"/>
+                android:id="@+id/deep_link_fire"/>
     </LinearLayout>
     <ListView
             android:layout_width="match_parent"

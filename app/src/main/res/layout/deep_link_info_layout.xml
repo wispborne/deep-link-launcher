@@ -5,9 +5,9 @@
         android:layout_height="wrap_content"
 >
     <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:padding="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="4dp"
             android:layout_centerVertical="true"
             android:id="@+id/deep_link_icon"/>
     <LinearLayout
@@ -22,7 +22,7 @@
                 android:id="@+id/deep_link_title"
                 android:singleLine="false"
                 android:textStyle="bold"
-                android:textSize="@dimen/abc_text_size_medium_material"/>
+                android:textSize="@dimen/abc_text_size_menu_material"/>
 
         <TextView
                 android:layout_width="match_parent"
