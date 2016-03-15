@@ -10,6 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:elevation="4dp"
             android:orientation="horizontal">
         <EditText
                 android:layout_width="0dp"
@@ -17,6 +18,7 @@
                 android:id="@+id/deep_link_input"
                 android:singleLine="false"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:paddingLeft="@dimen/activity_horizontal_large_margin"
                 android:textSize="@dimen/abc_text_size_large_material"
                 android:minHeight="64dp"
