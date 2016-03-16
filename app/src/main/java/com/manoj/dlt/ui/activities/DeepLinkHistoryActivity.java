@@ -114,6 +114,12 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        _adapter.updateBaseData(_history.getAllLinksSearchedInfo());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
