@@ -6,36 +6,44 @@
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.manoj.dlt.ui.activities.DeepLinkHistoryActivity">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:padding="10dp"
+            android:elevation="8dp"
+            android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:elevation="4dp"
-            android:orientation="horizontal">
-        <EditText
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/deep_link_input"
-                android:singleLine="false"
+            android:layout_height="wrap_content">
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:paddingLeft="@dimen/activity_horizontal_large_margin"
-                android:textSize="@dimen/abc_text_size_large_material"
-                android:minHeight="48dp"
-                android:imeOptions="actionGo"/>
-        <View
-                android:layout_width="1dp"
-                android:layout_height="40dp"
-                android:background="@color/LightGrey"
-                />
-        <TextView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/go"
                 android:gravity="center_vertical"
-                android:id="@+id/deep_link_fire"/>
-    </LinearLayout>
+                android:orientation="horizontal">
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/deep_link_input"
+                    android:singleLine="false"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="@dimen/activity_horizontal_large_margin"
+                    android:textSize="@dimen/abc_text_size_large_material"
+                    android:minHeight="48dp"
+                    android:imeOptions="actionGo"/>
+            <View
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:background="@color/LightGrey"
+                    />
+            <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:id="@+id/deep_link_fire"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
     <ListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
