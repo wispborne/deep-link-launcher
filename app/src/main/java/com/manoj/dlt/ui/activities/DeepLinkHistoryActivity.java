@@ -67,7 +67,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             {
                 DeepLinkInfo info = (DeepLinkInfo) _adapter.getItem(position);
                 _deepLinkInput.setText(info.getDeepLink());
-                _deepLinkInput.setSelection(info.getDeepLink().length()-1);
+                _deepLinkInput.setSelection(info.getDeepLink().length());
             }
         });
         _deepLinkInput.addTextChangedListener(new TextChangedListener()
