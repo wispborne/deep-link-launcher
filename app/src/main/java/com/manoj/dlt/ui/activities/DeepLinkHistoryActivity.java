@@ -145,23 +145,10 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         if (actionId == EditorInfo.IME_ACTION_GO)
         {
             return true;
-        } else if (keyEvent != null && enterKeyPressed(keyEvent))
-        {
-            return true;
         } else
         {
             return false;
         }
     }
-
-    private boolean enterKeyPressed(KeyEvent event)
-    {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
-    }
+    
 }
