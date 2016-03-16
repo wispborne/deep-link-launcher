@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import com.manoj.dlt.R;
+import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.utils.Utilities;
 
@@ -31,13 +33,13 @@ public class DeepLinkListAdapter extends FilterableListAdapter<DeepLinkInfo>
     }
 
     @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup)
+    public View getView(final int i, View convertView, ViewGroup viewGroup)
     {
         if (convertView == null)
         {
             convertView = LayoutInflater.from(_context).inflate(R.layout.deep_link_info_layout, viewGroup, false);
         }
-        DeepLinkInfo deepLinkInfo = (DeepLinkInfo) getItem(i);
+        final DeepLinkInfo deepLinkInfo = (DeepLinkInfo) getItem(i);
         String deepLink = deepLinkInfo.getDeepLink();
         CharSequence deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(_searchString), _searchString.length(), _context.getResources().getColor(R.color.Blue));
         Utilities.setTextViewText(convertView, R.id.deep_link_title, deepLinkTitle);
@@ -51,6 +53,16 @@ public class DeepLinkListAdapter extends FilterableListAdapter<DeepLinkInfo>
         {
             ((ImageView) convertView.findViewById(R.id.deep_link_icon)).setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_launcher));
         }
+        convertView.findViewById(R.id.deep_link_remove).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                _originalList.remove(i);
+                updateResults(_searchString);
+                new DeepLinkHistory(_context).removeLinkFromHistory(deepLinkInfo.getDeepLink());
+            }
+        });
         return convertView;
     }
 
