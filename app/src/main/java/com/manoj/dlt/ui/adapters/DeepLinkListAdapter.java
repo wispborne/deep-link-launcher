@@ -49,7 +49,7 @@ public class DeepLinkListAdapter extends FilterableListAdapter<DeepLinkInfo>
             ((ImageView) convertView.findViewById(R.id.deep_link_icon)).setImageDrawable(icon);
         } catch (PackageManager.NameNotFoundException exception)
         {
-            ((ImageView) convertView.findViewById(R.id.deep_link_icon)).setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_launcher));
+            ((ImageView) convertView.findViewById(R.id.deep_link_icon)).setImageDrawable(null);
         }
         return convertView;
     }
