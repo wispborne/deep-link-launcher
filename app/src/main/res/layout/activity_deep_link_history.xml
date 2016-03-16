@@ -21,11 +21,16 @@
                 android:background="@android:color/transparent"
                 android:paddingLeft="@dimen/activity_horizontal_large_margin"
                 android:textSize="@dimen/abc_text_size_large_material"
-                android:minHeight="64dp"
+                android:minHeight="48dp"
                 android:imeOptions="actionGo"/>
+        <View
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:background="@color/LightGrey"
+                />
         <TextView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_margin="8dp"
                 android:background="@drawable/go"
                 android:gravity="center_vertical"
