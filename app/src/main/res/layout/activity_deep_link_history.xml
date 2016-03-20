@@ -31,11 +31,7 @@
                     android:minHeight="48dp"
                     android:background="@color/White"
                     android:imeOptions="actionGo"/>
-            <View
-                    android:layout_width="1dp"
-                    android:layout_height="40dp"
-                    android:background="@color/LightGrey"
-                    />
+
             <TextView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
@@ -44,6 +40,13 @@
                     android:background="@drawable/go"
                     android:gravity="center_vertical"
                     android:id="@+id/deep_link_fire"/>
+            <View
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:layout_toLeftOf="@id/deep_link_fire"
+                    android:layout_centerVertical="true"
+                    android:background="@color/LightGrey"
+                    />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
     <ListView
