@@ -25,7 +25,7 @@
                     android:id="@+id/deep_link_input"
                     android:singleLine="false"
                     android:layout_height="wrap_content"
-                    android:paddingRight="33dp"
+                    android:paddingRight="42dp"
                     android:paddingLeft="@dimen/activity_horizontal_large_margin"
                     android:textSize="@dimen/abc_text_size_large_material"
                     android:minHeight="48dp"
@@ -38,7 +38,7 @@
                     android:layout_margin="8dp"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/go"
-                    android:gravity="center_vertical"
+                    android:layout_centerVertical="true"
                     android:id="@+id/deep_link_fire"/>
             <View
                     android:layout_width="1dp"
