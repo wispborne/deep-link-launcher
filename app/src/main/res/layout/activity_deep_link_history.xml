@@ -14,21 +14,21 @@
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
             <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:id="@+id/deep_link_input"
                     android:singleLine="false"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
+                    android:paddingRight="33dp"
                     android:paddingLeft="@dimen/activity_horizontal_large_margin"
                     android:textSize="@dimen/abc_text_size_large_material"
                     android:minHeight="48dp"
+                    android:background="?android:attr/selectableItemBackground"
                     android:imeOptions="actionGo"/>
             <View
                     android:layout_width="1dp"
@@ -39,10 +39,11 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_margin="8dp"
+                    android:layout_alignParentRight="true"
                     android:background="@drawable/go"
                     android:gravity="center_vertical"
                     android:id="@+id/deep_link_fire"/>
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
     <ListView
             android:layout_width="match_parent"
