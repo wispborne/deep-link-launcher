@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 import com.manoj.dlt.R;
-import com.manoj.dlt.Utilities;
+import com.manoj.dlt.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class AutoCompleteMatchArrayAdapter extends ArrayAdapter<String>
         int matchStartPos = matchingString.indexOf(_searchString);
         if (matchStartPos >= 0)
         {
-            SpannableStringBuilder builder = Utilities.colorPartialString(matchingString, matchStartPos, matchStartPos + _searchString.length(), _context.getResources().getColor(R.color.Blue));
+            SpannableStringBuilder builder = Utilities.colorPartialString(matchingString, matchStartPos, _searchString.length(), _context.getResources().getColor(R.color.Blue));
             textView.setText(builder, TextView.BufferType.SPANNABLE);
         } else
         {

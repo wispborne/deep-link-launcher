@@ -6,14 +6,12 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import com.manoj.dlt.R;
-import com.manoj.dlt.Utilities;
+import com.manoj.dlt.utils.Utilities;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.ui.adapters.AutoCompleteMatchArrayAdapter;
@@ -106,10 +104,8 @@ public class DeepLinkTestActivity extends AppCompatActivity
     private void addResolvedInfoToHistory(String deepLink, ResolveInfo resolveInfo)
     {
         String packageName = resolveInfo.activityInfo.packageName;
-        String activityName = resolveInfo.activityInfo.targetActivity;
         String activityLabel = resolveInfo.loadLabel(getPackageManager()).toString();
-        int iconRes = resolveInfo.getIconResource();
-        DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityName, activityLabel, packageName, iconRes, System.currentTimeMillis());
+        DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis());
         _deepLinkHistory.addLinkToHistory(deepLinkInfo);
     }
 
