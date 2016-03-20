@@ -8,10 +8,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.activities.DeepLinkTestActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name=".ui.activities.DeepLinkHistoryActivity"
             android:label="@string/title_activity_deep_link_history"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
