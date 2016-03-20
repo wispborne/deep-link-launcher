@@ -92,10 +92,10 @@ public class DeepLinkInfo implements Comparable
         DeepLinkInfo that = (DeepLinkInfo) o;
         if (this.getUpdatedTime() < that.getUpdatedTime())
         {
-            return -1;
+            return 1;
         } else
         {
-            return 1;
+            return -1;
         }
     }
 
