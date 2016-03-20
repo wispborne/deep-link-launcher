@@ -37,9 +37,41 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         initView();
     }
 
-    public void initView()
+    private void initView()
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
+        _listView = (ListView) findViewById(R.id.deep_link_list_view);
+        _history = new DeepLinkHistory(this);
+        _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(), this);
+        configureListView();
+        configureDeepLinkInput();
+        findViewById(R.id.deep_link_fire).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                testDeepLink();
+            }
+        });
+    }
+
+    private void configureListView()
+    {
+        _listView.setAdapter(_adapter);
+        _listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+            {
+                DeepLinkInfo info = (DeepLinkInfo) _adapter.getItem(position);
+                _deepLinkInput.setText(info.getDeepLink());
+                _deepLinkInput.setSelection(info.getDeepLink().length());
+            }
+        });
+    }
+
+    private void configureDeepLinkInput()
+    {
         _deepLinkInput.requestFocus();
         _deepLinkInput.setOnEditorActionListener(new TextView.OnEditorActionListener()
         {
@@ -56,34 +88,12 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 }
             }
         });
-        _listView = (ListView) findViewById(R.id.deep_link_list_view);
-        _history = new DeepLinkHistory(this);
-        _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(), this);
-        _listView.setAdapter(_adapter);
-        _listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
-            {
-                DeepLinkInfo info = (DeepLinkInfo) _adapter.getItem(position);
-                _deepLinkInput.setText(info.getDeepLink());
-                _deepLinkInput.setSelection(info.getDeepLink().length());
-            }
-        });
         _deepLinkInput.addTextChangedListener(new TextChangedListener()
         {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
                 _adapter.updateResults(charSequence);
-            }
-        });
-        findViewById(R.id.deep_link_fire).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                testDeepLink();
             }
         });
     }
