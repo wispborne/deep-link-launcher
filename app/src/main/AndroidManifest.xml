@@ -10,8 +10,9 @@
         <activity
             android:name=".ui.activities.DeepLinkHistoryActivity"
             android:label="@string/title_activity_deep_link_history"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden" >
+<!-- No keyboard shown for first time, when tutorial is shown. Keyboard displayed via code on subsequent instances -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
