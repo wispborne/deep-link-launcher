@@ -8,7 +8,9 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.manoj.dlt.Constants;
 import com.manoj.dlt.features.DeepLinkHistory;
+import com.manoj.dlt.features.FileSystem;
 import com.manoj.dlt.models.DeepLinkInfo;
 
 public class Utilities
@@ -38,6 +40,25 @@ public class Utilities
         String activityLabel = resolveInfo.loadLabel(context.getPackageManager()).toString();
         DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis());
         new DeepLinkHistory(context).addLinkToHistory(deepLinkInfo);
+    }
+
+    public static boolean isAppTutorialSeen(Context context)
+    {
+        FileSystem oneTimeBooleanStore =  new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
+        String tutSeenBool = oneTimeBooleanStore.read(Constants.APP_TUTORIAL_SEEN);
+        if(tutSeenBool != null && tutSeenBool.equals("true"))
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
+
+    public static void setAppTutorialSeen(Context context)
+    {
+        FileSystem oneTimeBooleanStore =  new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
+        oneTimeBooleanStore.write(Constants.APP_TUTORIAL_SEEN, "true");
     }
 
 }
