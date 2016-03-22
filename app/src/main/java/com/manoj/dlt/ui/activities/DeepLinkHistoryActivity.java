@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -53,6 +51,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 testDeepLink();
             }
         });
+        setAppropriateLayout();
     }
 
     private void configureListView()
@@ -98,6 +97,36 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         });
     }
 
+    private void setAppropriateLayout()
+    {
+        if (Utilities.isAppTutorialSeen(this))
+        {
+            showDeepLinkRootView();
+        } else
+        {
+            View tutorialView = findViewById(R.id.tutorial_layer);
+            tutorialView.setVisibility(View.VISIBLE);
+            tutorialView.setClickable(true);
+            tutorialView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Utilities.setAppTutorialSeen(DeepLinkHistoryActivity.this);
+                    showDeepLinkRootView();
+                }
+            });
+        }
+    }
+
+    private void showDeepLinkRootView()
+    {
+        findViewById(R.id.tutorial_layer).setVisibility(View.GONE);
+        findViewById(R.id.deep_link_history_root).setVisibility(View.VISIBLE);
+        _deepLinkInput.requestFocus();
+        Utilities.showKeyboard(this);
+    }
+
     public void testDeepLink()
     {
         String deepLinkUri = _deepLinkInput.getText().toString();
@@ -141,5 +170,5 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             return false;
         }
     }
-    
+
 }
