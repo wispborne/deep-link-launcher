@@ -6,6 +6,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.manoj.dlt.Constants;
@@ -59,6 +60,18 @@ public class Utilities
     {
         FileSystem oneTimeBooleanStore =  new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
         oneTimeBooleanStore.write(Constants.APP_TUTORIAL_SEEN, "true");
+    }
+
+    public static void showKeyboard(Context activityContext)
+    {
+        InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+    }
+
+    public static void hideKeyboard(Context activityContext, View viewInWindow)
+    {
+        InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(viewInWindow.getWindowToken(),0);
     }
 
 }
