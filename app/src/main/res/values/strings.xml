@@ -6,4 +6,5 @@
     <string name="error_no_activity_resolved">"No activity found to resolve the given deep link"</string>
     <string name="error_improper_uri">"Improper URI detected. please check again "</string>
     <string name="title_activity_deep_link_history">Deep Link Activity</string>
+    <string name="error_title">Error</string>
 </resources>

@@ -2,14 +2,15 @@ package com.manoj.dlt.utils;
 
 import android.content.Context;
 import android.content.pm.ResolveInfo;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.manoj.dlt.Constants;
+import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.features.FileSystem;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -27,7 +28,10 @@ public class Utilities
 
     public static void raiseError(String errorText, Context context)
     {
-        Toast.makeText(context, errorText, Toast.LENGTH_LONG).show();
+        new AlertDialog.Builder(context).
+                setTitle(context.getString(R.string.error_title))
+                .setMessage(errorText)
+                .show();
     }
 
     public static void setTextViewText(View ancestor, int textViewId, CharSequence text)
