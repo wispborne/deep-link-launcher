@@ -49,12 +49,12 @@ public class Utilities
 
     public static boolean isAppTutorialSeen(Context context)
     {
-        FileSystem oneTimeBooleanStore =  new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
+        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
         String tutSeenBool = oneTimeBooleanStore.read(Constants.APP_TUTORIAL_SEEN);
-        if(tutSeenBool != null && tutSeenBool.equals("true"))
+        if (tutSeenBool != null && tutSeenBool.equals("true"))
         {
             return true;
-        }else
+        } else
         {
             return false;
         }
@@ -62,21 +62,21 @@ public class Utilities
 
     public static void setAppTutorialSeen(Context context)
     {
-        FileSystem oneTimeBooleanStore =  new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
+        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
         oneTimeBooleanStore.write(Constants.APP_TUTORIAL_SEEN, "true");
     }
 
     public static void showKeyboard(Context activityContext)
     {
         InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     public static void hideKeyboard(View viewInWindow)
     {
         Context windowContext = viewInWindow.getContext();
         InputMethodManager imm = (InputMethodManager) windowContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(viewInWindow.getWindowToken(),0);
+        imm.hideSoftInputFromWindow(viewInWindow.getWindowToken(), 0);
     }
 
 }
