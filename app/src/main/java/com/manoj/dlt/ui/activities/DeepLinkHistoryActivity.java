@@ -101,6 +101,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         {
             tutorialView.setVisibility(View.GONE);
             _deepLinkInput.requestFocus();
+            Utilities.showKeyboard(this);
         } else
         {
             tutorialView.setVisibility(View.VISIBLE);
@@ -113,6 +114,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                     Utilities.setAppTutorialSeen(getApplicationContext());
                     tutorialView.setVisibility(View.GONE);
                     _deepLinkInput.requestFocus();
+                    Utilities.showKeyboard(DeepLinkHistoryActivity.this);
                 }
             });
         }
