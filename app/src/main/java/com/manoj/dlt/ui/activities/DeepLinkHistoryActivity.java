@@ -7,14 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -53,6 +48,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 testDeepLink();
             }
         });
+        setTutorialView();
     }
 
     private void configureListView()
@@ -96,6 +92,30 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 _adapter.updateResults(charSequence);
             }
         });
+    }
+
+    private void setTutorialView()
+    {
+        final View tutorialView = (ImageView) findViewById(R.id.tutorial_layer);
+        if (Utilities.isAppTutorialSeen(this))
+        {
+            tutorialView.setVisibility(View.GONE);
+            _deepLinkInput.requestFocus();
+        } else
+        {
+            tutorialView.setVisibility(View.VISIBLE);
+            tutorialView.setClickable(true);
+            tutorialView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Utilities.setAppTutorialSeen(getApplicationContext());
+                    tutorialView.setVisibility(View.GONE);
+                    _deepLinkInput.requestFocus();
+                }
+            });
+        }
     }
 
     public void testDeepLink()
