@@ -68,9 +68,10 @@ public class Utilities
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
-    public static void hideKeyboard(Context activityContext, View viewInWindow)
+    public static void hideKeyboard(View viewInWindow)
     {
-        InputMethodManager imm = (InputMethodManager) activityContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        Context windowContext = viewInWindow.getContext();
+        InputMethodManager imm = (InputMethodManager) windowContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(viewInWindow.getWindowToken(),0);
     }
 

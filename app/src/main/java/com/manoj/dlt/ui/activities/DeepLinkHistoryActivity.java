@@ -111,7 +111,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view)
                 {
-                    Utilities.setAppTutorialSeen(getApplicationContext());
+                    Utilities.setAppTutorialSeen(DeepLinkHistoryActivity.this);
                     tutorialView.setVisibility(View.GONE);
                     _deepLinkInput.requestFocus();
                     Utilities.showKeyboard(DeepLinkHistoryActivity.this);
@@ -163,5 +163,5 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             return false;
         }
     }
-    
+
 }
