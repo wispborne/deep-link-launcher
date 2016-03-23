@@ -45,11 +45,12 @@
                 android:ellipsize="end"/>
 
     </LinearLayout>
-    <TextView
+    <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:id="@+id/deep_link_remove"
-            android:layout_marginRight="4dp"
+            android:layout_marginRight="8dp"
             android:background="@drawable/cancel"
+            android:scaleType="fitXY"
             />
 </LinearLayout>
