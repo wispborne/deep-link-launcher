@@ -13,12 +13,14 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
 import com.manoj.dlt.utils.TextChangedListener;
 import com.manoj.dlt.utils.Utilities;
+import io.fabric.sdk.android.Fabric;
 
 public class DeepLinkHistoryActivity extends AppCompatActivity
 {
@@ -31,6 +33,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_deep_link_history);
         initView();
     }
