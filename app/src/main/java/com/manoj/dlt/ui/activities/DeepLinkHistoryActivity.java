@@ -145,11 +145,11 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 Utilities.addResolvedInfoToHistory(deepLinkUri, resolveInfo, this);
             } else
             {
-                Utilities.raiseError(getString(R.string.error_no_activity_resolved), this);
+                Utilities.raiseError(getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkUri), this);
             }
         } else
         {
-            Utilities.raiseError(getString(R.string.error_improper_uri), this);
+            Utilities.raiseError(getString(R.string.error_improper_uri).concat(": ").concat(deepLinkUri), this);
         }
     }
 

@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import com.crashlytics.android.Crashlytics;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
@@ -32,6 +33,7 @@ public class Utilities
                 setTitle(context.getString(R.string.error_title))
                 .setMessage(errorText)
                 .show();
+        Crashlytics.logException(new Exception(errorText));
     }
 
     public static void setTextViewText(View ancestor, int textViewId, CharSequence text)
