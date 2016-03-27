@@ -33,7 +33,7 @@ public class Utilities
                 setTitle(context.getString(R.string.error_title))
                 .setMessage(errorText)
                 .show();
-        Crashlytics.logException(new Throwable(errorText));
+        Crashlytics.logException(new Exception(errorText));
     }
 
     public static void setTextViewText(View ancestor, int textViewId, CharSequence text)
