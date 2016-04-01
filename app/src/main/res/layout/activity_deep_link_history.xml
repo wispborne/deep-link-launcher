@@ -29,7 +29,7 @@
                 <EditText
                         android:layout_width="match_parent"
                         android:id="@+id/deep_link_input"
-                        android:singleLine="false"
+                        android:singleLine="true"
                         android:layout_height="wrap_content"
                         android:paddingRight="42dp"
                         android:paddingLeft="@dimen/activity_horizontal_large_margin"

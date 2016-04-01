@@ -77,7 +77,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent)
             {
-                if (shouldFireDeepLink(actionId, keyEvent))
+                if (shouldFireDeepLink(actionId))
                 {
                     testDeepLink();
                     return true;
@@ -160,15 +160,13 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         _adapter.updateBaseData(_history.getAllLinksSearchedInfo());
     }
 
-    private boolean shouldFireDeepLink(int actionId, KeyEvent keyEvent)
+    private boolean shouldFireDeepLink(int actionId)
     {
-        if (actionId == EditorInfo.IME_ACTION_GO)
+        if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)
         {
             return true;
-        } else
-        {
-            return false;
         }
+        return false;
     }
 
 }
