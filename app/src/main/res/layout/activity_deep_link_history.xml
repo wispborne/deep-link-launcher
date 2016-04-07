@@ -35,6 +35,7 @@
                         android:paddingLeft="@dimen/activity_horizontal_large_margin"
                         android:textSize="@dimen/abc_text_size_large_material"
                         android:minHeight="48dp"
+                        android:inputType="textUri"
                         android:background="@color/White"
                         android:imeOptions="actionGo"/>
 
