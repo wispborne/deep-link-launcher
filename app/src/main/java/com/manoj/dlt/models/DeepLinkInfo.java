@@ -99,6 +99,7 @@ public class DeepLinkInfo implements Comparable
         }
     }
 
+    //unique id for each deep link entry. similar deep links, varying in query or fragments are combined
     private String generateId()
     {
         Uri uri = Uri.parse(_deepLink);
@@ -111,6 +112,7 @@ public class DeepLinkInfo implements Comparable
         {
             id = id.replace(uri.getQuery(), "").replace("?", "");
         }
+        id = id.replace("/","");
         return id;
     }
 
