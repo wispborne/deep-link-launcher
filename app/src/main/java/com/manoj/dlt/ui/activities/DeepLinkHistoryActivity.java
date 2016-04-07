@@ -210,6 +210,9 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         if (uri.getScheme() == null || uri.getScheme().length() == 0)
         {
             return false;
+        } else if (uriText.contains("\n") || uriText.contains(" "))
+        {
+            return false;
         } else
         {
             return true;
