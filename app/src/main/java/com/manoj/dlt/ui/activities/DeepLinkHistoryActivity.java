@@ -1,5 +1,7 @@
 package com.manoj.dlt.ui.activities;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -9,10 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -97,6 +96,33 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         });
     }
 
+    private void pasteFromClipboard()
+    {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if(!isProperUri(_deepLinkInput.getText().toString()) && clipboardManager.hasPrimaryClip())
+        {
+            ClipData.Item clipItem = clipboardManager.getPrimaryClip().getItemAt(0);
+            if(clipItem != null)
+            {
+                if(clipItem.getText() != null)
+                {
+                    String clipBoardText = clipItem.getText().toString();
+                    if(isProperUri(clipBoardText))
+                    {
+                        setDeepLinkInputText(clipBoardText);
+                    }
+                } else if(clipItem.getUri() != null)
+                {
+                    String clipBoardText = clipItem.getUri().toString();
+                    if(isProperUri(clipBoardText))
+                    {
+                        setDeepLinkInputText(clipBoardText);
+                    }
+                }
+            }
+        }
+    }
+
     private void setAppropriateLayout()
     {
         if (Utilities.isAppTutorialSeen(this))
@@ -160,6 +186,13 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         _adapter.updateBaseData(_history.getAllLinksSearchedInfo());
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        pasteFromClipboard();
+    }
+
     private boolean shouldFireDeepLink(int actionId)
     {
         if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)
@@ -167,6 +200,24 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             return true;
         }
         return false;
+    }
+
+    private boolean isProperUri(String uriText)
+    {
+        Uri uri = Uri.parse(uriText);
+        if(uri.getScheme() == null || uri.getScheme().length() == 0)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
+    }
+
+    private void setDeepLinkInputText(String text)
+    {
+        _deepLinkInput.setText(text);
+        _deepLinkInput.setSelection(text.length());
     }
 
 }
