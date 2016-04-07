@@ -12,3 +12,4 @@ gradle*
 */build/
 build/
 app/fabric.properties
+app/releases
