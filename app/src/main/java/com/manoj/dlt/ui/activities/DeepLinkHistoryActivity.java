@@ -11,7 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -98,22 +101,22 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     private void pasteFromClipboard()
     {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if(!isProperUri(_deepLinkInput.getText().toString()) && clipboardManager.hasPrimaryClip())
+        if (!isProperUri(_deepLinkInput.getText().toString()) && clipboardManager.hasPrimaryClip())
         {
             ClipData.Item clipItem = clipboardManager.getPrimaryClip().getItemAt(0);
-            if(clipItem != null)
+            if (clipItem != null)
             {
-                if(clipItem.getText() != null)
+                if (clipItem.getText() != null)
                 {
                     String clipBoardText = clipItem.getText().toString();
-                    if(isProperUri(clipBoardText))
+                    if (isProperUri(clipBoardText))
                     {
                         setDeepLinkInputText(clipBoardText);
                     }
-                } else if(clipItem.getUri() != null)
+                } else if (clipItem.getUri() != null)
                 {
                     String clipBoardText = clipItem.getUri().toString();
-                    if(isProperUri(clipBoardText))
+                    if (isProperUri(clipBoardText))
                     {
                         setDeepLinkInputText(clipBoardText);
                     }
@@ -194,7 +197,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 
     private boolean shouldFireDeepLink(int actionId)
     {
-        if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)
+        if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)
         {
             return true;
         }
@@ -204,7 +207,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     private boolean isProperUri(String uriText)
     {
         Uri uri = Uri.parse(uriText);
-        if(uri.getScheme() == null || uri.getScheme().length() == 0)
+        if (uri.getScheme() == null || uri.getScheme().length() == 0)
         {
             return false;
         } else
