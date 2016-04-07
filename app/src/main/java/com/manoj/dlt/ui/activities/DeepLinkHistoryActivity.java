@@ -62,8 +62,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
                 DeepLinkInfo info = (DeepLinkInfo) _adapter.getItem(position);
-                _deepLinkInput.setText(info.getDeepLink());
-                _deepLinkInput.setSelection(info.getDeepLink().length());
+                setDeepLinkInputText(info.getDeepLink());
             }
         });
     }
@@ -156,7 +155,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     public void testDeepLink()
     {
         String deepLinkUri = _deepLinkInput.getText().toString();
-        if (deepLinkUri.contains(":"))
+        if (isProperUri(deepLinkUri))
         {
             Uri uri = Uri.parse(deepLinkUri);
             Intent intent = new Intent();
