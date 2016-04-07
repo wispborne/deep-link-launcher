@@ -28,6 +28,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     private EditText _deepLinkInput;
     private DeepLinkHistory _history;
     private DeepLinkListAdapter _adapter;
+    private String _previousClipboardText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -109,16 +110,18 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 if (clipItem.getText() != null)
                 {
                     String clipBoardText = clipItem.getText().toString();
-                    if (isProperUri(clipBoardText))
+                    if (isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
                     {
                         setDeepLinkInputText(clipBoardText);
+                        _previousClipboardText = clipBoardText;
                     }
                 } else if (clipItem.getUri() != null)
                 {
                     String clipBoardText = clipItem.getUri().toString();
-                    if (isProperUri(clipBoardText))
+                    if (isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
                     {
                         setDeepLinkInputText(clipBoardText);
+                        _previousClipboardText = clipBoardText;
                     }
                 }
             }
