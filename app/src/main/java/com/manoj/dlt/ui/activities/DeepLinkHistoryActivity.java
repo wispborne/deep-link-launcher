@@ -11,10 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -132,6 +129,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         if (Utilities.isAppTutorialSeen(this))
         {
+            Utilities.showAppRateDailogIfNeeded(this);
             showDeepLinkRootView();
         } else
         {

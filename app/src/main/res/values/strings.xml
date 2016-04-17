@@ -7,4 +7,11 @@
     <string name="error_improper_uri">"Improper URI detected"</string>
     <string name="title_activity_deep_link_history">Deep Link Activity</string>
     <string name="error_title">Error</string>
+
+    <!--String resources (override) for rate API-->
+    <string name="rate_dialog_title">Rate this app</string>
+    <string name="rate_dialog_message">Hi there! Would you please take out a few seconds to rate this app? The developer would really appreciate it :-)</string>
+    <string name="rate_dialog_ok">Sure, Rate it now!</string>
+    <string name="rate_dialog_cancel">Mark it TODO</string>
+    <string name="rate_dialog_no">No, Thanks</string>
 </resources>

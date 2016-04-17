@@ -1,5 +1,6 @@
 package com.manoj.dlt.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ResolveInfo;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistory;
 import com.manoj.dlt.features.FileSystem;
 import com.manoj.dlt.models.DeepLinkInfo;
+import hotchemi.android.rate.AppRate;
 
 public class Utilities
 {
@@ -79,6 +81,15 @@ public class Utilities
         Context windowContext = viewInWindow.getContext();
         InputMethodManager imm = (InputMethodManager) windowContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(viewInWindow.getWindowToken(), 0);
+    }
+
+    public static void showAppRateDailogIfNeeded(Activity activity)
+    {
+        AppRate.with(activity)
+                .setInstallDays(0) //number of days since install, default 10
+                .setLaunchTimes(3) //number of minimum launches, default 10
+                .monitor();
+        AppRate.showRateDialogIfMeetsConditions(activity);
     }
 
 }
