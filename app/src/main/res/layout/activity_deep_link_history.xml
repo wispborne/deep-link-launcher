@@ -8,7 +8,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:background="@color/White"
             android:id="@+id/deep_link_history_root"
             android:visibility="gone"
@@ -16,45 +15,45 @@
 
         <android.support.v7.widget.CardView
                 android:id="@+id/card_view"
-                android:padding="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:elevation="8dp"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <RelativeLayout
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
+                    android:background="@color/White"
                     android:orientation="horizontal">
                 <EditText
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:id="@+id/deep_link_input"
-                        android:singleLine="true"
                         android:layout_height="wrap_content"
-                        android:paddingRight="42dp"
-                        android:paddingLeft="@dimen/activity_horizontal_large_margin"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="4dp"
                         android:textSize="@dimen/abc_text_size_large_material"
                         android:minHeight="48dp"
                         android:inputType="textUri"
                         android:background="@color/White"
                         android:imeOptions="actionGo"/>
-
-                <TextView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_margin="8dp"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/go"
-                        android:layout_centerVertical="true"
-                        android:id="@+id/deep_link_fire"/>
                 <View
                         android:layout_width="1dp"
                         android:layout_height="40dp"
-                        android:layout_toLeftOf="@id/deep_link_fire"
-                        android:layout_centerVertical="true"
                         android:background="@color/LightGrey"
-                        />
-            </RelativeLayout>
+                />
+                <ImageView
+                        android:layout_width="44dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/go"
+                        android:background="?attr/selectableItemBackground"
+                        android:id="@+id/deep_link_fire"/>
+
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <ListView
                 android:layout_width="match_parent"
