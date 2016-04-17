@@ -87,6 +87,7 @@ public class Utilities
     {
         AppRate.with(activity)
                 .setInstallDays(0) //number of days since install, default 10
+                //TODO: this does not account for config changes, and number of lanches (5) includes config changes. Needs to be fixed
                 .setLaunchTimes(5) //number of minimum launches, default 10
                 .setShowNeverButton(false)
                 .setRemindInterval(2) //number of days since remind me later was clicked
