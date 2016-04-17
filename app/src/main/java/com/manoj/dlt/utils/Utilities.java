@@ -88,6 +88,8 @@ public class Utilities
         AppRate.with(activity)
                 .setInstallDays(0) //number of days since install, default 10
                 .setLaunchTimes(3) //number of minimum launches, default 10
+                .setShowNeverButton(false)
+                .setRemindInterval(2) //number of days since remind me later was clicked
                 .monitor();
         AppRate.showRateDialogIfMeetsConditions(activity);
     }
