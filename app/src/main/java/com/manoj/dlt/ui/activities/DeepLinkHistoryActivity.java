@@ -3,6 +3,7 @@ package com.manoj.dlt.ui.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -133,6 +134,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             showDeepLinkRootView();
         } else
         {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             View tutorialView = findViewById(R.id.tutorial_layer);
             tutorialView.setVisibility(View.VISIBLE);
             tutorialView.setClickable(true);
