@@ -19,6 +19,7 @@ import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
 import com.manoj.dlt.utils.TextChangedListener;
 import com.manoj.dlt.utils.Utilities;
+import hotchemi.android.rate.AppRate;
 
 public class DeepLinkHistoryActivity extends AppCompatActivity
 {
@@ -130,7 +131,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         if (Utilities.isAppTutorialSeen(this))
         {
-            Utilities.showAppRateDailogIfNeeded(this);
+            AppRate.showRateDialogIfMeetsConditions(this);
             showDeepLinkRootView();
         } else
         {

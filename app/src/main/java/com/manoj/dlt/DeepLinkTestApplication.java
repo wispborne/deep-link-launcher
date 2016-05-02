@@ -2,6 +2,7 @@ package com.manoj.dlt;
 
 import android.app.Application;
 import com.crashlytics.android.Crashlytics;
+import com.manoj.dlt.utils.Utilities;
 import io.fabric.sdk.android.Fabric;
 
 public class DeepLinkTestApplication extends Application
@@ -11,5 +12,6 @@ public class DeepLinkTestApplication extends Application
     {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+        Utilities.initializeAppRateDialog(getApplicationContext());
     }
 }

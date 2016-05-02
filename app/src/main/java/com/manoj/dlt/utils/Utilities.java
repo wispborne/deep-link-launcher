@@ -83,16 +83,14 @@ public class Utilities
         imm.hideSoftInputFromWindow(viewInWindow.getWindowToken(), 0);
     }
 
-    public static void showAppRateDailogIfNeeded(Activity activity)
+    public static void initializeAppRateDialog(Context context)
     {
-        AppRate.with(activity)
+        AppRate.with(context)
                 .setInstallDays(0) //number of days since install, default 10
-                //TODO: this does not account for config changes, and number of lanches (5) includes config changes. Needs to be fixed
-                .setLaunchTimes(5) //number of minimum launches, default 10
+                .setLaunchTimes(3) //number of minimum launches, default 10
                 .setShowNeverButton(false)
                 .setRemindInterval(2) //number of days since remind me later was clicked
                 .monitor();
-        AppRate.showRateDialogIfMeetsConditions(activity);
     }
 
 }
