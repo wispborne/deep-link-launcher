@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "5592928202",
+    "firebase_url": "https://sweltering-fire-2158.firebaseio.com",
+    "project_id": "sweltering-fire-2158",
+    "storage_bucket": "sweltering-fire-2158.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5592928202:android:e4b5f32222103da5",
+        "android_client_info": {
+          "package_name": "com.manoj.dlt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5592928202-ntp70akjhv580u0h610ekurf3n8io8l2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpwoSmsfPV5IkVQi-Mg-ZzrM5T0tohpG4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
