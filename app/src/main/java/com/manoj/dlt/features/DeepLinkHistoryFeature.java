@@ -69,7 +69,7 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
         _fileSystem.clearAll();
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe(sticky = true, priority = 1)
     public void onEvent(DeepLinkFireEvent deepLinkFireEvent)
     {
         addLinkToHistory(deepLinkFireEvent.getDeepLinkInfo());
