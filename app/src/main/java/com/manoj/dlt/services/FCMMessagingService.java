@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.manoj.dlt.utils.Utilities;
 
 import java.util.Map;
 
@@ -19,5 +20,7 @@ public class FCMMessagingService extends FirebaseMessagingService
         {
             Log.d("FCM","key = "+entry.getKey()+" , value = "+entry.getValue());
         }
+        String deepLink = remoteMessage.getData().get("deep_link");
+        Utilities.checkAndFireDeepLink(deepLink, getApplicationContext());
     }
 }
