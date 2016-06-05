@@ -15,9 +15,13 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.R;
-import com.manoj.dlt.features.DeepLinkHistoryFeature;
+import com.manoj.dlt.events.DeepLinkFireEvent;
 import com.manoj.dlt.features.FileSystem;
 import com.manoj.dlt.models.DeepLinkInfo;
+import com.manoj.dlt.models.ResultType;
+
+import org.greenrobot.eventbus.EventBus;
+
 import hotchemi.android.rate.AppRate;
 
 public class Utilities
@@ -26,17 +30,19 @@ public class Utilities
     {
         if(isProperUri(deepLinkUri))
         {
-            if(resolveAndAddToHistory(deepLinkUri, context))
+            if(resolveAndFire(deepLinkUri, context))
             {
                 return true;
             } else
             {
-                raiseError(context.getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkUri), context);
+                DeepLinkFireEvent deepLinkFireEvent = new DeepLinkFireEvent(ResultType.FAILURE, DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND);
+                EventBus.getDefault().postSticky(deepLinkFireEvent);
                 return false;
             }
         } else
         {
-            raiseError(context.getString(R.string.error_improper_uri).concat(": ").concat(deepLinkUri), context);
+            DeepLinkFireEvent deepLinkFireEvent = new DeepLinkFireEvent(ResultType.FAILURE, DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI);
+            EventBus.getDefault().postSticky(deepLinkFireEvent);
             return false;
         }
     }
@@ -56,7 +62,7 @@ public class Utilities
         }
     }
 
-    public static boolean resolveAndAddToHistory(String deepLinkUri, Context context)
+    public static boolean resolveAndFire(String deepLinkUri, Context context)
     {
         Uri uri = Uri.parse(deepLinkUri);
         Intent intent = new Intent();
@@ -68,7 +74,9 @@ public class Utilities
         if (resolveInfo != null)
         {
             context.startActivity(intent);
-            Utilities.addResolvedInfoToHistory(deepLinkUri, resolveInfo, context);
+            DeepLinkInfo deepLinkInfo = getDeepLinkInfo(deepLinkUri, resolveInfo, context);
+            DeepLinkFireEvent deepLinkFireEvent = new DeepLinkFireEvent(ResultType.SUCCESS, deepLinkInfo);
+            EventBus.getDefault().postSticky(deepLinkFireEvent);
             return true;
         } else
         {
@@ -99,12 +107,12 @@ public class Utilities
         ((TextView) ancestor.findViewById(textViewId)).setText(text);
     }
 
-    public static void addResolvedInfoToHistory(String deepLink, ResolveInfo resolveInfo, Context context)
+    public static DeepLinkInfo getDeepLinkInfo(String deepLink, ResolveInfo resolveInfo, Context context)
     {
         String packageName = resolveInfo.activityInfo.packageName;
         String activityLabel = resolveInfo.loadLabel(context.getPackageManager()).toString();
         DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis());
-        DeepLinkHistoryFeature.getInstance(context).addLinkToHistory(deepLinkInfo);
+        return deepLinkInfo;
     }
 
     public static boolean isAppTutorialSeen(Context context)

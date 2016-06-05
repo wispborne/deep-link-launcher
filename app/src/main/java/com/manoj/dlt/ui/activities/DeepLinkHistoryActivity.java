@@ -10,11 +10,18 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.manoj.dlt.R;
+import com.manoj.dlt.events.DeepLinkFireEvent;
 import com.manoj.dlt.features.DeepLinkHistoryFeature;
 import com.manoj.dlt.models.DeepLinkInfo;
+import com.manoj.dlt.models.ResultType;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
 import com.manoj.dlt.utils.TextChangedListener;
 import com.manoj.dlt.utils.Utilities;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import hotchemi.android.rate.AppRate;
 
 public class DeepLinkHistoryActivity extends AppCompatActivity
@@ -163,6 +170,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
+        EventBus.getDefault().register(this);
         _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
     }
 
@@ -171,6 +179,33 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         super.onResume();
         pasteFromClipboard();
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(DeepLinkFireEvent deepLinkFireEvent)
+    {
+        String deepLinkString = deepLinkFireEvent.getDeepLinkInfo().getDeepLink();
+        setDeepLinkInputText(deepLinkString);
+        if(deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
+        {
+            _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
+        } else
+        {
+            if(DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND.equals(deepLinkFireEvent.getFailureReason()))
+            {
+                Utilities.raiseError(getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkString), this);
+            } else if(DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI.equals(deepLinkFireEvent.getFailureReason()))
+            {
+                Utilities.raiseError(getString(R.string.error_improper_uri).concat(": ").concat(deepLinkString), this);
+            }
+        }
+        EventBus.getDefault().removeStickyEvent(deepLinkFireEvent);
     }
 
     private boolean shouldFireDeepLink(int actionId)
