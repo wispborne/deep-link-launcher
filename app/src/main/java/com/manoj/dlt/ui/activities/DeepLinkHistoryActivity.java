@@ -50,7 +50,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                testDeepLink();
+                extractAndFireLink();
             }
         });
         setAppropriateLayout();
@@ -80,7 +80,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             {
                 if (shouldFireDeepLink(actionId))
                 {
-                    testDeepLink();
+                    extractAndFireLink();
                     return true;
                 } else
                 {
@@ -159,9 +159,13 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         Utilities.showKeyboard(this);
     }
 
-    public void testDeepLink()
+    public void extractAndFireLink()
     {
         String deepLinkUri = _deepLinkInput.getText().toString();
+        checkAndfireDeepLink(deepLinkUri);
+    }
+
+    private void checkAndfireDeepLink(String deepLinkUri) {
         if (isProperUri(deepLinkUri))
         {
             Uri uri = Uri.parse(deepLinkUri);
