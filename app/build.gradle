@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "com.manoj.dlt"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 22
     }
     buildTypes {
@@ -30,6 +30,9 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    dexOptions{
+        incremental true
     }
 }
 
