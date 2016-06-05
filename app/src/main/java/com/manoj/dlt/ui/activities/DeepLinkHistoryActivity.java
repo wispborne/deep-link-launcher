@@ -2,11 +2,7 @@ package com.manoj.dlt.ui.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -14,7 +10,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.manoj.dlt.R;
-import com.manoj.dlt.features.DeepLinkHistory;
+import com.manoj.dlt.features.DeepLinkHistoryFeature;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
 import com.manoj.dlt.utils.TextChangedListener;
@@ -40,7 +36,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
-        _adapter = new DeepLinkListAdapter(DeepLinkHistory.getInstance(this).getAllLinksSearchedInfo(), this);
+        _adapter = new DeepLinkListAdapter(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo(), this);
         configureListView();
         configureDeepLinkInput();
         findViewById(R.id.deep_link_fire).setOnClickListener(new View.OnClickListener()
@@ -167,7 +163,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
-        _adapter.updateBaseData(DeepLinkHistory.getInstance(this).getAllLinksSearchedInfo());
+        _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
     }
 
     @Override
