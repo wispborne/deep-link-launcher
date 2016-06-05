@@ -15,24 +15,29 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.R;
-import com.manoj.dlt.features.DeepLinkHistory;
+import com.manoj.dlt.features.DeepLinkHistoryFeature;
 import com.manoj.dlt.features.FileSystem;
 import com.manoj.dlt.models.DeepLinkInfo;
 import hotchemi.android.rate.AppRate;
 
 public class Utilities
 {
-    public static void checkAndFireDeepLink(String deepLinkUri, Context context)
+    public static boolean checkAndFireDeepLink(String deepLinkUri, Context context)
     {
         if(isProperUri(deepLinkUri))
         {
-            if(!resolveAndAddToHistory(deepLinkUri, context))
+            if(resolveAndAddToHistory(deepLinkUri, context))
+            {
+                return true;
+            } else
             {
                 raiseError(context.getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkUri), context);
+                return false;
             }
         } else
         {
             raiseError(context.getString(R.string.error_improper_uri).concat(": ").concat(deepLinkUri), context);
+            return false;
         }
     }
 
