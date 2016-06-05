@@ -101,7 +101,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     private void pasteFromClipboard()
     {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (!isProperUri(_deepLinkInput.getText().toString()) && clipboardManager.hasPrimaryClip())
+        if (!Utilities.isProperUri(_deepLinkInput.getText().toString()) && clipboardManager.hasPrimaryClip())
         {
             ClipData.Item clipItem = clipboardManager.getPrimaryClip().getItemAt(0);
             if (clipItem != null)
@@ -109,7 +109,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 if (clipItem.getText() != null)
                 {
                     String clipBoardText = clipItem.getText().toString();
-                    if (isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
+                    if (Utilities.isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
                     {
                         setDeepLinkInputText(clipBoardText);
                         _previousClipboardText = clipBoardText;
@@ -117,7 +117,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 } else if (clipItem.getUri() != null)
                 {
                     String clipBoardText = clipItem.getUri().toString();
-                    if (isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
+                    if (Utilities.isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
                     {
                         setDeepLinkInputText(clipBoardText);
                         _previousClipboardText = clipBoardText;
@@ -162,31 +162,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     public void extractAndFireLink()
     {
         String deepLinkUri = _deepLinkInput.getText().toString();
-        checkAndfireDeepLink(deepLinkUri);
-    }
-
-    private void checkAndfireDeepLink(String deepLinkUri) {
-        if (isProperUri(deepLinkUri))
-        {
-            Uri uri = Uri.parse(deepLinkUri);
-            Intent intent = new Intent();
-            intent.setData(uri);
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PackageManager pm = getPackageManager();
-            ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            if (resolveInfo != null)
-            {
-                startActivity(intent);
-                Utilities.addResolvedInfoToHistory(deepLinkUri, resolveInfo, this);
-            } else
-            {
-                Utilities.raiseError(getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkUri), this);
-            }
-        } else
-        {
-            Utilities.raiseError(getString(R.string.error_improper_uri).concat(": ").concat(deepLinkUri), this);
-        }
+        Utilities.checkAndFireDeepLink(deepLinkUri, this);
     }
 
     @Override
@@ -210,21 +186,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             return true;
         }
         return false;
-    }
-
-    private boolean isProperUri(String uriText)
-    {
-        Uri uri = Uri.parse(uriText);
-        if (uri.getScheme() == null || uri.getScheme().length() == 0)
-        {
-            return false;
-        } else if (uriText.contains("\n") || uriText.contains(" "))
-        {
-            return false;
-        } else
-        {
-            return true;
-        }
     }
 
     private void setDeepLinkInputText(String text)
