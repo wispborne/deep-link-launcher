@@ -99,7 +99,7 @@ public class Utilities
         String packageName = resolveInfo.activityInfo.packageName;
         String activityLabel = resolveInfo.loadLabel(context.getPackageManager()).toString();
         DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis());
-        new DeepLinkHistory(context).addLinkToHistory(deepLinkInfo);
+        DeepLinkHistory.getInstance(context).addLinkToHistory(deepLinkInfo);
     }
 
     public static boolean isAppTutorialSeen(Context context)

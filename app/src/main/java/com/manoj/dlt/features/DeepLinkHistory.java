@@ -12,11 +12,21 @@ import java.util.List;
 
 public class DeepLinkHistory implements IDeepLinkHistory
 {
-    FileSystem _fileSystem;
+    private static DeepLinkHistory _instance;
+    private FileSystem _fileSystem;
 
-    public DeepLinkHistory(Context context)
+    private DeepLinkHistory(Context context)
     {
         _fileSystem = new FileSystem(context, Constants.DEEP_LINK_HISTORY_KEY);
+    }
+
+    public static DeepLinkHistory getInstance(Context context)
+    {
+        if(_instance == null)
+        {
+            _instance = new DeepLinkHistory(context);
+        }
+        return _instance;
     }
 
     @Override

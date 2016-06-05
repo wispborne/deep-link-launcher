@@ -25,7 +25,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 {
     private ListView _listView;
     private EditText _deepLinkInput;
-    private DeepLinkHistory _history;
     private DeepLinkListAdapter _adapter;
     private String _previousClipboardText;
 
@@ -41,8 +40,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
-        _history = new DeepLinkHistory(this);
-        _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(), this);
+        _adapter = new DeepLinkListAdapter(DeepLinkHistory.getInstance(this).getAllLinksSearchedInfo(), this);
         configureListView();
         configureDeepLinkInput();
         findViewById(R.id.deep_link_fire).setOnClickListener(new View.OnClickListener()
@@ -169,7 +167,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
-        _adapter.updateBaseData(_history.getAllLinksSearchedInfo());
+        _adapter.updateBaseData(DeepLinkHistory.getInstance(this).getAllLinksSearchedInfo());
     }
 
     @Override
