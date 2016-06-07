@@ -2,6 +2,8 @@ package com.manoj.dlt.features;
 
 import android.content.Context;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.interfaces.IProfileFeature;
 
@@ -40,9 +42,10 @@ public class ProfileFeature implements IProfileFeature
     }
 
     @Override
-    public String getCurrentUserFirebaseBaseRef()
+    public DatabaseReference getCurrentUserFirebaseBaseRef()
     {
-        return Constants.getFirebaseUserRef().concat("/"+_userId);
+        DatabaseReference baseRef = FirebaseDatabase.getInstance().getReference(Constants.getFirebaseUserRef());
+        baseRef.child("users").child(_userId);
     }
 
     private String generateUserId()
