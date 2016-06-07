@@ -14,7 +14,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeepLinkHistoryFeature implements IDeepLinkHistory
 {
@@ -58,15 +60,17 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     }
 
     @Override
-    public void addLinkToHistory(DeepLinkInfo deepLinkInfo)
+    public void addLinkToHistory(final DeepLinkInfo deepLinkInfo)
     {
         DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
         DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkInfo.getId());
-        linkReference.child(DbConstants.DL_ACTIVITY_LABEL).setValue(deepLinkInfo.getActivityLabel());
-        linkReference.child(DbConstants.DL_DEEP_LINK).setValue(deepLinkInfo.getDeepLink());
-        linkReference.child(DbConstants.DL_PACKAGE_NAME).setValue(deepLinkInfo.getPackageName());
-        linkReference.child(DbConstants.DL_UPDATED_TIME).setValue(deepLinkInfo.getUpdatedTime());
-
+        Map<String, Object> infoMap = new HashMap<String, Object>(){{
+        put(DbConstants.DL_ACTIVITY_LABEL, deepLinkInfo.getActivityLabel());
+        put(DbConstants.DL_DEEP_LINK, deepLinkInfo.getDeepLink());
+        put(DbConstants.DL_PACKAGE_NAME, deepLinkInfo.getPackageName());
+        put(DbConstants.DL_UPDATED_TIME, deepLinkInfo.getUpdatedTime());
+        }};
+        linkReference.setValue(infoMap);
         //TODO: remove this legacy code
         _fileSystem.write(deepLinkInfo.getId(), DeepLinkInfo.toJson(deepLinkInfo));
     }
