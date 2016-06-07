@@ -4,5 +4,5 @@ public interface IProfileFeature
 {
     public String getUserId();
 
-    public String getCurrentUserHistoryBase();
+    public String getCurrentUserFirebaseBaseRef();
 }

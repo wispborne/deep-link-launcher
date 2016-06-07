@@ -40,7 +40,7 @@ public class ProfileFeature implements IProfileFeature
     }
 
     @Override
-    public String getCurrentUserHistoryBase()
+    public String getCurrentUserFirebaseBaseRef()
     {
         return Constants.getFirebaseUserRef().concat("/"+_userId);
     }
