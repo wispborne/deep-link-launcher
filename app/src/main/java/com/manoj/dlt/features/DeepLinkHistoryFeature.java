@@ -72,9 +72,10 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     }
 
     @Override
-    public void removeLinkFromHistory(String deepLink)
+    public void removeLinkFromHistory(String deepLinkId)
     {
-        _fileSystem.clear(deepLink);
+
+        _fileSystem.clear(deepLinkId);
     }
 
     @Override
