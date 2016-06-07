@@ -78,7 +78,10 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     @Override
     public void removeLinkFromHistory(String deepLinkId)
     {
-
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
+        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkId);
+        linkReference.setValue(null);
+        //TODO: remove legacy code
         _fileSystem.clear(deepLinkId);
     }
 
