@@ -26,7 +26,7 @@ public class ProfileFeature implements IProfileFeature
         }
     }
 
-    public ProfileFeature getInstance(Context context)
+    public static ProfileFeature getInstance(Context context)
     {
         if(_instance == null)
         {
