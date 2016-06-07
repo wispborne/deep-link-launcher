@@ -1,5 +1,8 @@
 package com.manoj.dlt;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Constants
 {
     public enum CONFIG
@@ -13,10 +16,11 @@ public class Constants
     public static final String USER_ID_KEY = "user_id";
     public static CONFIG ENVIRONMENT  = CONFIG.SANDBOX;
 
-    private static final String FIREBASE_BASE_REF = "https://sweltering-fire-2158.firebaseio.com/";
 
-    public static String getFirebaseUserRef()
+    public static DatabaseReference getFirebaseUserRef()
     {
-        return FIREBASE_BASE_REF.concat("/"+ENVIRONMENT.name().toLowerCase()).concat("/users");
+        return FirebaseDatabase.getInstance()
+                .getReference(ENVIRONMENT.name().toLowerCase())
+                .child(DbConstants.USERS);
     }
 }
