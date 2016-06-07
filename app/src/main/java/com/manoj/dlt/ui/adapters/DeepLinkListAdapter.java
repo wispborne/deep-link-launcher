@@ -59,7 +59,7 @@ public class DeepLinkListAdapter extends FilterableListAdapter<DeepLinkInfo>
             {
                 _originalList.remove(i);
                 updateResults(_searchString);
-                new DeepLinkHistory(_context).removeLinkFromHistory(deepLinkInfo.getDeepLink());
+                new DeepLinkHistory(_context).removeLinkFromHistory(deepLinkInfo.getId());
             }
         });
         return convertView;
