@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.DataSnapshot;
 import com.manoj.dlt.Constants;
+import com.manoj.dlt.DbConstants;
 import com.manoj.dlt.R;
 import com.manoj.dlt.events.DeepLinkFireEvent;
 import com.manoj.dlt.features.FileSystem;
@@ -155,6 +157,15 @@ public class Utilities
                 .setShowNeverButton(false)
                 .setRemindInterval(2) //number of days since remind me later was clicked
                 .monitor();
+    }
+
+    public static DeepLinkInfo getLinkInfo(DataSnapshot dataSnapshot)
+    {
+        long updatedTime = Long.parseLong(dataSnapshot.child(DbConstants.DL_UPDATED_TIME).getValue().toString());
+        return new DeepLinkInfo(dataSnapshot.child(DbConstants.DL_DEEP_LINK).getValue().toString(),
+                dataSnapshot.child(DbConstants.DL_ACTIVITY_LABEL).getValue().toString(),
+                dataSnapshot.child(DbConstants.DL_PACKAGE_NAME).getValue().toString(),
+                updatedTime);
     }
 
 }
