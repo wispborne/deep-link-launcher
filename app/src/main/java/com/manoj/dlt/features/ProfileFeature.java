@@ -45,7 +45,7 @@ public class ProfileFeature implements IProfileFeature
     public DatabaseReference getCurrentUserFirebaseBaseRef()
     {
         DatabaseReference baseRef = FirebaseDatabase.getInstance().getReference(Constants.getFirebaseUserRef());
-        baseRef.child("users").child(_userId);
+        return baseRef.child("users").child(_userId);
     }
 
     private String generateUserId()
