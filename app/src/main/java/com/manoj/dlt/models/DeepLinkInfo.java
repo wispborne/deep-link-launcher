@@ -113,6 +113,8 @@ public class DeepLinkInfo implements Comparable
             id = id.replace(uri.getQuery(), "").replace("?", "");
         }
         id = id.replace("/","");
+        //replace '.' since firebase does not support them in paths
+        id = id.replace(".","-dot-");
         return id;
     }
 
