@@ -45,8 +45,8 @@ public class ProfileFeature implements IProfileFeature
     @Override
     public DatabaseReference getCurrentUserFirebaseBaseRef()
     {
-        DatabaseReference baseRef = Constants.getFirebaseUserRef();
-        return baseRef.child(DbConstants.USERS).child(_userId);
+        DatabaseReference baseUserRef = Constants.getFirebaseUserRef();
+        return baseUserRef.child(_userId);
     }
 
     private String generateUserId()
