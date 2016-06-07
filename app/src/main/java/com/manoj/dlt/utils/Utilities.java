@@ -117,7 +117,7 @@ public class Utilities
 
     public static boolean isAppTutorialSeen(Context context)
     {
-        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
+        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.GLOBAL_PREF_KEY);
         String tutSeenBool = oneTimeBooleanStore.read(Constants.APP_TUTORIAL_SEEN);
         if (tutSeenBool != null && tutSeenBool.equals("true"))
         {
@@ -130,7 +130,7 @@ public class Utilities
 
     public static void setAppTutorialSeen(Context context)
     {
-        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.ONE_TIME_PREF_KEY);
+        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.GLOBAL_PREF_KEY);
         oneTimeBooleanStore.write(Constants.APP_TUTORIAL_SEEN, "true");
     }
 
