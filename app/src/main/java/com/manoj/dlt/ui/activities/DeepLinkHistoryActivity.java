@@ -9,9 +9,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.manoj.dlt.DbConstants;
 import com.manoj.dlt.R;
 import com.manoj.dlt.events.DeepLinkFireEvent;
 import com.manoj.dlt.features.DeepLinkHistoryFeature;
+import com.manoj.dlt.features.ProfileFeature;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.models.ResultType;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
@@ -22,6 +29,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hotchemi.android.rate.AppRate;
 
 public class DeepLinkHistoryActivity extends AppCompatActivity
@@ -30,6 +40,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     private EditText _deepLinkInput;
     private DeepLinkListAdapter _adapter;
     private String _previousClipboardText;
+    private ValueEventListener _historyUpdateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,6 +48,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deep_link_history);
         initView();
+        _historyUpdateListener = getFirebaseHistoryListener();
     }
 
     private void initView()
@@ -171,7 +183,8 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         super.onStart();
         EventBus.getDefault().register(this);
-        _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
+        attachFirebaseListener();
+        //_adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
     }
 
     @Override
@@ -182,8 +195,10 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         EventBus.getDefault().unregister(this);
+        removeFirebaseListener();
         super.onStop();
     }
 
@@ -208,6 +223,43 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         EventBus.getDefault().removeStickyEvent(deepLinkFireEvent);
     }
 
+    private void attachFirebaseListener()
+    {
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
+        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
+        linkReference.addValueEventListener(_historyUpdateListener);
+    }
+
+    private void removeFirebaseListener()
+    {
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
+        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
+        linkReference.removeEventListener(_historyUpdateListener);
+    }
+
+    private ValueEventListener getFirebaseHistoryListener()
+    {
+        return new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                List<DeepLinkInfo> deepLinkInfos = new ArrayList<DeepLinkInfo>();
+                for(DataSnapshot child: dataSnapshot.getChildren())
+                {
+                    DeepLinkInfo info = Utilities.getLinkInfo(child);
+                    deepLinkInfos.add(info);
+                }
+                _adapter.updateBaseData(deepLinkInfos);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+            }
+        };
+    }
     private boolean shouldFireDeepLink(int actionId)
     {
         if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)
