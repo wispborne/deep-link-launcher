@@ -13,6 +13,7 @@ public class DeepLinkInfo implements Comparable
     private String _id;
     private long _updatedTime; //Milliseconds
 
+    //TODO: include id in here. DO NOT generate id every time
     public DeepLinkInfo(String deepLink, String activityLabel, String packageName, long updatedTime)
     {
         _activitylabel = activityLabel;
