@@ -8,6 +8,7 @@ import com.manoj.dlt.DbConstants;
 import com.manoj.dlt.events.DeepLinkFireEvent;
 import com.manoj.dlt.interfaces.IDeepLinkHistory;
 import com.manoj.dlt.models.DeepLinkInfo;
+import com.manoj.dlt.models.ResultType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -94,6 +95,9 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     @Subscribe(sticky = true, priority = 1)
     public void onEvent(DeepLinkFireEvent deepLinkFireEvent)
     {
-        addLinkToHistory(deepLinkFireEvent.getDeepLinkInfo());
+        if(deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
+        {
+            addLinkToHistory(deepLinkFireEvent.getDeepLinkInfo());
+        }
     }
 }
