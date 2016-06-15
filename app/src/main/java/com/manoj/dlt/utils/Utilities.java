@@ -37,13 +37,15 @@ public class Utilities
                 return true;
             } else
             {
-                DeepLinkFireEvent deepLinkFireEvent = new DeepLinkFireEvent(ResultType.FAILURE, DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND);
+                DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLinkUri, null, null, -1);
+                DeepLinkFireEvent deepLinkFireEvent = new DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND);
                 EventBus.getDefault().postSticky(deepLinkFireEvent);
                 return false;
             }
         } else
         {
-            DeepLinkFireEvent deepLinkFireEvent = new DeepLinkFireEvent(ResultType.FAILURE, DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI);
+            DeepLinkInfo deepLinkInfo = new DeepLinkInfo(deepLinkUri, null, null, -1);
+            DeepLinkFireEvent deepLinkFireEvent = new DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI);
             EventBus.getDefault().postSticky(deepLinkFireEvent);
             return false;
         }

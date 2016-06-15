@@ -20,8 +20,9 @@ public class DeepLinkFireEvent {
         _resultType = resultType;
     }
 
-    public DeepLinkFireEvent(ResultType resultType, FAILURE_REASON failureReason)
+    public DeepLinkFireEvent(ResultType resultType, DeepLinkInfo deepLinkInfo, FAILURE_REASON failureReason)
     {
+        _deepLinkInfo = deepLinkInfo;
         _failureReason = failureReason;
         _resultType = resultType;
     }
