@@ -99,11 +99,16 @@ public class Utilities
 
     public static void raiseError(String errorText, Context context)
     {
-        new AlertDialog.Builder(context).
-                setTitle(context.getString(R.string.error_title))
-                .setMessage(errorText)
-                .show();
+        showAlert(context.getString(R.string.error_title), errorText, context);
         Crashlytics.logException(new Exception(errorText));
+    }
+
+    public static void showAlert(String title, String message, Context context)
+    {
+        new AlertDialog.Builder(context).
+                setTitle(title)
+                .setMessage(message)
+                .show();
     }
 
     public static void setTextViewText(View ancestor, int textViewId, CharSequence text)

@@ -66,6 +66,15 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 extractAndFireLink();
             }
         });
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
+                Utilities.showAlert("Fire from your PC","go to https://swelteringfire-2158.firebaseapp.com/"+userId, DeepLinkHistoryActivity.this);
+            }
+        });
         setAppropriateLayout();
     }
 
