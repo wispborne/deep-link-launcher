@@ -193,7 +193,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         super.onStart();
         EventBus.getDefault().register(this);
         attachFirebaseListener();
-        //_adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
+        _adapter.updateResults(_deepLinkInput.getText().toString());
     }
 
     @Override
@@ -219,6 +219,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         if(deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
         {
             _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
+            _adapter.updateResults(deepLinkString);
         } else
         {
             if(DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND.equals(deepLinkFireEvent.getFailureReason()))
@@ -260,6 +261,10 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                     deepLinkInfos.add(info);
                 }
                 _adapter.updateBaseData(deepLinkInfos);
+                if(_deepLinkInput != null && _deepLinkInput.getText().length() > 0)
+                {
+                    _adapter.updateResults(_deepLinkInput.getText().toString());
+                }
             }
 
             @Override
