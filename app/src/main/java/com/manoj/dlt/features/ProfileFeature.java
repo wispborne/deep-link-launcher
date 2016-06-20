@@ -1,6 +1,7 @@
 package com.manoj.dlt.features;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,6 +26,7 @@ public class ProfileFeature implements IProfileFeature
             _userId = generateUserId();
             _fileSystem.write(Constants.USER_ID_KEY, _userId);
         }
+        Log.d("profile","user id = "+_userId);
     }
 
     public static ProfileFeature getInstance(Context context)
