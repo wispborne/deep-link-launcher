@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import hotchemi.android.rate.AppRate;
@@ -260,6 +261,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                     DeepLinkInfo info = Utilities.getLinkInfo(child);
                     deepLinkInfos.add(info);
                 }
+                Collections.sort(deepLinkInfos);
                 _adapter.updateBaseData(deepLinkInfos);
                 if(_deepLinkInput != null && _deepLinkInput.getText().length() > 0)
                 {
