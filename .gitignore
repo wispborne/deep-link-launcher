@@ -13,3 +13,4 @@ gradle*
 build/
 app/fabric.properties
 app/releases
+app/google_services.json
