@@ -13,6 +13,7 @@ public class DeepLinkInfo implements Comparable
     private String _id;
     private long _updatedTime; //Milliseconds
 
+    //TODO: include id in here. DO NOT generate id every time
     public DeepLinkInfo(String deepLink, String activityLabel, String packageName, long updatedTime)
     {
         _activitylabel = activityLabel;
@@ -113,6 +114,8 @@ public class DeepLinkInfo implements Comparable
             id = id.replace(uri.getQuery(), "").replace("?", "");
         }
         id = id.replace("/","");
+        //replace '.' since firebase does not support them in paths
+        id = id.replace(".","-dot-");
         return id;
     }
 

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.manoj.dlt.R;
-import com.manoj.dlt.features.DeepLinkHistory;
+import com.manoj.dlt.features.DeepLinkHistoryFeature;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.utils.Utilities;
 
@@ -59,7 +59,7 @@ public class DeepLinkListAdapter extends FilterableListAdapter<DeepLinkInfo>
             {
                 _originalList.remove(i);
                 updateResults(_searchString);
-                new DeepLinkHistory(_context).removeLinkFromHistory(deepLinkInfo.getId());
+                DeepLinkHistoryFeature.getInstance(_context).removeLinkFromHistory(deepLinkInfo.getId());
             }
         });
         return convertView;

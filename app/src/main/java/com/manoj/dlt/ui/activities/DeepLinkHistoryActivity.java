@@ -2,32 +2,46 @@ package com.manoj.dlt.ui.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.manoj.dlt.DbConstants;
 import com.manoj.dlt.R;
-import com.manoj.dlt.features.DeepLinkHistory;
+import com.manoj.dlt.events.DeepLinkFireEvent;
+import com.manoj.dlt.features.DeepLinkHistoryFeature;
+import com.manoj.dlt.features.ProfileFeature;
 import com.manoj.dlt.models.DeepLinkInfo;
+import com.manoj.dlt.models.ResultType;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
 import com.manoj.dlt.utils.TextChangedListener;
 import com.manoj.dlt.utils.Utilities;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import hotchemi.android.rate.AppRate;
 
 public class DeepLinkHistoryActivity extends AppCompatActivity
 {
     private ListView _listView;
     private EditText _deepLinkInput;
-    private DeepLinkHistory _history;
     private DeepLinkListAdapter _adapter;
     private String _previousClipboardText;
+    private ValueEventListener _historyUpdateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,14 +49,14 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deep_link_history);
         initView();
+        _historyUpdateListener = getFirebaseHistoryListener();
     }
 
     private void initView()
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
-        _history = new DeepLinkHistory(this);
-        _adapter = new DeepLinkListAdapter(_history.getAllLinksSearchedInfo(), this);
+        _adapter = new DeepLinkListAdapter(new ArrayList<DeepLinkInfo>(), this);
         configureListView();
         configureDeepLinkInput();
         findViewById(R.id.deep_link_fire).setOnClickListener(new View.OnClickListener()
@@ -50,7 +64,16 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                testDeepLink();
+                extractAndFireLink();
+            }
+        });
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
+                Utilities.showAlert("Fire from your PC","go to https://swelteringfire-2158.firebaseapp.com/"+userId, DeepLinkHistoryActivity.this);
             }
         });
         setAppropriateLayout();
@@ -80,7 +103,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             {
                 if (shouldFireDeepLink(actionId))
                 {
-                    testDeepLink();
+                    extractAndFireLink();
                     return true;
                 } else
                 {
@@ -101,7 +124,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     private void pasteFromClipboard()
     {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (!isProperUri(_deepLinkInput.getText().toString()) && clipboardManager.hasPrimaryClip())
+        if (!Utilities.isProperUri(_deepLinkInput.getText().toString()) && clipboardManager.hasPrimaryClip())
         {
             ClipData.Item clipItem = clipboardManager.getPrimaryClip().getItemAt(0);
             if (clipItem != null)
@@ -109,7 +132,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 if (clipItem.getText() != null)
                 {
                     String clipBoardText = clipItem.getText().toString();
-                    if (isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
+                    if (Utilities.isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
                     {
                         setDeepLinkInputText(clipBoardText);
                         _previousClipboardText = clipBoardText;
@@ -117,7 +140,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 } else if (clipItem.getUri() != null)
                 {
                     String clipBoardText = clipItem.getUri().toString();
-                    if (isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
+                    if (Utilities.isProperUri(clipBoardText) && !clipBoardText.equals(_previousClipboardText))
                     {
                         setDeepLinkInputText(clipBoardText);
                         _previousClipboardText = clipBoardText;
@@ -159,37 +182,19 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         Utilities.showKeyboard(this);
     }
 
-    public void testDeepLink()
+    public void extractAndFireLink()
     {
         String deepLinkUri = _deepLinkInput.getText().toString();
-        if (isProperUri(deepLinkUri))
-        {
-            Uri uri = Uri.parse(deepLinkUri);
-            Intent intent = new Intent();
-            intent.setData(uri);
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PackageManager pm = getPackageManager();
-            ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            if (resolveInfo != null)
-            {
-                startActivity(intent);
-                Utilities.addResolvedInfoToHistory(deepLinkUri, resolveInfo, this);
-            } else
-            {
-                Utilities.raiseError(getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkUri), this);
-            }
-        } else
-        {
-            Utilities.raiseError(getString(R.string.error_improper_uri).concat(": ").concat(deepLinkUri), this);
-        }
+        Utilities.checkAndFireDeepLink(deepLinkUri, this);
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
-        _adapter.updateBaseData(_history.getAllLinksSearchedInfo());
+        EventBus.getDefault().register(this);
+        attachFirebaseListener();
+        _adapter.updateResults(_deepLinkInput.getText().toString());
     }
 
     @Override
@@ -199,6 +204,78 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         pasteFromClipboard();
     }
 
+    @Override
+    protected void onStop()
+    {
+        EventBus.getDefault().unregister(this);
+        removeFirebaseListener();
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(DeepLinkFireEvent deepLinkFireEvent)
+    {
+        String deepLinkString = deepLinkFireEvent.getDeepLinkInfo().getDeepLink();
+        setDeepLinkInputText(deepLinkString);
+        if(deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
+        {
+            _adapter.updateResults(deepLinkString);
+        } else
+        {
+            if(DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND.equals(deepLinkFireEvent.getFailureReason()))
+            {
+                Utilities.raiseError(getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkString), this);
+            } else if(DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI.equals(deepLinkFireEvent.getFailureReason()))
+            {
+                Utilities.raiseError(getString(R.string.error_improper_uri).concat(": ").concat(deepLinkString), this);
+            }
+        }
+        EventBus.getDefault().removeStickyEvent(deepLinkFireEvent);
+    }
+
+    private void attachFirebaseListener()
+    {
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
+        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
+        linkReference.addValueEventListener(_historyUpdateListener);
+    }
+
+    private void removeFirebaseListener()
+    {
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
+        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
+        linkReference.removeEventListener(_historyUpdateListener);
+    }
+
+    private ValueEventListener getFirebaseHistoryListener()
+    {
+        return new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                findViewById(R.id.progress_wheel).setVisibility(View.GONE);
+                List<DeepLinkInfo> deepLinkInfos = new ArrayList<DeepLinkInfo>();
+                for(DataSnapshot child: dataSnapshot.getChildren())
+                {
+                    DeepLinkInfo info = Utilities.getLinkInfo(child);
+                    deepLinkInfos.add(info);
+                }
+                Collections.sort(deepLinkInfos);
+                _adapter.updateBaseData(deepLinkInfos);
+                if(_deepLinkInput != null && _deepLinkInput.getText().length() > 0)
+                {
+                    _adapter.updateResults(_deepLinkInput.getText().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+            }
+        };
+    }
     private boolean shouldFireDeepLink(int actionId)
     {
         if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)
@@ -206,21 +283,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             return true;
         }
         return false;
-    }
-
-    private boolean isProperUri(String uriText)
-    {
-        Uri uri = Uri.parse(uriText);
-        if (uri.getScheme() == null || uri.getScheme().length() == 0)
-        {
-            return false;
-        } else if (uriText.contains("\n") || uriText.contains(" "))
-        {
-            return false;
-        } else
-        {
-            return true;
-        }
     }
 
     private void setDeepLinkInputText(String text)
