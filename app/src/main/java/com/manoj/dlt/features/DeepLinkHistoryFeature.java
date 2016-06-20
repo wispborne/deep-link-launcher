@@ -30,6 +30,7 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
         _fileSystem = new FileSystem(context, Constants.DEEP_LINK_HISTORY_KEY);
         EventBus.getDefault().register(this);
         _context = context;
+        migrateHistoryToFirebase();
     }
 
     public static DeepLinkHistoryFeature getInstance(Context context)
@@ -98,6 +99,16 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
         if(deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
         {
             addLinkToHistory(deepLinkFireEvent.getDeepLinkInfo());
+        }
+    }
+
+    //legacy function to migrate db to firebase, for older version
+    //TODO: remove once all users migrated
+    private void migrateHistoryToFirebase()
+    {
+        for(DeepLinkInfo info: getAllLinksSearchedInfo())
+        {
+            addLinkToHistory(info);
         }
     }
 }
