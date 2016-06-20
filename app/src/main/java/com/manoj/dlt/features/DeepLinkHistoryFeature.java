@@ -28,9 +28,9 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     private DeepLinkHistoryFeature(Context context)
     {
         _fileSystem = new FileSystem(context, Constants.DEEP_LINK_HISTORY_KEY);
-        EventBus.getDefault().register(this);
         _context = context;
         migrateHistoryToFirebase();
+        EventBus.getDefault().register(this);
     }
 
     public static DeepLinkHistoryFeature getInstance(Context context)
