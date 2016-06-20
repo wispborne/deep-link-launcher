@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "com.manoj.dlt"
-        minSdkVersion 21
+        minSdkVersion 14
         targetSdkVersion 22
     }
     buildTypes {
