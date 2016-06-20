@@ -253,6 +253,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
+                findViewById(R.id.progress_wheel).setVisibility(View.GONE);
                 List<DeepLinkInfo> deepLinkInfos = new ArrayList<DeepLinkInfo>();
                 for(DataSnapshot child: dataSnapshot.getChildren())
                 {
