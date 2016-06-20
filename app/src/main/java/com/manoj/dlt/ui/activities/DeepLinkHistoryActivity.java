@@ -55,7 +55,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
-        _adapter = new DeepLinkListAdapter(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo(), this);
+        _adapter = new DeepLinkListAdapter(new ArrayList<DeepLinkInfo>(), this);
         configureListView();
         configureDeepLinkInput();
         findViewById(R.id.deep_link_fire).setOnClickListener(new View.OnClickListener()
@@ -218,7 +218,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         setDeepLinkInputText(deepLinkString);
         if(deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
         {
-            _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getAllLinksSearchedInfo());
             _adapter.updateResults(deepLinkString);
         } else
         {
