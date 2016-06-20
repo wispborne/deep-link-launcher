@@ -43,25 +43,6 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     }
 
     @Override
-    public List<DeepLinkInfo> getAllLinksSearchedInfo()
-    {
-        //TODO: read from firebase
-        List<DeepLinkInfo> deepLinks = new ArrayList<DeepLinkInfo>();
-        for (String deepLinkInfoJson : _fileSystem.values())
-        {
-            deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
-        }
-        Collections.sort(deepLinks);
-        return deepLinks;
-    }
-
-    @Override
-    public List<String> getAllLinksSearched()
-    {
-        return _fileSystem.keyList();
-    }
-
-    @Override
     public void addLinkToHistory(final DeepLinkInfo deepLinkInfo)
     {
         DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
@@ -73,8 +54,6 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
         put(DbConstants.DL_UPDATED_TIME, deepLinkInfo.getUpdatedTime());
         }};
         linkReference.setValue(infoMap);
-        //TODO: remove this legacy code
-        _fileSystem.write(deepLinkInfo.getId(), DeepLinkInfo.toJson(deepLinkInfo));
     }
 
     @Override
@@ -83,14 +62,14 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
         DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
         DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkId);
         linkReference.setValue(null);
-        //TODO: remove legacy code
-        _fileSystem.clear(deepLinkId);
     }
 
     @Override
     public void clearAllHistory()
     {
-        _fileSystem.clearAll();
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
+        DatabaseReference historyRef = baseUserReference.child(DbConstants.USER_HISTORY);
+        historyRef.setValue(null);
     }
 
     @Subscribe(sticky = true, priority = 1)
@@ -106,9 +85,21 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     //TODO: remove once all users migrated
     private void migrateHistoryToFirebase()
     {
-        for(DeepLinkInfo info: getAllLinksSearchedInfo())
+        for(DeepLinkInfo info: getLinkHistoryFromFileSystem())
         {
             addLinkToHistory(info);
         }
+        _fileSystem.clearAll();
+    }
+
+    private List<DeepLinkInfo> getLinkHistoryFromFileSystem()
+    {
+        List<DeepLinkInfo> deepLinks = new ArrayList<DeepLinkInfo>();
+        for (String deepLinkInfoJson : _fileSystem.values())
+        {
+            deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
+        }
+        Collections.sort(deepLinks);
+        return deepLinks;
     }
 }
