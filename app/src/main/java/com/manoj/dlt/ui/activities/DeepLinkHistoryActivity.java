@@ -73,8 +73,14 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
-                Utilities.showAlert("Fire from your PC","go to https://swelteringfire-2158.firebaseapp.com/"+userId, DeepLinkHistoryActivity.this);
+                if(Constants.isFirebaseAvailable(DeepLinkHistoryActivity.this))
+                {
+                    String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
+                    Utilities.showAlert("Fire from your PC", "go to https://swelteringfire-2158.firebaseapp.com/" + userId, DeepLinkHistoryActivity.this);
+                } else
+                {
+                    Utilities.showAlert("Play Services not found", getString(R.string.play_services_error), DeepLinkHistoryActivity.this);
+                }
             }
         });
         setAppropriateLayout();
