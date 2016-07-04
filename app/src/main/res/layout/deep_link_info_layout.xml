@@ -46,12 +46,19 @@
                 android:ellipsize="end"/>
 
     </LinearLayout>
-    <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:id="@+id/deep_link_remove"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/cancel"
-            android:scaleType="fitXY"
-            />
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:paddingRight="8dp"
+        android:paddingLeft="4dp"
+        android:id="@+id/deep_link_remove"
+        >
+        <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/cancel"
+                android:scaleType="fitXY"
+                />
+    </RelativeLayout>
 </LinearLayout>
