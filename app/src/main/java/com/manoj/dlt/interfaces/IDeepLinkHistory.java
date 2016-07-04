@@ -11,4 +11,6 @@ public interface IDeepLinkHistory
     public void removeLinkFromHistory(String deepLink);
 
     public void clearAllHistory();
+
+    public List<DeepLinkInfo> getLinkHistoryFromFileSystem();
 }

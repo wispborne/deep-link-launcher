@@ -45,31 +45,49 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
     @Override
     public void addLinkToHistory(final DeepLinkInfo deepLinkInfo)
     {
-        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
-        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkInfo.getId());
-        Map<String, Object> infoMap = new HashMap<String, Object>(){{
-        put(DbConstants.DL_ACTIVITY_LABEL, deepLinkInfo.getActivityLabel());
-        put(DbConstants.DL_DEEP_LINK, deepLinkInfo.getDeepLink());
-        put(DbConstants.DL_PACKAGE_NAME, deepLinkInfo.getPackageName());
-        put(DbConstants.DL_UPDATED_TIME, deepLinkInfo.getUpdatedTime());
-        }};
-        linkReference.setValue(infoMap);
+        if(Constants.isFirebaseAvailable(_context))
+        {
+            addLinkToFirebaseHistory(deepLinkInfo);
+        } else
+        {
+            addLinkToFileSystemHistory(deepLinkInfo);
+        }
     }
 
     @Override
     public void removeLinkFromHistory(String deepLinkId)
     {
-        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
-        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkId);
-        linkReference.setValue(null);
+        if(Constants.isFirebaseAvailable(_context))
+        {
+            removeLinkFromFirebaseHistory(deepLinkId);
+        } else
+        {
+            removeLinkFromFileSystemHistory(deepLinkId);
+        }
     }
 
     @Override
     public void clearAllHistory()
     {
-        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
-        DatabaseReference historyRef = baseUserReference.child(DbConstants.USER_HISTORY);
-        historyRef.setValue(null);
+        if(Constants.isFirebaseAvailable(_context))
+        {
+            clearFirebaseHistory();
+        } else
+        {
+            clearFileSystemHistory();
+        }
+    }
+
+    @Override
+    public List<DeepLinkInfo> getLinkHistoryFromFileSystem()
+    {
+        List<DeepLinkInfo> deepLinks = new ArrayList<DeepLinkInfo>();
+        for (String deepLinkInfoJson : _fileSystem.values())
+        {
+            deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
+        }
+        Collections.sort(deepLinks);
+        return deepLinks;
     }
 
     @Subscribe(sticky = true, priority = 1)
@@ -81,25 +99,57 @@ public class DeepLinkHistoryFeature implements IDeepLinkHistory
         }
     }
 
-    //legacy function to migrate db to firebase, for older version
-    //TODO: remove once all users migrated
-    private void migrateHistoryToFirebase()
+    private void addLinkToFileSystemHistory(DeepLinkInfo deepLinkInfo)
     {
-        for(DeepLinkInfo info: getLinkHistoryFromFileSystem())
-        {
-            addLinkToHistory(info);
-        }
+        _fileSystem.write(deepLinkInfo.getId(), DeepLinkInfo.toJson(deepLinkInfo));
+    }
+
+    private void addLinkToFirebaseHistory(final DeepLinkInfo deepLinkInfo)
+    {
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
+        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkInfo.getId());
+        Map<String, Object> infoMap = new HashMap<String, Object>() {{
+            put(DbConstants.DL_ACTIVITY_LABEL, deepLinkInfo.getActivityLabel());
+            put(DbConstants.DL_DEEP_LINK, deepLinkInfo.getDeepLink());
+            put(DbConstants.DL_PACKAGE_NAME, deepLinkInfo.getPackageName());
+            put(DbConstants.DL_UPDATED_TIME, deepLinkInfo.getUpdatedTime());
+        }};
+        linkReference.setValue(infoMap);
+    }
+
+    private void clearFileSystemHistory()
+    {
         _fileSystem.clearAll();
     }
 
-    private List<DeepLinkInfo> getLinkHistoryFromFileSystem()
+    private void clearFirebaseHistory()
     {
-        List<DeepLinkInfo> deepLinks = new ArrayList<DeepLinkInfo>();
-        for (String deepLinkInfoJson : _fileSystem.values())
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
+        DatabaseReference historyRef = baseUserReference.child(DbConstants.USER_HISTORY);
+        historyRef.setValue(null);
+    }
+
+    private void removeLinkFromFileSystemHistory(String deepLinkId)
+    {
+        _fileSystem.clear(deepLinkId);
+    }
+
+    private void removeLinkFromFirebaseHistory(String deepLinkId)
+    {
+        DatabaseReference baseUserReference = ProfileFeature.getInstance(_context).getCurrentUserFirebaseBaseRef();
+        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkId);
+        linkReference.setValue(null);
+    }
+
+    private void migrateHistoryToFirebase()
+    {
+        if(Constants.isFirebaseAvailable(_context))
         {
-            deepLinks.add(DeepLinkInfo.fromJson(deepLinkInfoJson));
+            for (DeepLinkInfo info : getLinkHistoryFromFileSystem())
+            {
+                addLinkToHistory(info);
+            }
+            clearFileSystemHistory();
         }
-        Collections.sort(deepLinks);
-        return deepLinks;
     }
 }
