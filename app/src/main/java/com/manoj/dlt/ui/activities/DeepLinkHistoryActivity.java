@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.manoj.dlt.Constants;
 import com.manoj.dlt.DbConstants;
 import com.manoj.dlt.R;
 import com.manoj.dlt.events.DeepLinkFireEvent;
@@ -193,14 +194,13 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         super.onStart();
         EventBus.getDefault().register(this);
-        attachFirebaseListener();
-        _adapter.updateResults(_deepLinkInput.getText().toString());
     }
 
     @Override
     protected void onResume()
     {
         super.onResume();
+        initListViewData();
         pasteFromClipboard();
     }
 
@@ -233,18 +233,38 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         EventBus.getDefault().removeStickyEvent(deepLinkFireEvent);
     }
 
+    private void initListViewData()
+    {
+        if(Constants.isFirebaseAvailable(this))
+        {
+            //Attach callback to init adapter from data in firebase
+            attachFirebaseListener();
+        } else
+        {
+            _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getLinkHistoryFromFileSystem());
+            findViewById(R.id.progress_wheel).setVisibility(View.GONE);
+        }
+        _adapter.updateResults(_deepLinkInput.getText().toString());
+    }
+
     private void attachFirebaseListener()
     {
-        DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
-        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
-        linkReference.addValueEventListener(_historyUpdateListener);
+        if(Constants.isFirebaseAvailable(this))
+        {
+            DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
+            DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
+            linkReference.addValueEventListener(_historyUpdateListener);
+        }
     }
 
     private void removeFirebaseListener()
     {
-        DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
-        DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
-        linkReference.removeEventListener(_historyUpdateListener);
+        if(Constants.isFirebaseAvailable(this))
+        {
+            DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
+            DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
+            linkReference.removeEventListener(_historyUpdateListener);
+        }
     }
 
     private ValueEventListener getFirebaseHistoryListener()
