@@ -79,7 +79,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                     Utilities.showAlert("Fire from your PC", "go to https://swelteringfire-2158.firebaseapp.com/" + userId, DeepLinkHistoryActivity.this);
                 } else
                 {
-                    Utilities.showAlert("Play Services not found!", getString(R.string.play_services_error), DeepLinkHistoryActivity.this);
+                    Utilities.raiseError(getString(R.string.play_services_error), DeepLinkHistoryActivity.this);
                 }
             }
         });
