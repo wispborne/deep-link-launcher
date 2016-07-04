@@ -7,6 +7,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.manoj.dlt.Constants;
 import com.manoj.dlt.DbConstants;
 import com.manoj.dlt.utils.FirebaseChildAddedListener;
 import com.manoj.dlt.utils.Utilities;
@@ -42,7 +43,7 @@ public class LinkQueueHandler {
         {
             //Already attached listener on queue. do nothing
             return;
-        } else
+        } else if(Constants.isFirebaseAvailable(_context))
         {
             _queueReference.addChildEventListener(_queueListener);
             _isProcessing = true;
