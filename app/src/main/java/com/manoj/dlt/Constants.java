@@ -1,5 +1,9 @@
 package com.manoj.dlt;
 
+import android.content.Context;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,5 +26,17 @@ public class Constants
         return FirebaseDatabase.getInstance()
                 .getReference(ENVIRONMENT.name().toLowerCase())
                 .child(DbConstants.USERS);
+    }
+
+    public static boolean isFirebaseAvailable(Context context)
+    {
+        int playServicesAvl = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+        if(playServicesAvl == ConnectionResult.SUCCESS)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 }
