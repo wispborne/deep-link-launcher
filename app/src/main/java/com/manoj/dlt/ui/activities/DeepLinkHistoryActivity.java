@@ -199,6 +199,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
+        initListViewData();
         EventBus.getDefault().register(this);
     }
 
@@ -206,7 +207,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        initListViewData();
         pasteFromClipboard();
     }
 
