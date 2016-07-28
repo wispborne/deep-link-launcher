@@ -14,4 +14,7 @@
     <string name="rate_dialog_message">Hi there! Would you please take out a few seconds to rate this app? The developer would really appreciate it :-)</string>
     <string name="rate_dialog_ok">Sure, Rate it now!</string>
     <string name="rate_dialog_cancel">Mark it as TODO</string>
+
+    <string name="share_chooser_title">Your dev friends are on...</string>
+    <string name="share_text">Hi! You can use this handy little tool to test out deep links on android itself: https://play.google.com/store/apps/details?id=com.manoj.dlt</string>
 </resources>
