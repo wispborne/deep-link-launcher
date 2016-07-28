@@ -2,8 +2,8 @@
 <manifest
         xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.manoj.dlt"
-        android:versionCode="202"
-        android:versionName="2.0.2">
+        android:versionCode="203"
+        android:versionName="2.0.3">
 
     <application
             android:allowBackup="true"
