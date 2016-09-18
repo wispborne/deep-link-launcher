@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:wheel="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -103,8 +102,8 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
-                wheel:matProg_barColor="#5588FF"
-                wheel:matProg_progressIndeterminate="true" />
+                app:matProg_barColor="#5588FF"
+                app:matProg_progressIndeterminate="true" />
         </FrameLayout>
 
     </LinearLayout>
