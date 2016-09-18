@@ -162,7 +162,8 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 _adapter.updateResults(charSequence);
             }
         });
-        _deepLinkInput.setOnClickListener(new View.OnClickListener() {
+        _deepLinkInput.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 _fabMenu.close(true);
