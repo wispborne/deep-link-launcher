@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -93,6 +94,16 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 shareApp();
+            }
+        });
+        findViewById(R.id.fab_rate).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_PLAY_URI)));
+                //Do not show app rate dialog anymore
+                AppRate.with(DeepLinkHistoryActivity.this).setAgreeShowDialog(false);
             }
         });
         setAppropriateLayout();
