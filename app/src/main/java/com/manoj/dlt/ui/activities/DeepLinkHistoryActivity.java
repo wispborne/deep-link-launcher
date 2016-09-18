@@ -73,6 +73,11 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 extractAndFireLink();
             }
         });
+        setFabClickListeners();
+        setAppropriateLayout();
+    }
+
+    private void setFabClickListeners() {
         findViewById(R.id.fab_web).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -106,7 +111,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 AppRate.with(DeepLinkHistoryActivity.this).setAgreeShowDialog(false);
             }
         });
-        setAppropriateLayout();
     }
 
     private void shareApp() {
