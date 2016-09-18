@@ -70,7 +70,7 @@
                 android:id="@+id/list_focus_overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/Gray"
+                android:background="@color/Black"
                 android:alpha="0.6"
                 android:visibility="gone"/>
 
@@ -86,7 +86,7 @@
                 app:menu_colorPressed="@color/fabColorPressed"
                 app:menu_labels_colorNormal="@color/fabColorNormal"
                 app:menu_labels_colorPressed="@color/fabColorPressed"
-                app:menu_labels_textColor="@color/Black">
+                app:menu_labels_textColor="@color/White">
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_share"
                     android:layout_width="wrap_content"
