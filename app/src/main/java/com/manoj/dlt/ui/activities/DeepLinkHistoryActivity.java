@@ -98,7 +98,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                shareApp();
+                Utilities.shareApp(DeepLinkHistoryActivity.this);
             }
         });
         findViewById(R.id.fab_rate).setOnClickListener(new View.OnClickListener()
@@ -111,14 +111,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 AppRate.with(DeepLinkHistoryActivity.this).setAgreeShowDialog(false);
             }
         });
-    }
-
-    private void shareApp() {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
     }
 
     private void configureListView()
