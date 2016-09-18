@@ -2,6 +2,7 @@ package com.manoj.dlt.ui.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -71,22 +72,38 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 extractAndFireLink();
             }
         });
-//        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                if(Constants.isFirebaseAvailable(DeepLinkHistoryActivity.this))
-//                {
-//                    String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
-//                    Utilities.showAlert("Fire from your PC", "go to https://swelteringfire-2158.firebaseapp.com/" + userId, DeepLinkHistoryActivity.this);
-//                } else
-//                {
-//                    Utilities.raiseError(getString(R.string.play_services_error), DeepLinkHistoryActivity.this);
-//                }
-//            }
-//        });
+        findViewById(R.id.fab_web).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(Constants.isFirebaseAvailable(DeepLinkHistoryActivity.this))
+                {
+                    String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
+                    Utilities.showAlert("Fire from your PC", "go to https://swelteringfire-2158.firebaseapp.com/" + userId, DeepLinkHistoryActivity.this);
+                } else
+                {
+                    Utilities.raiseError(getString(R.string.play_services_error), DeepLinkHistoryActivity.this);
+                }
+            }
+        });
+        findViewById(R.id.fab_share).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                shareApp();
+            }
+        });
         setAppropriateLayout();
+    }
+
+    private void shareApp() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
     }
 
     private void configureListView()
