@@ -165,7 +165,8 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         _deepLinkInput.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 _fabMenu.close(true);
             }
         });
