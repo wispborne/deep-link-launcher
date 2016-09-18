@@ -111,6 +111,14 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 AppRate.with(DeepLinkHistoryActivity.this).setAgreeShowDialog(false);
             }
         });
+        _fabMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener()
+        {
+            @Override
+            public void onMenuToggle(boolean opened)
+            {
+                setContentInFocus(opened);
+            }
+        });
     }
 
     private void configureListView()
@@ -342,6 +350,24 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput.setText(text);
         _deepLinkInput.setSelection(text.length());
+    }
+
+    private void setContentInFocus(boolean hideFocus)
+    {
+        View overlay = findViewById(R.id.list_focus_overlay);
+        if(hideFocus)
+        {
+            overlay.setVisibility(View.VISIBLE);
+        } else
+        {
+            overlay.setVisibility(View.GONE);
+        }
+        overlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _fabMenu.close(true);
+            }
+        });
     }
 
 }

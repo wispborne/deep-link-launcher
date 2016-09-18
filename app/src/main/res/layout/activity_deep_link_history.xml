@@ -66,6 +66,13 @@
                     android:paddingRight="@dimen/activity_horizontal_medium_margin"
                     android:listSelector="?attr/selectableItemBackground"
                     android:divider="@color/Gray"/>
+            <View
+                android:id="@+id/list_focus_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/Gray"
+                android:alpha="0.6"
+                android:visibility="gone"/>
 
             <com.github.clans.fab.FloatingActionMenu
                 android:id="@+id/fab_menu"
