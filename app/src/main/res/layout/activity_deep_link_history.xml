@@ -74,12 +74,20 @@
                 android:layout_gravity="bottom|end"
                 android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                app:menu_colorNormal="@color/DeepSkyBlue"
+                app:menu_colorPressed="@color/Turquoise"
+                app:menu_labels_colorNormal="@color/DeepSkyBlue"
+                app:menu_labels_colorPressed="@color/Turquoise"
+                app:menu_labels_textColor="@color/Black">
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_share_white_24px"
+                    app:fab_label="Share"
+                    app:fab_colorNormal="@color/DeepSkyBlue"
+                    app:fab_colorPressed="@color/Turquoise"
                     />
                 <!--<com.github.clans.fab.FloatingActionButton-->
                     <!--android:id="@+id/fab_shortcut"-->
@@ -91,12 +99,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_star_white_24dp"
+                    app:fab_label="Rate"
+                    app:fab_colorNormal="@color/DeepSkyBlue"
+                    app:fab_colorPressed="@color/Turquoise"
                     />
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_web"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_desktop_windows_white_24px"
+                    app:fab_label="Fire from web"
+                    app:fab_colorNormal="@color/DeepSkyBlue"
+                    app:fab_colorPressed="@color/Turquoise"
                     />
             </com.github.clans.fab.FloatingActionMenu>
 
@@ -105,7 +119,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
-                app:matProg_barColor="#5588FF"
+                app:matProg_barColor="@color/DeepSkyBlue"
                 app:matProg_progressIndeterminate="true" />
         </FrameLayout>
 
