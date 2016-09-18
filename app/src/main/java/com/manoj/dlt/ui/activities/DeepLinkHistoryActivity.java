@@ -77,7 +77,8 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         setAppropriateLayout();
     }
 
-    private void setFabClickListeners() {
+    private void setFabClickListeners()
+    {
         findViewById(R.id.fab_web).setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -383,9 +384,11 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         {
             overlay.setVisibility(View.GONE);
         }
-        overlay.setOnClickListener(new View.OnClickListener() {
+        overlay.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 _fabMenu.close(true);
             }
         });
