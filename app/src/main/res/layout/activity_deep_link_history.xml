@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:wheel="http://schemas.android.com/apk/res-auto">
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -66,13 +67,37 @@
                     android:paddingRight="@dimen/activity_horizontal_medium_margin"
                     android:listSelector="?attr/selectableItemBackground"
                     android:divider="@color/Gray"/>
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
+
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/fab_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
-                android:src="@drawable/laptop_icon" />
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp">
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_shortcut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_web"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </com.github.clans.fab.FloatingActionMenu>
+
             <com.pnikosis.materialishprogress.ProgressWheel
                 android:id="@+id/progress_wheel"
                 android:layout_width="80dp"

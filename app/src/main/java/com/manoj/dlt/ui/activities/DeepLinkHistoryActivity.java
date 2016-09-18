@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +40,7 @@ import hotchemi.android.rate.AppRate;
 public class DeepLinkHistoryActivity extends AppCompatActivity
 {
     private ListView _listView;
+    private FloatingActionMenu _fabMenu;
     private EditText _deepLinkInput;
     private DeepLinkListAdapter _adapter;
     private String _previousClipboardText;
@@ -57,6 +59,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
+        _fabMenu = (FloatingActionMenu) findViewById(R.id.fab_menu);
         _adapter = new DeepLinkListAdapter(new ArrayList<DeepLinkInfo>(), this);
         configureListView();
         configureDeepLinkInput();
@@ -68,21 +71,21 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 extractAndFireLink();
             }
         });
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                if(Constants.isFirebaseAvailable(DeepLinkHistoryActivity.this))
-                {
-                    String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
-                    Utilities.showAlert("Fire from your PC", "go to https://swelteringfire-2158.firebaseapp.com/" + userId, DeepLinkHistoryActivity.this);
-                } else
-                {
-                    Utilities.raiseError(getString(R.string.play_services_error), DeepLinkHistoryActivity.this);
-                }
-            }
-        });
+//        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View view)
+//            {
+//                if(Constants.isFirebaseAvailable(DeepLinkHistoryActivity.this))
+//                {
+//                    String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
+//                    Utilities.showAlert("Fire from your PC", "go to https://swelteringfire-2158.firebaseapp.com/" + userId, DeepLinkHistoryActivity.this);
+//                } else
+//                {
+//                    Utilities.raiseError(getString(R.string.play_services_error), DeepLinkHistoryActivity.this);
+//                }
+//            }
+//        });
         setAppropriateLayout();
     }
 
