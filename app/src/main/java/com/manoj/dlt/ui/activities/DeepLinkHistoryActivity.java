@@ -158,7 +158,14 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
+                _fabMenu.close(false);
                 _adapter.updateResults(charSequence);
+            }
+        });
+        _deepLinkInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _fabMenu.close(true);
             }
         });
     }
@@ -272,6 +279,18 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             }
         }
         EventBus.getDefault().removeStickyEvent(deepLinkFireEvent);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(_fabMenu.isOpened())
+        {
+            _fabMenu.close(true);
+        } else
+        {
+            super.onBackPressed();
+        }
     }
 
     private void initListViewData()
