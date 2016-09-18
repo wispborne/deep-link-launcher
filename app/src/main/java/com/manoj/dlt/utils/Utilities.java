@@ -175,4 +175,13 @@ public class Utilities
                 updatedTime);
     }
 
+    public static void shareApp(Context context)
+    {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_text));
+        sendIntent.setType("text/plain");
+        context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.share_chooser_title)));
+    }
+
 }

@@ -2,7 +2,9 @@ package com.manoj.dlt.ui.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +42,7 @@ import hotchemi.android.rate.AppRate;
 public class DeepLinkHistoryActivity extends AppCompatActivity
 {
     private ListView _listView;
+    private FloatingActionMenu _fabMenu;
     private EditText _deepLinkInput;
     private DeepLinkListAdapter _adapter;
     private String _previousClipboardText;
@@ -57,6 +61,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
+        _fabMenu = (FloatingActionMenu) findViewById(R.id.fab_menu);
         _adapter = new DeepLinkListAdapter(new ArrayList<DeepLinkInfo>(), this);
         configureListView();
         configureDeepLinkInput();
@@ -68,7 +73,13 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 extractAndFireLink();
             }
         });
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener()
+        setFabClickListeners();
+        setAppropriateLayout();
+    }
+
+    private void setFabClickListeners()
+    {
+        findViewById(R.id.fab_web).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -83,7 +94,32 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 }
             }
         });
-        setAppropriateLayout();
+        findViewById(R.id.fab_share).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Utilities.shareApp(DeepLinkHistoryActivity.this);
+            }
+        });
+        findViewById(R.id.fab_rate).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_PLAY_URI)));
+                //Do not show app rate dialog anymore
+                AppRate.with(DeepLinkHistoryActivity.this).setAgreeShowDialog(false);
+            }
+        });
+        _fabMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener()
+        {
+            @Override
+            public void onMenuToggle(boolean opened)
+            {
+                setContentInFocus(opened);
+            }
+        });
     }
 
     private void configureListView()
@@ -123,7 +159,16 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
+                _fabMenu.close(false);
                 _adapter.updateResults(charSequence);
+            }
+        });
+        _deepLinkInput.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                _fabMenu.close(true);
             }
         });
     }
@@ -239,6 +284,18 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         EventBus.getDefault().removeStickyEvent(deepLinkFireEvent);
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if(_fabMenu.isOpened())
+        {
+            _fabMenu.close(true);
+        } else
+        {
+            super.onBackPressed();
+        }
+    }
+
     private void initListViewData()
     {
         if(Constants.isFirebaseAvailable(this))
@@ -315,6 +372,26 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput.setText(text);
         _deepLinkInput.setSelection(text.length());
+    }
+
+    private void setContentInFocus(boolean hideFocus)
+    {
+        View overlay = findViewById(R.id.list_focus_overlay);
+        if(hideFocus)
+        {
+            overlay.setVisibility(View.VISIBLE);
+        } else
+        {
+            overlay.setVisibility(View.GONE);
+        }
+        overlay.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                _fabMenu.close(true);
+            }
+        });
     }
 
 }

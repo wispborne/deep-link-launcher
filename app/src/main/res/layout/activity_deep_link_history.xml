@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:wheel="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -66,20 +66,68 @@
                     android:paddingRight="@dimen/activity_horizontal_medium_margin"
                     android:listSelector="?attr/selectableItemBackground"
                     android:divider="@color/Gray"/>
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
+            <View
+                android:id="@+id/list_focus_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/Black"
+                android:alpha="0.6"
+                android:visibility="gone"/>
+
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/fab_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="16dp"
-                android:src="@drawable/laptop_icon" />
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:menu_colorNormal="@color/fabColorNormal"
+                app:menu_colorPressed="@color/fabColorPressed"
+                app:menu_labels_colorNormal="@color/fabColorNormal"
+                app:menu_labels_colorPressed="@color/fabColorPressed"
+                app:menu_labels_textColor="@color/White">
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_share_white_24px"
+                    app:fab_label="Share"
+                    app:fab_colorNormal="@color/fabColorNormal"
+                    app:fab_colorPressed="@color/fabColorPressed"
+                    />
+                <!--<com.github.clans.fab.FloatingActionButton-->
+                    <!--android:id="@+id/fab_shortcut"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--/>-->
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star_white_24dp"
+                    app:fab_label="Rate"
+                    app:fab_colorNormal="@color/fabColorNormal"
+                    app:fab_colorPressed="@color/fabColorPressed"
+                    />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_web"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_desktop_windows_white_24px"
+                    app:fab_label="Fire from web"
+                    app:fab_colorNormal="@color/fabColorNormal"
+                    app:fab_colorPressed="@color/fabColorPressed"
+                    />
+            </com.github.clans.fab.FloatingActionMenu>
+
             <com.pnikosis.materialishprogress.ProgressWheel
                 android:id="@+id/progress_wheel"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
-                wheel:matProg_barColor="#5588FF"
-                wheel:matProg_progressIndeterminate="true" />
+                app:matProg_barColor="@color/fabColorNormal"
+                app:matProg_progressIndeterminate="true" />
         </FrameLayout>
 
     </LinearLayout>
