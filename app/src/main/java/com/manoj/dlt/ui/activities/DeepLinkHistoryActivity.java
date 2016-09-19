@@ -158,6 +158,23 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 setDeepLinkInputText(info.getDeepLink());
             }
         });
+        _listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                DeepLinkInfo info = (DeepLinkInfo) _adapter.getItem(position);
+                confirmShortcut(info);
+                return true;
+            }
+        });
+    }
+
+    private void confirmShortcut(DeepLinkInfo info)
+    {
+        //TODO: show confirm dialog
+        Utilities.addShortcut(info.getDeepLink(), DeepLinkHistoryActivity.this, info.getActivityLabel());
+        Toast.makeText(DeepLinkHistoryActivity.this, "shortcut added", Toast.LENGTH_LONG).show();
     }
 
     private void configureDeepLinkInput()
