@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
-import com.github.clans.fab.FloatingActionMenu;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +43,7 @@ import hotchemi.android.rate.AppRate;
 public class DeepLinkHistoryActivity extends AppCompatActivity
 {
     private ListView _listView;
-    private FloatingActionMenu _fabMenu;
+    private FloatingActionsMenu _fabMenu;
     private EditText _deepLinkInput;
     private DeepLinkListAdapter _adapter;
     private String _previousClipboardText;
@@ -61,7 +62,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     {
         _deepLinkInput = (EditText) findViewById(R.id.deep_link_input);
         _listView = (ListView) findViewById(R.id.deep_link_list_view);
-        _fabMenu = (FloatingActionMenu) findViewById(R.id.fab_menu);
         _adapter = new DeepLinkListAdapter(new ArrayList<DeepLinkInfo>(), this);
         configureListView();
         configureDeepLinkInput();
@@ -73,13 +73,19 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 extractAndFireLink();
             }
         });
-        setFabClickListeners();
+        setFabMenuActions();
         setAppropriateLayout();
     }
 
-    private void setFabClickListeners()
+    private void setFabMenuActions()
     {
-        findViewById(R.id.fab_web).setOnClickListener(new View.OnClickListener()
+        setFabMenuOrientation();
+        setFabListeners();
+    }
+
+    private void setFabListeners()
+    {
+        _fabMenu.findViewById(R.id.fab_web).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -94,7 +100,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 }
             }
         });
-        findViewById(R.id.fab_share).setOnClickListener(new View.OnClickListener()
+        _fabMenu.findViewById(R.id.fab_share).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -102,7 +108,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 Utilities.shareApp(DeepLinkHistoryActivity.this);
             }
         });
-        findViewById(R.id.fab_rate).setOnClickListener(new View.OnClickListener()
+        _fabMenu.findViewById(R.id.fab_rate).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -112,14 +118,32 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 AppRate.with(DeepLinkHistoryActivity.this).setAgreeShowDialog(false);
             }
         });
-        _fabMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener()
+        _fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener()
         {
             @Override
-            public void onMenuToggle(boolean opened)
+            public void onMenuExpanded()
             {
-                setContentInFocus(opened);
+                setContentInFocus(true);
+            }
+
+            @Override
+            public void onMenuCollapsed()
+            {
+                setContentInFocus(false);
             }
         });
+    }
+
+    private void setFabMenuOrientation()
+    {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            _fabMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu_vertical);
+        } else
+        {
+            _fabMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu_horizontal);
+        }
+        _fabMenu.setVisibility(View.VISIBLE);
     }
 
     private void configureListView()
@@ -159,7 +183,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-                _fabMenu.close(false);
+                _fabMenu.collapse();
                 _adapter.updateResults(charSequence);
             }
         });
@@ -168,7 +192,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                _fabMenu.close(true);
+                _fabMenu.collapse();
             }
         });
     }
@@ -287,9 +311,9 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        if(_fabMenu.isOpened())
+        if(_fabMenu.isExpanded())
         {
-            _fabMenu.close(true);
+            _fabMenu.collapse();
         } else
         {
             super.onBackPressed();
@@ -389,7 +413,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                _fabMenu.close(true);
+                _fabMenu.collapse();
             }
         });
     }
