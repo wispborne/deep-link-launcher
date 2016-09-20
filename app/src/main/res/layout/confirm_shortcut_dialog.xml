@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="@color/White">
+    <TextView
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:text="CONFIRM SHORTCUT"
+        android:textColor="@color/Black"
+        android:id="@+id/confirm_shortcut_title"
+        android:textSize="20dp"/>
+    <EditText
+        android:layout_margin="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/shortcut_label"
+        android:layout_below="@id/confirm_shortcut_title"
+        android:hint="Test entry into activity"/>
+    <TextView
+        android:layout_margin="8dp"
+        android:layout_below="@id/shortcut_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/fabColorNormal"
+        android:text="CONFIRM"
+        android:layout_alignParentRight="true"
+        android:id="@+id/confirm_shortcut_positive"/>
+    <TextView
+        android:layout_margin="8dp"
+        android:layout_below="@id/shortcut_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/fabColorNormal"
+        android:text="DISMISS"
+        android:layout_toLeftOf="@id/confirm_shortcut_positive"
+        android:id="@+id/confirm_shortcut_negative"/>
+
+</RelativeLayout>
