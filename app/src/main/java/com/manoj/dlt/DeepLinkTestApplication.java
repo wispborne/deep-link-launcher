@@ -4,6 +4,7 @@ import android.app.Application;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.database.FirebaseDatabase;
 import com.manoj.dlt.features.DeepLinkHistoryFeature;
 import com.manoj.dlt.features.LinkQueueHandler;
 import com.manoj.dlt.features.ProfileFeature;
@@ -24,6 +25,7 @@ public class DeepLinkTestApplication extends Application
         {
             Toast.makeText(getApplicationContext(),"In Testing mode",Toast.LENGTH_LONG).show();
         }
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         DeepLinkHistoryFeature.getInstance(getApplicationContext());
         Utilities.initializeAppRateDialog(getApplicationContext());
         LinkQueueHandler.getInstance(getApplicationContext()).runQueueListener();
