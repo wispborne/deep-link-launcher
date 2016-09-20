@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/shortcut_label"
         android:layout_below="@id/confirm_shortcut_title"
-        android:hint="Test entry into activity"/>
+        android:hint="Custom label"/>
     <TextView
         android:layout_margin="8dp"
         android:layout_below="@id/shortcut_label"
