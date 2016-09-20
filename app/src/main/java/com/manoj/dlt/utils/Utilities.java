@@ -99,7 +99,6 @@ public class Utilities
         }
     }
 
-    @NonNull
     private static Intent getDeepLinkIntent(String deepLinkUri) {
         Uri uri = Uri.parse(deepLinkUri);
         Intent intent = new Intent();

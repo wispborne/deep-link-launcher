@@ -7,6 +7,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.manoj.dlt.features.DeepLinkHistoryFeature;
 import com.manoj.dlt.features.ProfileFeature;
 import com.manoj.dlt.models.DeepLinkInfo;
 import com.manoj.dlt.models.ResultType;
+import com.manoj.dlt.ui.ConfirmShortcutDialog;
 import com.manoj.dlt.ui.adapters.DeepLinkListAdapter;
 import com.manoj.dlt.utils.TextChangedListener;
 import com.manoj.dlt.utils.Utilities;
@@ -42,6 +45,7 @@ import hotchemi.android.rate.AppRate;
 
 public class DeepLinkHistoryActivity extends AppCompatActivity
 {
+    public static final String TAG_DIALOG = "dialog";
     private ListView _listView;
     private FloatingActionsMenu _fabMenu;
     private EditText _deepLinkInput;
@@ -163,18 +167,24 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
-                DeepLinkInfo info = (DeepLinkInfo) _adapter.getItem(position);
-                confirmShortcut(info);
+                showConfirmShortcutDialog((DeepLinkInfo) _adapter.getItem(position));
                 return true;
             }
         });
     }
 
-    private void confirmShortcut(DeepLinkInfo info)
+    private void showConfirmShortcutDialog(DeepLinkInfo info)
     {
-        //TODO: show confirm dialog
-        Utilities.addShortcut(info.getDeepLink(), DeepLinkHistoryActivity.this, info.getActivityLabel());
-        Toast.makeText(DeepLinkHistoryActivity.this, "shortcut added", Toast.LENGTH_LONG).show();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null)
+        {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        ConfirmShortcutDialog.newInstance(info.getDeepLink(), info.getActivityLabel()).show(ft, TAG_DIALOG);
     }
 
     private void configureDeepLinkInput()
