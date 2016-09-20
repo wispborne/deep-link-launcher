@@ -55,6 +55,6 @@ public class ProfileFeature implements IProfileFeature
     {
         //TODO: better implementation
         String rand = UUID.randomUUID().toString();
-        return rand.substring(0,4);
+        return rand.substring(0,5);
     }
 }
