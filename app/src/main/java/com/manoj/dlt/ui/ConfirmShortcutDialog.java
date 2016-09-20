@@ -80,6 +80,7 @@ public class ConfirmShortcutDialog extends DialogFragment
             {
                 Utilities.addShortcut(_deepLink,getActivity(), labelEditText.getText().toString());
                 Toast.makeText(getActivity(), "shortcut added", Toast.LENGTH_LONG).show();
+                dismiss();
             }
         });
     }
