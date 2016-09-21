@@ -21,6 +21,7 @@ public class DeepLinkTestApplication extends Application
         {
             Fabric.with(this, new Crashlytics());
             Crashlytics.setUserIdentifier(ProfileFeature.getInstance(this).getUserId());
+            Crashlytics.setString("user id", ProfileFeature.getInstance(this).getUserId());
         } else
         {
             Toast.makeText(getApplicationContext(),"In Testing mode",Toast.LENGTH_LONG).show();
