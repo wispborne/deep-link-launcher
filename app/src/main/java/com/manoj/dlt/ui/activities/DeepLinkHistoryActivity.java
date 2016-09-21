@@ -374,6 +374,10 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 {
                     _adapter.updateResults(_deepLinkInput.getText().toString());
                 }
+                if(deepLinkInfos.size() > 0 && !Utilities.isShortcutHintSeen(DeepLinkHistoryActivity.this))
+                {
+                    showShortcutBanner();
+                }
             }
 
             @Override
@@ -383,6 +387,21 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             }
         };
     }
+
+    private void showShortcutBanner()
+    {
+        findViewById(R.id.shortcut_hint_banner).setVisibility(View.VISIBLE);
+        findViewById(R.id.shortcut_hint_banner_cancel).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Utilities.setShortcutBannerSeen(DeepLinkHistoryActivity.this);
+                findViewById(R.id.shortcut_hint_banner).setVisibility(View.GONE);
+            }
+        });
+    }
+
     private boolean shouldFireDeepLink(int actionId)
     {
         if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT)
