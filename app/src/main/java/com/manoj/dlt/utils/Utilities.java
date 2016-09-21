@@ -148,7 +148,7 @@ public class Utilities
         }
     }
 
-    private static FileSystem getOneTimeStore(Context context)
+    public static FileSystem getOneTimeStore(Context context)
     {
         return new FileSystem(context, Constants.GLOBAL_PREF_KEY);
     }

@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.DbConstants;
 import com.manoj.dlt.interfaces.IProfileFeature;
+import com.manoj.dlt.utils.Utilities;
 
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ public class ProfileFeature implements IProfileFeature
 
     private ProfileFeature(Context context)
     {
-        _fileSystem = new FileSystem(context, Constants.GLOBAL_PREF_KEY);
+        _fileSystem = Utilities.getOneTimeStore(context);
         _userId = _fileSystem.read(Constants.USER_ID_KEY);
         if(_userId == null)
         {
