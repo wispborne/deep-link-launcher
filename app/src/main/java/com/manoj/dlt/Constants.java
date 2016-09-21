@@ -17,6 +17,7 @@ public class Constants
     public static final String DEEP_LINK_HISTORY_KEY = "deep_link_history_key_v1";
     public static final String GLOBAL_PREF_KEY = "one_time_key";
     public static final String APP_TUTORIAL_SEEN = "app_tut_seen";
+    public static final String SHORTCUT_HINT_SEEN = "shortcut_hint_seen";
     public static final String USER_ID_KEY = "user_id";
     public static final String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=com.manoj.dlt";
     public static CONFIG ENVIRONMENT  = CONFIG.SANDBOX;

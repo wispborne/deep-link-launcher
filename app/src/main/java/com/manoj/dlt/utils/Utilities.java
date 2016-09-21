@@ -126,8 +126,7 @@ public class Utilities
 
     public static boolean isAppTutorialSeen(Context context)
     {
-        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.GLOBAL_PREF_KEY);
-        String tutSeenBool = oneTimeBooleanStore.read(Constants.APP_TUTORIAL_SEEN);
+        String tutSeenBool = getOneTimeStore(context).read(Constants.APP_TUTORIAL_SEEN);
         if (tutSeenBool != null && tutSeenBool.equals("true"))
         {
             return true;
@@ -137,10 +136,31 @@ public class Utilities
         }
     }
 
+    public static boolean isShortcutHintSeen(Context context)
+    {
+        String shortcutSeenString = getOneTimeStore(context).read(Constants.SHORTCUT_HINT_SEEN);
+        if (shortcutSeenString != null && shortcutSeenString.equals("true"))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
+    private static FileSystem getOneTimeStore(Context context)
+    {
+        return new FileSystem(context, Constants.GLOBAL_PREF_KEY);
+    }
+
     public static void setAppTutorialSeen(Context context)
     {
-        FileSystem oneTimeBooleanStore = new FileSystem(context, Constants.GLOBAL_PREF_KEY);
-        oneTimeBooleanStore.write(Constants.APP_TUTORIAL_SEEN, "true");
+        getOneTimeStore(context).write(Constants.APP_TUTORIAL_SEEN, "true");
+    }
+
+    public static void setShortcutBannerSeen(Context context)
+    {
+        getOneTimeStore(context).write(Constants.SHORTCUT_HINT_SEEN, "true");
     }
 
     public static void showKeyboard(Context activityContext)
