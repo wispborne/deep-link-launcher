@@ -51,6 +51,20 @@ public class Utilities
         }
     }
 
+    public static void addShortcut(String deepLinkUri, Context context, String shortcutName)
+    {
+        final Intent shortcutIntent = getDeepLinkIntent(deepLinkUri);
+        final Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        // Sets the custom shortcut's title
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
+        // Set the custom shortcut icon
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.drawable.ic_launcher));
+        // add the shortcut
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        context.sendBroadcast(intent);
+    }
+
     public static boolean isProperUri(String uriText)
     {
         Uri uri = Uri.parse(uriText);
@@ -68,10 +82,7 @@ public class Utilities
 
     public static boolean resolveAndFire(String deepLinkUri, Context context)
     {
-        Uri uri = Uri.parse(deepLinkUri);
-        Intent intent = new Intent();
-        intent.setData(uri);
-        intent.setAction(Intent.ACTION_VIEW);
+        Intent intent = getDeepLinkIntent(deepLinkUri);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PackageManager pm = context.getPackageManager();
         ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -86,6 +97,14 @@ public class Utilities
         {
             return false;
         }
+    }
+
+    private static Intent getDeepLinkIntent(String deepLinkUri) {
+        Uri uri = Uri.parse(deepLinkUri);
+        Intent intent = new Intent();
+        intent.setData(uri);
+        intent.setAction(Intent.ACTION_VIEW);
+        return intent;
     }
 
     public static SpannableStringBuilder colorPartialString(String text, int startPos, int length, int color)
