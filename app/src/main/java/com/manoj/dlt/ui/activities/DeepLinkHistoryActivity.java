@@ -328,7 +328,12 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             attachFirebaseListener();
         } else
         {
-            _adapter.updateBaseData(DeepLinkHistoryFeature.getInstance(this).getLinkHistoryFromFileSystem());
+            List<DeepLinkInfo> deepLinkInfoList = DeepLinkHistoryFeature.getInstance(this).getLinkHistoryFromFileSystem();
+            if(deepLinkInfoList.size() > 0)
+            {
+                showShortcutBanner();
+            }
+            _adapter.updateBaseData(deepLinkInfoList);
             findViewById(R.id.progress_wheel).setVisibility(View.GONE);
         }
         _adapter.updateResults(_deepLinkInput.getText().toString());
