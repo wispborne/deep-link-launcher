@@ -56,7 +56,6 @@ public class Utilities
         final Intent shortcutIntent = getDeepLinkIntent(deepLinkUri);
         final Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        // Sets the custom shortcut's title
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
         // Set the custom shortcut icon
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.drawable.ic_launcher));
