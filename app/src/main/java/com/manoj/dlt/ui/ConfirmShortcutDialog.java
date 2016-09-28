@@ -78,8 +78,14 @@ public class ConfirmShortcutDialog extends DialogFragment
             @Override
             public void onClick(View v)
             {
-                Utilities.addShortcut(_deepLink,getActivity(), labelEditText.getText().toString());
-                Toast.makeText(getActivity(), "shortcut added", Toast.LENGTH_LONG).show();
+                boolean shortcutAdded = Utilities.addShortcut(_deepLink,getActivity(), labelEditText.getText().toString());
+                if(shortcutAdded)
+                {
+                    Toast.makeText(getActivity(), "shortcut added", Toast.LENGTH_LONG).show();
+                } else
+                {
+                    Toast.makeText(getActivity(), "could not add shortcut", Toast.LENGTH_LONG).show();
+                }
                 dismiss();
             }
         });
