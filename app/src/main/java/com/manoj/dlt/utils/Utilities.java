@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
@@ -51,17 +53,27 @@ public class Utilities
         }
     }
 
-    public static void addShortcut(String deepLinkUri, Context context, String shortcutName)
+    public static boolean addShortcut(String deepLinkUri, Context context, String shortcutName)
     {
         final Intent shortcutIntent = getDeepLinkIntent(deepLinkUri);
         final Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
-        // Set the custom shortcut icon
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(context, R.drawable.ic_launcher));
-        // add the shortcut
-        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        context.sendBroadcast(intent);
+        // Set the custom shortcut icon. Not sure about this, but seems to work
+        ResolveInfo resolveInfo = getResolveInfo(context, getDeepLinkIntent(deepLinkUri));
+        try
+        {
+            Drawable icon = context.getPackageManager().getApplicationIcon(resolveInfo.activityInfo.packageName);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, ((BitmapDrawable)icon).getBitmap());
+            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            context.sendBroadcast(intent);
+            return true;
+        } catch (Exception exception)
+        {
+            Crashlytics.logException(exception);
+            exception.printStackTrace();
+            return false;
+        }
     }
 
     public static boolean isProperUri(String uriText)
