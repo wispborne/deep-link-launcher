@@ -84,8 +84,7 @@ public class Utilities
     {
         Intent intent = getDeepLinkIntent(deepLinkUri);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PackageManager pm = context.getPackageManager();
-        ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        ResolveInfo resolveInfo = getResolveInfo(context, intent);
         if (resolveInfo != null)
         {
             context.startActivity(intent);
@@ -97,6 +96,12 @@ public class Utilities
         {
             return false;
         }
+    }
+
+    private static ResolveInfo getResolveInfo(Context context, Intent intent)
+    {
+        PackageManager pm = context.getPackageManager();
+        return pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
     }
 
     private static Intent getDeepLinkIntent(String deepLinkUri) {
