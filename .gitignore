@@ -16,3 +16,4 @@ app/releases
 app/google_services.json
 *.apk
 app/*.apk
+*.properties
