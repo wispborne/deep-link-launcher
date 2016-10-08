@@ -26,9 +26,12 @@ public class DeepLinkTestApplication extends Application
         {
             Toast.makeText(getApplicationContext(),"In Testing mode",Toast.LENGTH_LONG).show();
         }
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if(Constants.isFirebaseAvailable(this))
+        {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            LinkQueueHandler.getInstance(getApplicationContext()).runQueueListener();
+        }
         DeepLinkHistoryFeature.getInstance(getApplicationContext());
         Utilities.initializeAppRateDialog(getApplicationContext());
-        LinkQueueHandler.getInstance(getApplicationContext()).runQueueListener();
     }
 }
