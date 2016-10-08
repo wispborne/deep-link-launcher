@@ -69,6 +69,7 @@ public class LinkQueueHandler {
                 String qId = dataSnapshot.getKey();
                 String deepLink = dataSnapshot.getValue().toString();
                 Utilities.checkAndFireDeepLink(deepLink, _context);
+                Utilities.logLinkViaWeb(deepLink, ProfileFeature.getInstance(_context).getUserId(), _context);
                 _queueReference.child(qId).setValue(null);
             }
         };

@@ -7,6 +7,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -15,6 +16,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.manoj.dlt.Constants;
 import com.manoj.dlt.DbConstants;
@@ -239,4 +243,16 @@ public class Utilities
         context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.share_chooser_title)));
     }
 
+    public static void logLinkViaWeb(String deepLink, String userId, Context context)
+    {
+        Answers.getInstance().logCustom(new CustomEvent("deep link fired via web")
+        .putCustomAttribute("deepLink", deepLink)
+        .putCustomAttribute("userId", userId)
+        .putCustomAttribute("timeStamp",System.currentTimeMillis()));
+        Bundle bundle = new Bundle();
+        bundle.putString("deepLink", deepLink);
+        bundle.putString("userId", userId);
+        bundle.putLong("timeStamp", System.currentTimeMillis());
+        FirebaseAnalytics.getInstance(context).logEvent("deep link fired via web", bundle);
+    }
 }
