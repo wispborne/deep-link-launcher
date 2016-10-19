@@ -44,8 +44,6 @@
                 />
                 <ImageView
                         android:layout_width="44dp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
                         android:layout_height="match_parent"
                         android:src="@drawable/custom_go_24dp"
                         android:scaleType="fitCenter"
