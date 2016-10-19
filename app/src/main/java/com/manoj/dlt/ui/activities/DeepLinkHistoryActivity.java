@@ -358,7 +358,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             List<DeepLinkInfo> deepLinkInfoList = DeepLinkHistoryFeature.getInstance(this).getLinkHistoryFromFileSystem();
             if(deepLinkInfoList.size() > 0)
             {
-                showShortcutBanner();
+                showShortcutBannerIfNeeded();
             }
             _adapter.updateBaseData(deepLinkInfoList);
             findViewById(R.id.progress_wheel).setVisibility(View.GONE);
@@ -406,9 +406,9 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
                 {
                     _adapter.updateResults(_deepLinkInput.getText().toString());
                 }
-                if(deepLinkInfos.size() > 0 && !Utilities.isShortcutHintSeen(DeepLinkHistoryActivity.this))
+                if(deepLinkInfos.size() > 0)
                 {
-                    showShortcutBanner();
+                    showShortcutBannerIfNeeded();
                 }
             }
 
@@ -420,18 +420,21 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         };
     }
 
-    private void showShortcutBanner()
+    private void showShortcutBannerIfNeeded()
     {
-        findViewById(R.id.shortcut_hint_banner).setVisibility(View.VISIBLE);
-        findViewById(R.id.shortcut_hint_banner_cancel).setOnClickListener(new View.OnClickListener()
+        if(!Utilities.isShortcutHintSeen(this))
         {
-            @Override
-            public void onClick(View v)
+            findViewById(R.id.shortcut_hint_banner).setVisibility(View.VISIBLE);
+            findViewById(R.id.shortcut_hint_banner_cancel).setOnClickListener(new View.OnClickListener()
             {
-                Utilities.setShortcutBannerSeen(DeepLinkHistoryActivity.this);
-                findViewById(R.id.shortcut_hint_banner).setVisibility(View.GONE);
-            }
-        });
+                @Override
+                public void onClick(View v)
+                {
+                    Utilities.setShortcutBannerSeen(DeepLinkHistoryActivity.this);
+                    findViewById(R.id.shortcut_hint_banner).setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     private boolean shouldFireDeepLink(int actionId)
