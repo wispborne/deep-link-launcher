@@ -47,6 +47,7 @@
 
     </LinearLayout>
     <ImageView
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/deep_link_remove"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="8dp"
