@@ -24,6 +24,8 @@ android {
         applicationId "com.manoj.dlt"
         minSdkVersion 14
         targetSdkVersion 22
+        vectorDrawables.useSupportLibrary = true
+        resConfig "en"
     }
     buildTypes {
         release {
@@ -40,13 +42,13 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:cardview-v7:23.2.0'
     compile 'com.pnikosis:materialish-progress:1.7'
     compile 'com.github.hotchemi:android-rate:1.0.1'
     compile 'com.google.firebase:firebase-database:9.0.2'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:design:23.2.0'
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
