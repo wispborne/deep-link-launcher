@@ -24,7 +24,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:background="@color/White"
                     android:orientation="horizontal">
                 <EditText
                         android:layout_width="0dp"
@@ -36,7 +35,6 @@
                         android:textSize="@dimen/abc_text_size_large_material"
                         android:minHeight="48dp"
                         android:inputType="textUri"
-                        android:background="@color/White"
                         android:imeOptions="actionGo"/>
                 <View
                         android:layout_width="1dp"
