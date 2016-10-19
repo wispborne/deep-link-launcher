@@ -35,7 +35,6 @@ android {
     dexOptions{
         maxProcessCount 4
         threadCount 16
-        incremental true
     }
 }
 
