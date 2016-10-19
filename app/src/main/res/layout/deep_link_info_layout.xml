@@ -55,5 +55,6 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_cancel_red_24_px"
             android:scaleType="center"
+            android:elevation="4dp"
             />
 </LinearLayout>
