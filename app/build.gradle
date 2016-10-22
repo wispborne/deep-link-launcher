@@ -24,7 +24,6 @@ android {
         applicationId "com.manoj.dlt"
         minSdkVersion 14
         targetSdkVersion 22
-        vectorDrawables.useSupportLibrary = true
         resConfig "en"
         buildConfigField("com.manoj.dlt.Constants.CONFIG", "CONFIG", "com.manoj.dlt.Constants.CONFIG.SANDBOX")
         //buildConfigField("com.manoj.dlt.Constants.CONFIG", "CONFIG", "com.manoj.dlt.Constants.CONFIG.PRODUCTION")
