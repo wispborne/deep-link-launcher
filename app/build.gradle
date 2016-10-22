@@ -26,12 +26,15 @@ android {
         targetSdkVersion 22
         vectorDrawables.useSupportLibrary = true
         resConfig "en"
+        buildConfigField("com.manoj.dlt.Constants.CONFIG", "CONFIG", "com.manoj.dlt.Constants.CONFIG.SANDBOX")
+        //buildConfigField("com.manoj.dlt.Constants.CONFIG", "CONFIG", "com.manoj.dlt.Constants.CONFIG.PRODUCTION")
     }
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("com.manoj.dlt.Constants.CONFIG", "CONFIG", "com.manoj.dlt.Constants.CONFIG.PRODUCTION")
         }
     }
     dexOptions{
