@@ -119,10 +119,10 @@
                 android:text="GOT IT"/>
         </LinearLayout>
     </LinearLayout>
-    <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/tutorial"
-            android:scaleType="fitXY"
-            android:id="@+id/tutorial_layer"/>
+    <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/tutorial"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:id="@+id/tutorial_layer"/>-->
 </FrameLayout>

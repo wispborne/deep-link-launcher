@@ -3,7 +3,6 @@ package com.manoj.dlt.ui.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,9 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +43,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import hotchemi.android.rate.AppRate;
@@ -94,7 +99,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                if(Constants.isFirebaseAvailable(DeepLinkHistoryActivity.this))
+                if (Constants.isFirebaseAvailable(DeepLinkHistoryActivity.this))
                 {
                     String userId = ProfileFeature.getInstance(DeepLinkHistoryActivity.this).getUserId();
                     Utilities.showAlert("Fire from your PC", "go to https://swelteringfire-2158.firebaseapp.com/" + userId, DeepLinkHistoryActivity.this);
@@ -140,7 +145,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 
     private void setFabMenuOrientation()
     {
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
         {
             _fabMenu = (FloatingActionsMenu) findViewById(R.id.fab_menu_vertical);
         } else
@@ -261,25 +266,27 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             showDeepLinkRootView();
         } else
         {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            View tutorialView = findViewById(R.id.tutorial_layer);
-            tutorialView.setVisibility(View.VISIBLE);
-            tutorialView.setClickable(true);
-            tutorialView.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    Utilities.setAppTutorialSeen(DeepLinkHistoryActivity.this);
-                    showDeepLinkRootView();
-                }
-            });
+            showDeepLinkRootView();
+            launchTutorial();
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//            View tutorialView = findViewById(R.id.tutorial_layer);
+//            tutorialView.setVisibility(View.VISIBLE);
+//            tutorialView.setClickable(true);
+//            tutorialView.setOnClickListener(new View.OnClickListener()
+//            {
+//                @Override
+//                public void onClick(View view)
+//                {
+//                    Utilities.setAppTutorialSeen(DeepLinkHistoryActivity.this);
+//                    showDeepLinkRootView();
+//                }
+//            });
         }
     }
 
     private void showDeepLinkRootView()
     {
-        findViewById(R.id.tutorial_layer).setVisibility(View.GONE);
+//        findViewById(R.id.tutorial_layer).setVisibility(View.GONE);
         findViewById(R.id.deep_link_history_root).setVisibility(View.VISIBLE);
         _deepLinkInput.requestFocus();
         Utilities.showKeyboard(this);
@@ -314,20 +321,20 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         super.onStop();
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @Subscribe (sticky = true, threadMode = ThreadMode.MAIN)
     public void onEvent(DeepLinkFireEvent deepLinkFireEvent)
     {
         String deepLinkString = deepLinkFireEvent.getDeepLinkInfo().getDeepLink();
         setDeepLinkInputText(deepLinkString);
-        if(deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
+        if (deepLinkFireEvent.getResultType().equals(ResultType.SUCCESS))
         {
             _adapter.updateResults(deepLinkString);
         } else
         {
-            if(DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND.equals(deepLinkFireEvent.getFailureReason()))
+            if (DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND.equals(deepLinkFireEvent.getFailureReason()))
             {
                 Utilities.raiseError(getString(R.string.error_no_activity_resolved).concat(": ").concat(deepLinkString), this);
-            } else if(DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI.equals(deepLinkFireEvent.getFailureReason()))
+            } else if (DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI.equals(deepLinkFireEvent.getFailureReason()))
             {
                 Utilities.raiseError(getString(R.string.error_improper_uri).concat(": ").concat(deepLinkString), this);
             }
@@ -338,7 +345,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        if(_fabMenu.isExpanded())
+        if (_fabMenu.isExpanded())
         {
             _fabMenu.collapse();
         } else
@@ -349,14 +356,14 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 
     private void initListViewData()
     {
-        if(Constants.isFirebaseAvailable(this))
+        if (Constants.isFirebaseAvailable(this))
         {
             //Attach callback to init adapter from data in firebase
             attachFirebaseListener();
         } else
         {
             List<DeepLinkInfo> deepLinkInfoList = DeepLinkHistoryFeature.getInstance(this).getLinkHistoryFromFileSystem();
-            if(deepLinkInfoList.size() > 0)
+            if (deepLinkInfoList.size() > 0)
             {
                 showShortcutBannerIfNeeded();
             }
@@ -366,9 +373,38 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
         _adapter.updateResults(_deepLinkInput.getText().toString());
     }
 
+    private void launchTutorial()
+    {
+        DeepLinkInfo deepLinkInfo = new DeepLinkInfo("deeplinktester://example", "Deep Link Tester", getPackageName(), new Date().getTime());
+        final String testLinkId = deepLinkInfo.getId();
+        final DeepLinkHistoryFeature deepLinkHistoryFeature = DeepLinkHistoryFeature.getInstance(this);
+        deepLinkHistoryFeature.addLinkToHistory(deepLinkInfo);
+
+        new TapTargetSequence(this)
+                .targets(TapTarget.forView(findViewById(R.id.deep_link_input), getString(R.string.onboarding_input_title))
+                        .dimColor(android.R.color.black)
+                        .outerCircleColor(R.color.SlateGray)
+                        .targetCircleColor(android.R.color.background_light))
+                .listener(new TapTargetSequence.Listener()
+                {
+                    @Override
+                    public void onSequenceFinish()
+                    {
+                        deepLinkHistoryFeature.removeLinkFromHistory(testLinkId);
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget)
+                    {
+
+                    }
+                })
+                .start();
+    }
+
     private void attachFirebaseListener()
     {
-        if(Constants.isFirebaseAvailable(this))
+        if (Constants.isFirebaseAvailable(this))
         {
             DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
             DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
@@ -378,7 +414,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 
     private void removeFirebaseListener()
     {
-        if(Constants.isFirebaseAvailable(this))
+        if (Constants.isFirebaseAvailable(this))
         {
             DatabaseReference baseUserReference = ProfileFeature.getInstance(this).getCurrentUserFirebaseBaseRef();
             DatabaseReference linkReference = baseUserReference.child(DbConstants.USER_HISTORY);
@@ -395,18 +431,18 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
             {
                 findViewById(R.id.progress_wheel).setVisibility(View.GONE);
                 List<DeepLinkInfo> deepLinkInfos = new ArrayList<DeepLinkInfo>();
-                for(DataSnapshot child: dataSnapshot.getChildren())
+                for (DataSnapshot child : dataSnapshot.getChildren())
                 {
                     DeepLinkInfo info = Utilities.getLinkInfo(child);
                     deepLinkInfos.add(info);
                 }
                 Collections.sort(deepLinkInfos);
                 _adapter.updateBaseData(deepLinkInfos);
-                if(_deepLinkInput != null && _deepLinkInput.getText().length() > 0)
+                if (_deepLinkInput != null && _deepLinkInput.getText().length() > 0)
                 {
                     _adapter.updateResults(_deepLinkInput.getText().toString());
                 }
-                if(deepLinkInfos.size() > 0)
+                if (deepLinkInfos.size() > 0)
                 {
                     showShortcutBannerIfNeeded();
                 }
@@ -422,7 +458,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 
     private void showShortcutBannerIfNeeded()
     {
-        if(!Utilities.isShortcutHintSeen(this))
+        if (!Utilities.isShortcutHintSeen(this))
         {
             findViewById(R.id.shortcut_hint_banner).setVisibility(View.VISIBLE);
             findViewById(R.id.shortcut_hint_banner_cancel).setOnClickListener(new View.OnClickListener()
@@ -455,7 +491,7 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
     private void setContentInFocus(boolean hideFocus)
     {
         View overlay = findViewById(R.id.list_focus_overlay);
-        if(hideFocus)
+        if (hideFocus)
         {
             overlay.setVisibility(View.VISIBLE);
         } else

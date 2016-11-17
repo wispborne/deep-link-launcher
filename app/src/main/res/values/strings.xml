@@ -17,4 +17,5 @@
 
     <string name="share_chooser_title">Your dev friends are on...</string>
     <string name="share_text">Hi! You can test out android deep links without ADB, directly from your laptop browser or android phone using this tool: https://play.google.com/store/apps/details?id=com.manoj.dlt</string>
+    <string name="onboarding_input_title">Enter your deep link here…</string>
 </resources>
