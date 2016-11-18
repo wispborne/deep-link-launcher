@@ -3,10 +3,12 @@ package com.manoj.dlt.ui.adapters;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.manoj.dlt.R;
 import com.manoj.dlt.features.DeepLinkHistoryFeature;
 import com.manoj.dlt.models.DeepLinkInfo;
@@ -38,31 +40,37 @@ public class DeepLinkListAdapter extends FilterableListAdapter<DeepLinkInfo>
         {
             convertView = LayoutInflater.from(_context).inflate(R.layout.deep_link_info_layout, viewGroup, false);
         }
+
         final DeepLinkInfo deepLinkInfo = (DeepLinkInfo) getItem(i);
+        return createView(i, convertView, deepLinkInfo);
+    }
+
+    @NonNull
+    public View createView(final int position, View view, final DeepLinkInfo deepLinkInfo) {
         String deepLink = deepLinkInfo.getDeepLink();
         CharSequence deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(_searchString), _searchString.length(), _context.getResources().getColor(R.color.Blue));
-        Utilities.setTextViewText(convertView, R.id.deep_link_title, deepLinkTitle);
-        Utilities.setTextViewText(convertView, R.id.deep_link_package_name, deepLinkInfo.getPackageName());
-        Utilities.setTextViewText(convertView, R.id.deep_link_activity_name, deepLinkInfo.getActivityLabel());
+        Utilities.setTextViewText(view, R.id.deep_link_title, deepLinkTitle);
+        Utilities.setTextViewText(view, R.id.deep_link_package_name, deepLinkInfo.getPackageName());
+        Utilities.setTextViewText(view, R.id.deep_link_activity_name, deepLinkInfo.getActivityLabel());
         try
         {
             Drawable icon = _context.getPackageManager().getApplicationIcon(deepLinkInfo.getPackageName());
-            ((ImageView) convertView.findViewById(R.id.deep_link_icon)).setImageDrawable(icon);
+            ((ImageView) view.findViewById(R.id.deep_link_icon)).setImageDrawable(icon);
         } catch (PackageManager.NameNotFoundException exception)
         {
-            ((ImageView) convertView.findViewById(R.id.deep_link_icon)).setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_warning_red_24_px));
+            ((ImageView) view.findViewById(R.id.deep_link_icon)).setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_warning_red_24_px));
         }
-        convertView.findViewById(R.id.deep_link_remove).setOnClickListener(new View.OnClickListener()
+        view.findViewById(R.id.deep_link_remove).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                _originalList.remove(i);
+                _originalList.remove(position);
                 updateResults(_searchString);
                 DeepLinkHistoryFeature.getInstance(_context).removeLinkFromHistory(deepLinkInfo.getId());
             }
         });
-        return convertView;
+        return view;
     }
 
     @Override

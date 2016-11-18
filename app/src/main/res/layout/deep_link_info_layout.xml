@@ -7,6 +7,8 @@
         android:gravity="center_vertical"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
+        android:background="?selectableItemBackground"
+        android:id="@+id/deep_link_layout"
 >
     <ImageView
             android:layout_height="64dp"

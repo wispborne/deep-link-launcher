@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@color/White"
             android:id="@+id/deep_link_history_root"
-            android:visibility="gone"
             tools:context="com.manoj.dlt.ui.activities.DeepLinkHistoryActivity">
 
         <android.support.v7.widget.CardView
@@ -33,20 +33,18 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="4dp"
                         android:textSize="@dimen/abc_text_size_large_material"
+                        android:hint="@string/deep_link_search_hint"
                         android:minHeight="48dp"
                         android:inputType="textUri"
                         android:background="@color/White"
                         android:imeOptions="actionGo"/>
-                <View
-                        android:layout_width="1dp"
-                        android:layout_height="40dp"
-                        android:background="@color/LightGrey"
-                />
+
                 <ImageView
-                        android:layout_width="44dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="8dp"
                         android:src="@drawable/custom_go_24dp"
-                        android:scaleType="fitCenter"
                         android:background="?attr/selectableItemBackground"
                         android:id="@+id/deep_link_fire"/>
 
@@ -119,10 +117,4 @@
                 android:text="GOT IT"/>
         </LinearLayout>
     </LinearLayout>
-    <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:src="@drawable/tutorial"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:id="@+id/tutorial_layer"/>-->
 </FrameLayout>

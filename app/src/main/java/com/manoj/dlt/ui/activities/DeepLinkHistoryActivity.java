@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -260,33 +261,20 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 
     private void setAppropriateLayout()
     {
+        showDeepLinkRootView();
+
         if (Utilities.isAppTutorialSeen(this))
         {
             AppRate.showRateDialogIfMeetsConditions(this);
-            showDeepLinkRootView();
         } else
         {
-            showDeepLinkRootView();
             launchTutorial();
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//            View tutorialView = findViewById(R.id.tutorial_layer);
-//            tutorialView.setVisibility(View.VISIBLE);
-//            tutorialView.setClickable(true);
-//            tutorialView.setOnClickListener(new View.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(View view)
-//                {
-//                    Utilities.setAppTutorialSeen(DeepLinkHistoryActivity.this);
-//                    showDeepLinkRootView();
-//                }
-//            });
+            Utilities.setAppTutorialSeen(DeepLinkHistoryActivity.this);
         }
     }
 
     private void showDeepLinkRootView()
     {
-//        findViewById(R.id.tutorial_layer).setVisibility(View.GONE);
         findViewById(R.id.deep_link_history_root).setVisibility(View.VISIBLE);
         _deepLinkInput.requestFocus();
         Utilities.showKeyboard(this);
@@ -375,28 +363,40 @@ public class DeepLinkHistoryActivity extends AppCompatActivity
 
     private void launchTutorial()
     {
-        DeepLinkInfo deepLinkInfo = new DeepLinkInfo("deeplinktester://example", "Deep Link Tester", getPackageName(), new Date().getTime());
-        final String testLinkId = deepLinkInfo.getId();
-        final DeepLinkHistoryFeature deepLinkHistoryFeature = DeepLinkHistoryFeature.getInstance(this);
-        deepLinkHistoryFeature.addLinkToHistory(deepLinkInfo);
+        final DeepLinkInfo deepLinkInfo = new DeepLinkInfo("deeplinktester://example", "Deep Link Tester", getPackageName(), new Date().getTime());
+
+        final View demoHeaderView = _adapter.createView(0, getLayoutInflater().inflate(R.layout.deep_link_info_layout, null, false), deepLinkInfo);
+        demoHeaderView.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.White, getTheme()));
+        _listView.addHeaderView(demoHeaderView);
 
         new TapTargetSequence(this)
                 .targets(TapTarget.forView(findViewById(R.id.deep_link_input), getString(R.string.onboarding_input_title))
-                        .dimColor(android.R.color.black)
-                        .outerCircleColor(R.color.SlateGray)
-                        .targetCircleColor(android.R.color.background_light))
+                            .dimColor(android.R.color.black)
+                            .outerCircleColor(R.color.SlateGray)
+                            .targetCircleColor(R.color.fabColorNormal)
+                            .tintTarget(false),
+                        TapTarget.forView(findViewById(R.id.deep_link_fire), getString(R.string.onboarding_launch_title))
+                            .dimColor(android.R.color.black)
+                            .outerCircleColor(R.color.SlateGray)
+                            .targetCircleColor(R.color.fabColorNormal)
+                            .tintTarget(false),
+                        TapTarget.forView(demoHeaderView, getString(R.string.onboarding_history_title))
+                            .dimColor(android.R.color.black)
+                            .outerCircleColor(R.color.SlateGray)
+                            .targetCircleColor(R.color.fabColorNormal)
+                            .tintTarget(false))
                 .listener(new TapTargetSequence.Listener()
                 {
                     @Override
                     public void onSequenceFinish()
                     {
-                        deepLinkHistoryFeature.removeLinkFromHistory(testLinkId);
+                        _listView.removeHeaderView(demoHeaderView);
                     }
 
                     @Override
                     public void onSequenceCanceled(TapTarget lastTarget)
                     {
-
+                        _listView.removeHeaderView(demoHeaderView);
                     }
                 })
                 .start();
