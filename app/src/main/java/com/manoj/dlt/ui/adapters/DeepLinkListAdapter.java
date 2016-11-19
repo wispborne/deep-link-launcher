@@ -46,9 +46,11 @@ public class DeepLinkListAdapter extends FilterableListAdapter<DeepLinkInfo>
     }
 
     @NonNull
-    public View createView(final int position, View view, final DeepLinkInfo deepLinkInfo) {
+    public View createView(final int position, View view, final DeepLinkInfo deepLinkInfo)
+    {
         String deepLink = deepLinkInfo.getDeepLink();
-        CharSequence deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(_searchString), _searchString.length(), _context.getResources().getColor(R.color.Blue));
+        CharSequence deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(_searchString),
+                _searchString.length(), _context.getResources().getColor(R.color.color_primary));
         Utilities.setTextViewText(view, R.id.deep_link_title, deepLinkTitle);
         Utilities.setTextViewText(view, R.id.deep_link_package_name, deepLinkInfo.getPackageName());
         Utilities.setTextViewText(view, R.id.deep_link_activity_name, deepLinkInfo.getActivityLabel());

@@ -3,43 +3,47 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:background="@color/White">
+    android:background="@color/white"
+    android:padding="8dp">
+
     <TextView
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="8dp"
+        android:id="@+id/confirm_shortcut_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
         android:paddingLeft="4dp"
         android:text="CONFIRM SHORTCUT"
-        android:textColor="@color/Black"
-        android:id="@+id/confirm_shortcut_title"
+        android:textColor="@color/black"
         android:textSize="20dp"/>
+
     <EditText
-        android:layout_margin="8dp"
+        android:id="@+id/shortcut_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/shortcut_label"
         android:layout_below="@id/confirm_shortcut_title"
+        android:layout_margin="8dp"
         android:hint="Custom label"/>
+
     <TextView
-        android:layout_margin="8dp"
-        android:layout_below="@id/shortcut_label"
+        android:id="@+id/confirm_shortcut_positive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/fabColorNormal"
-        android:text="CONFIRM"
         android:layout_alignParentRight="true"
-        android:id="@+id/confirm_shortcut_positive"/>
-    <TextView
-        android:layout_margin="8dp"
         android:layout_below="@id/shortcut_label"
+        android:layout_margin="8dp"
+        android:text="CONFIRM"
+        android:textColor="@color/color_primary"/>
+
+    <TextView
+        android:id="@+id/confirm_shortcut_negative"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/fabColorNormal"
-        android:text="DISMISS"
+        android:layout_below="@id/shortcut_label"
+        android:layout_margin="8dp"
         android:layout_toLeftOf="@id/confirm_shortcut_positive"
-        android:id="@+id/confirm_shortcut_negative"/>
+        android:text="DISMISS"
+        android:textColor="@color/color_primary"/>
 
 </RelativeLayout>

@@ -6,7 +6,7 @@
     <string name="error_no_activity_resolved">"No activity found to resolve the given deep link"</string>
     <string name="error_improper_uri">"Improper URI detected"</string>
     <string name="play_services_error">"Play Services Not Found. Please install/update the latest play services version to be able to type deep links directly from the web"</string>
-    <string name="title_activity_deep_link_history">Deep Link Activity</string>
+    <string name="title_activity_deep_link_history">Deep Link Tester</string>
     <string name="error_title">Error</string>
 
     <!--String resources (override) for rate API-->
@@ -21,4 +21,9 @@
     <string name="onboarding_launch_title">Launch the deep link…</string>
     <string name="onboarding_history_title">And when you return, your history will be saved!</string>
     <string name="deep_link_search_hint">Enter your deep link…</string>
+    <string name="menu_web_title">Fire from web</string>
+    <string name="menu_rate_title">Rate</string>
+    <string name="menu_share_title">Share</string>
+    <string name="deepLink_longPress_hint_accept">GOT IT</string>
+    <string name="deepLink_longPress_hint_message">Long click a deep link to add shortcut</string>
 </resources>

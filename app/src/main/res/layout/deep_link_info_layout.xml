@@ -30,7 +30,7 @@
                 android:id="@+id/deep_link_title"
                 android:singleLine="false"
                 android:textStyle="bold"
-                android:textColor="@color/Black"
+                android:textColor="@color/black"
                 android:textSize="@dimen/abc_text_size_menu_material"/>
 
         <TextView

@@ -2,119 +2,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/White"
-            android:id="@+id/deep_link_history_root"
-            tools:context="com.manoj.dlt.ui.activities.DeepLinkHistoryActivity">
+        android:id="@+id/deep_link_history_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context="com.manoj.dlt.ui.activities.DeepLinkHistoryActivity">
 
         <android.support.v7.widget.CardView
-                android:id="@+id/card_view"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:elevation="8dp"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/spacingSmall">
+
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_margin="@dimen/spacingSmall"
+                android:orientation="horizontal">
+
                 <EditText
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:id="@+id/deep_link_input"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="4dp"
-                        android:textSize="@dimen/abc_text_size_large_material"
-                        android:hint="@string/deep_link_search_hint"
-                        android:minHeight="48dp"
-                        android:inputType="textUri"
-                        android:background="@color/White"
-                        android:imeOptions="actionGo"/>
+                    android:id="@+id/deep_link_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:hint="@string/deep_link_search_hint"
+                    android:imeOptions="actionGo"
+                    android:inputType="textUri"
+                    android:minHeight="@dimen/spacingSmall"
+                    android:paddingLeft="@dimen/spacingSmall"
+                    android:paddingRight="@dimen/spacingTiny"
+                    android:textSize="@dimen/abc_text_size_large_material" />
 
                 <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:src="@drawable/custom_go_24dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:id="@+id/deep_link_fire"/>
+                    android:id="@+id/deepLink_paste"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_marginLeft="@dimen/spacingSmall"
+                    android:layout_marginRight="@dimen/spacingSmall"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_content_paste_black_24dp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/gray"
+                    />
+
+                <ImageView
+                    android:id="@+id/deep_link_fire"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_marginLeft="@dimen/spacingSmall_half"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/custom_go_24dp" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/deep_link_list_view"
-                    android:paddingLeft="@dimen/activity_horizontal_medium_margin"
-                    android:paddingRight="@dimen/activity_horizontal_medium_margin"
-                    android:listSelector="?attr/selectableItemBackground"
-                    android:divider="@color/Gray"/>
-            <View
-                android:id="@+id/list_focus_overlay"
+                android:id="@+id/deep_link_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/Black"
-                android:alpha="0.6"
-                android:visibility="gone"/>
+                android:divider="@color/gray"
+                android:listSelector="?attr/selectableItemBackground"
+                android:paddingLeft="@dimen/activity_horizontal_medium_margin"
+                android:paddingRight="@dimen/activity_horizontal_medium_margin" />
 
-            <include
-                layout="@layout/fab_menu_vertical"
-                android:visibility="gone"
-                />
-
-            <include
-                layout="@layout/fab_menu_horizontal"
-                android:visibility="gone"
-                />
-
-            <com.pnikosis.materialishprogress.ProgressWheel
+            <ProgressBar
                 android:id="@+id/progress_wheel"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_gravity="center"
-                app:matProg_barColor="@color/fabColorNormal"
-                app:matProg_progressIndeterminate="true" />
+                android:layout_gravity="center" />
         </FrameLayout>
+
         <LinearLayout
+            android:id="@+id/shortcut_hint_banner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Black"
-            android:orientation="horizontal"
+            android:background="@color/black"
             android:gravity="center_vertical"
-            android:id="@+id/shortcut_hint_banner"
-            android:visibility="gone"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="12dp"
-            android:paddingBottom="12dp">
+            android:visibility="gone">
+
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:textColor="@color/White"
-                android:layout_marginRight="8dp"
-                android:text="Long click a deep link to add shortcut"/>
+                android:layout_marginRight="@dimen/spacingSmall"
+                android:layout_weight="1"
+                android:text="@string/deepLink_longPress_hint_message"
+                android:textColor="@color/white" />
+
             <TextView
+                android:id="@+id/shortcut_hint_banner_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:id="@+id/shortcut_hint_banner_cancel"
-                android:textColor="@color/Yellow"
-                android:textSize="18dp"
-                android:text="GOT IT"/>
+                android:layout_marginLeft="@dimen/spacingSmall"
+                android:text="@string/deepLink_longPress_hint_accept"
+                android:textColor="@color/yellow"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
