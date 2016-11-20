@@ -54,7 +54,6 @@ public class DeepLinkHistoryActivity extends AppCompatActivity {
     private ListView listView;
     private EditText deepLinkInput;
     private DeepLinkListAdapter adapter;
-    private String previousClipboardText;
     private ValueEventListener historyUpdateListener;
 
     @Override
@@ -249,11 +248,9 @@ public class DeepLinkHistoryActivity extends AppCompatActivity {
                 if (clipItem.getText() != null) {
                     String clipBoardText = clipItem.getText().toString();
                     setDeepLinkInputText(clipBoardText);
-                    previousClipboardText = clipBoardText;
                 } else if (clipItem.getUri() != null) {
                     String clipBoardText = clipItem.getUri().toString();
                     setDeepLinkInputText(clipBoardText);
-                    previousClipboardText = clipBoardText;
                 }
             }
         }
@@ -284,18 +281,18 @@ public class DeepLinkHistoryActivity extends AppCompatActivity {
         new TapTargetSequence(this).targets(TapTarget.forView(findViewById(R.id.deep_link_input),
                 getString(R.string.onboarding_input_title))
                         .dimColor(android.R.color.black)
-                        .outerCircleColor(R.color.color_primary)
-                        .targetCircleColor(R.color.color_accent)
+                        .outerCircleColor(R.color.primary)
+                        .targetCircleColor(R.color.accent)
                         .tintTarget(false), TapTarget.forView(findViewById(R.id.deep_link_fire),
                 getString(R.string.onboarding_launch_title))
                         .dimColor(android.R.color.black)
-                        .outerCircleColor(R.color.color_primary)
-                        .targetCircleColor(R.color.color_accent)
+                        .outerCircleColor(R.color.primary)
+                        .targetCircleColor(R.color.accent)
                         .tintTarget(false),
                 TapTarget.forView(demoHeaderView, getString(R.string.onboarding_history_title))
                         .dimColor(android.R.color.black)
-                        .outerCircleColor(R.color.color_primary)
-                        .targetCircleColor(R.color.color_accent)
+                        .outerCircleColor(R.color.primary)
+                        .targetCircleColor(R.color.accent)
                         .tintTarget(false)).listener(new TapTargetSequence.Listener() {
             @Override
             public void onSequenceFinish() {

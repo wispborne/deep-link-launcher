@@ -1,63 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:background="?selectableItemBackground"
-        android:id="@+id/deep_link_layout"
->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/deep_link_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp">
+
     <ImageView
-            android:layout_height="64dp"
-            android:layout_width="64dp"
-            android:padding="4dp"
-            android:src="@drawable/ic_warning_red_24_px"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:id="@+id/deep_link_icon"/>
+        android:id="@+id/deep_link_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/spacingTiny"
+        android:scaleType="fitXY"
+        android:src="@drawable/link" />
+
     <LinearLayout
-            android:orientation="vertical"
-            android:padding="4dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/deep_link_title"
-                android:singleLine="false"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="@dimen/abc_text_size_menu_material"/>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/spacingTiny"
+        android:padding="@dimen/spacingTiny">
 
         <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/deep_link_package_name"
-                android:singleLine="true"
-                android:ellipsize="end"/>
+            android:id="@+id/deep_link_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/abc_text_size_menu_material"
+            android:textStyle="bold" />
 
         <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/deep_link_activity_name"
-                android:singleLine="true"
-                android:ellipsize="end"/>
+            android:id="@+id/deep_link_package_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/deep_link_activity_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true" />
 
     </LinearLayout>
+
     <ImageView
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:id="@+id/deep_link_remove"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_centerInParent="true"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_cancel_red_24_px"
-            android:scaleType="center"
-            android:elevation="4dp"
-            />
+        android:id="@+id/deep_link_remove"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:elevation="4dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_cancel_red_24_px" />
 </LinearLayout>

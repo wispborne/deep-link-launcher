@@ -34,7 +34,7 @@
         android:layout_below="@id/shortcut_label"
         android:layout_margin="8dp"
         android:text="CONFIRM"
-        android:textColor="@color/color_primary"/>
+        android:textColor="@color/primary"/>
 
     <TextView
         android:id="@+id/confirm_shortcut_negative"
@@ -44,6 +44,6 @@
         android:layout_margin="8dp"
         android:layout_toLeftOf="@id/confirm_shortcut_positive"
         android:text="DISMISS"
-        android:textColor="@color/color_primary"/>
+        android:textColor="@color/primary"/>
 
 </RelativeLayout>
