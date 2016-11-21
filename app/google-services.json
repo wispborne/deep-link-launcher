@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "5592928202",
-    "firebase_url": "https://sweltering-fire-2158.firebaseio.com",
-    "project_id": "sweltering-fire-2158",
-    "storage_bucket": "sweltering-fire-2158.appspot.com"
+    "project_number": "989588442334",
+    "firebase_url": "https://deep-link-launcher-debug.firebaseio.com",
+    "project_id": "deep-link-launcher-debug",
+    "storage_bucket": "deep-link-launcher-debug.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:5592928202:android:e4b5f32222103da5",
+        "mobilesdk_app_id": "1:989588442334:android:27bb38b50a9e67a9",
         "android_client_info": {
-          "package_name": "com.manoj.dlt"
+          "package_name": "com.thunderclouddev.deeplink.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "5592928202-ntp70akjhv580u0h610ekurf3n8io8l2.apps.googleusercontent.com",
+          "client_id": "989588442334-umtf1dhng3pn46mbgdpvlng9t90llg0g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCpwoSmsfPV5IkVQi-Mg-ZzrM5T0tohpG4"
+          "current_key": "AIzaSyBFHxMRLDplig-gIRZW6mo5kpBL2ogdVP0"
         }
       ],
       "services": {
