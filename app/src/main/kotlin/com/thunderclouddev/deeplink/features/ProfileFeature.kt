@@ -2,7 +2,6 @@ package com.thunderclouddev.deeplink.features
 
 import android.content.Context
 import android.util.Log
-import com.google.firebase.database.DatabaseReference
 import com.thunderclouddev.deeplink.Constants
 import com.thunderclouddev.deeplink.interfaces.IProfileFeature
 import com.thunderclouddev.deeplink.utils.Utilities
@@ -12,9 +11,6 @@ class ProfileFeature private constructor(context: Context) : IProfileFeature {
     private val fileSystem = Utilities.getOneTimeStore(context)
 
     override var userId = fileSystem.read(Constants.USER_ID_KEY) ?: generateUserIdAndSave()
-
-    override val currentUserFirebaseBaseRef: DatabaseReference
-        get() = Constants.firebaseUserRef.child(userId)
 
     private fun generateUserIdAndSave(): String {
         val generatedUserId = generateUserId()

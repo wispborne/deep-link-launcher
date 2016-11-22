@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "xxx",
+    "firebase_url": "https://deep-link-launcher.firebaseio.com",
+    "project_id": "deep-link-launcher",
+    "storage_bucket": "deep-link-launcher.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "xxx",
+        "android_client_info": {
+          "package_name": "com.thunderclouddev.deeplink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "xxx",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "xxx"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

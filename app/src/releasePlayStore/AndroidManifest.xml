@@ -3,7 +3,7 @@
     package="com.thunderclouddev.deeplink">
 
     <application
-        android:name=".AnalyticsApplication"
+        android:name=".PlayStoreApplication"
         tools:replace="android:name" />
 
 </manifest>

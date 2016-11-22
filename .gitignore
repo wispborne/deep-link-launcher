@@ -1,9 +1,5 @@
 # Created by https://www.gitignore.io/api/andr,android,intellij,crashlytics,gradle
 
-### Custom ###
-**/release/google-services.json
-**/releaseWithAnalytics/google-services.json
-
 ### Android ###
 # Built application files
 *.apk

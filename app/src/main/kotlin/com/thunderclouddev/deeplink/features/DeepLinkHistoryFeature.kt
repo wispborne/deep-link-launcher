@@ -1,6 +1,7 @@
 package com.thunderclouddev.deeplink.features
 
 import android.content.Context
+import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.Constants
 import com.thunderclouddev.deeplink.DbConstants
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
@@ -16,32 +17,19 @@ class DeepLinkHistoryFeature private constructor(private val _context: Context) 
 
     init {
         _fileSystem = FileSystem(_context, Constants.DEEP_LINK_HISTORY_KEY)
-        migrateHistoryToFirebase()
         EventBus.getDefault().register(this)
     }
 
     override fun addLinkToHistory(deepLinkInfo: DeepLinkInfo) {
-        if (Constants.isFirebaseAvailable(_context)) {
-            addLinkToFirebaseHistory(deepLinkInfo)
-        } else {
-            addLinkToFileSystemHistory(deepLinkInfo)
-        }
+        BaseApplication.database.addLinkToHistory(deepLinkInfo)
     }
 
     override fun removeLinkFromHistory(deepLinkId: String) {
-        if (Constants.isFirebaseAvailable(_context)) {
-            removeLinkFromFirebaseHistory(deepLinkId)
-        } else {
-            removeLinkFromFileSystemHistory(deepLinkId)
-        }
+        BaseApplication.database.removeLinkFromHistory(deepLinkId)
     }
 
     override fun clearAllHistory() {
-        if (Constants.isFirebaseAvailable(_context)) {
-            clearFirebaseHistory()
-        } else {
-            clearFileSystemHistory()
-        }
+        BaseApplication.database.clearAllHistory()
     }
 
     override val linkHistoryFromFileSystem: List<DeepLinkInfo>
@@ -58,51 +46,8 @@ class DeepLinkHistoryFeature private constructor(private val _context: Context) 
         }
     }
 
-    private fun addLinkToFileSystemHistory(deepLinkInfo: DeepLinkInfo) {
-        _fileSystem.write(deepLinkInfo.id, DeepLinkInfo.toJson(deepLinkInfo))
-    }
-
-    private fun addLinkToFirebaseHistory(deepLinkInfo: DeepLinkInfo) {
-        val baseUserReference = ProfileFeature.getInstance(_context).currentUserFirebaseBaseRef
-        val linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkInfo.id)
-        val infoMap = object : HashMap<String, Any>() {
-            init {
-                put(DbConstants.DL_ACTIVITY_LABEL, deepLinkInfo.activityLabel)
-                put(DbConstants.DL_DEEP_LINK, deepLinkInfo.deepLink)
-                put(DbConstants.DL_PACKAGE_NAME, deepLinkInfo.packageName)
-                put(DbConstants.DL_UPDATED_TIME, deepLinkInfo.updatedTime)
-            }
-        }
-        linkReference.setValue(infoMap)
-    }
-
     private fun clearFileSystemHistory() {
         _fileSystem.clearAll()
-    }
-
-    private fun clearFirebaseHistory() {
-        val baseUserReference = ProfileFeature.getInstance(_context).currentUserFirebaseBaseRef
-        val historyRef = baseUserReference.child(DbConstants.USER_HISTORY)
-        historyRef.setValue(null)
-    }
-
-    private fun removeLinkFromFileSystemHistory(deepLinkId: String) {
-        _fileSystem.clear(deepLinkId)
-    }
-
-    private fun removeLinkFromFirebaseHistory(deepLinkId: String) {
-        val baseUserReference = ProfileFeature.getInstance(_context).currentUserFirebaseBaseRef
-        val linkReference = baseUserReference.child(DbConstants.USER_HISTORY).child(deepLinkId)
-        linkReference.setValue(null)
-    }
-
-    private fun migrateHistoryToFirebase() {
-        if (Constants.isFirebaseAvailable(_context)) {
-            for (info in linkHistoryFromFileSystem) {
-                addLinkToHistory(info)
-            }
-            clearFileSystemHistory()
-        }
     }
 
     companion object {

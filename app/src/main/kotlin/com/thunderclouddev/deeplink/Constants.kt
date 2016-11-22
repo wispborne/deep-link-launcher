@@ -1,15 +1,8 @@
 package com.thunderclouddev.deeplink
 
-import android.content.Context
-
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-
 object Constants {
     enum class CONFIG {
-        DEBUG, RELEASE, RELEASE_WITH_ANALYTICS
+        DEBUG, RELEASE, RELEASE_PLAY_STORE
     }
 
     val DEEP_LINK_HISTORY_KEY = "deep_link_history_key_v1"
@@ -21,18 +14,7 @@ object Constants {
 
     var ENVIRONMENT: CONFIG = when (BuildConfig.BUILD_TYPE) {
         "release" -> CONFIG.RELEASE
-        "releaseWithAnalytics" -> CONFIG.RELEASE_WITH_ANALYTICS
+        "releasePlayStore" -> CONFIG.RELEASE_PLAY_STORE
         else -> CONFIG.DEBUG
-    }
-
-    val firebaseUserRef: DatabaseReference
-        get() = FirebaseDatabase.getInstance()
-                .getReference(ENVIRONMENT.name.toLowerCase())
-                .child(DbConstants.USERS)
-
-    fun isFirebaseAvailable(context: Context): Boolean {
-        val playServicesAvl = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
-
-        return playServicesAvl
     }
 }

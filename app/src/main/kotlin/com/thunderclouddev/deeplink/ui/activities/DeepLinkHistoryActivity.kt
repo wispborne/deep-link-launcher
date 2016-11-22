@@ -14,15 +14,11 @@ import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.Constants
-import com.thunderclouddev.deeplink.DbConstants
 import com.thunderclouddev.deeplink.R
+import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
-import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
-import com.thunderclouddev.deeplink.features.ProfileFeature
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.ConfirmShortcutDialog
@@ -38,13 +34,11 @@ import java.util.*
 
 class DeepLinkHistoryActivity : AppCompatActivity() {
     private var adapter: DeepLinkListAdapter? = null
-    private var historyUpdateListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deep_link_history)
         initView()
-        historyUpdateListener = firebaseHistoryListener
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,15 +50,6 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
         val itemId = item.itemId
 
         when (itemId) {
-            R.id.menu_web -> if (Constants.isFirebaseAvailable(this@DeepLinkHistoryActivity)) {
-                val userId = ProfileFeature.getInstance(this@DeepLinkHistoryActivity).userId
-                Utilities.showAlert("Fire from your PC",
-                        "go to https://swelteringfire-2158.firebaseapp.com/" + userId,
-                        this@DeepLinkHistoryActivity)
-            } else {
-                Utilities.raiseError(getString(R.string.play_services_error),
-                        this@DeepLinkHistoryActivity)
-            }
             R.id.menu_share -> Utilities.shareApp(this@DeepLinkHistoryActivity)
             R.id.menu_rate -> {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_PLAY_URI)))
@@ -119,17 +104,8 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     }
 
     private fun initListViewData() {
-        if (Constants.isFirebaseAvailable(this)) {
-            //Attach callback to init adapter from data in firebase
-            attachFirebaseListener()
-        } else {
-            val deepLinkInfoList = DeepLinkHistoryFeature.getInstance(this).linkHistoryFromFileSystem
-            if (deepLinkInfoList.isNotEmpty()) {
-                showShortcutBannerIfNeeded()
-            }
-            adapter!!.updateBaseData(deepLinkInfoList)
-            findViewById(R.id.progress_wheel).visibility = View.GONE
-        }
+        //Attach callback to init adapter from data
+        attachDatabaseListener()
         adapter!!.updateResults(deep_link_input.text.toString())
     }
 
@@ -254,38 +230,29 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
         }).start()
     }
 
-    private fun attachFirebaseListener() {
-        if (Constants.isFirebaseAvailable(this)) {
-            val baseUserReference = ProfileFeature.getInstance(this).currentUserFirebaseBaseRef
-            val linkReference = baseUserReference.child(DbConstants.USER_HISTORY)
-            linkReference.addValueEventListener(historyUpdateListener)
-        }
+    private var databaseListenerId: Int = 0
+
+    private fun attachDatabaseListener() {
+        databaseListenerId = BaseApplication.database.addListener(firebaseHistoryListener)
     }
 
     private fun removeFirebaseListener() {
-        if (Constants.isFirebaseAvailable(this)) {
-            val baseUserReference = ProfileFeature.getInstance(this).currentUserFirebaseBaseRef
-            val linkReference = baseUserReference.child(DbConstants.USER_HISTORY)
-            linkReference.removeEventListener(historyUpdateListener!!)
-        }
+        BaseApplication.database.removeListener(databaseListenerId)
     }
 
-    private val firebaseHistoryListener: ValueEventListener
-        get() = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                findViewById(R.id.progress_wheel).visibility = View.GONE
-                val deepLinkInfos = dataSnapshot.children.map { Utilities.getLinkInfo(it) }.sorted()
-                adapter!!.updateBaseData(deepLinkInfos)
+    private val firebaseHistoryListener: DeepLinkDatabase.Listener
+        get() = object : DeepLinkDatabase.Listener {
+            override fun onDataChanged(dataSnapshot: List<DeepLinkInfo>) {
+                progress_wheel.visibility = View.GONE
+                adapter!!.updateBaseData(dataSnapshot)
+
                 if (deep_link_input != null && deep_link_input.text.isNotEmpty()) {
                     adapter!!.updateResults(deep_link_input.text.toString())
                 }
-                if (deepLinkInfos.isNotEmpty()) {
+
+                if (dataSnapshot.isNotEmpty()) {
                     showShortcutBannerIfNeeded()
                 }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
             }
         }
 

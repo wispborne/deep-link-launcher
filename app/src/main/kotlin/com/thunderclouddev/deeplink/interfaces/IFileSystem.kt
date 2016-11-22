@@ -12,4 +12,6 @@ interface IFileSystem {
     fun keyList(): List<String>
 
     fun values(): List<String>
+
+    fun all(): Map<String, String>
 }

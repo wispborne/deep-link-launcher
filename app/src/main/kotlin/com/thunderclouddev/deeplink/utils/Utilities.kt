@@ -13,9 +13,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import com.google.firebase.database.DataSnapshot
 import com.thunderclouddev.deeplink.Constants
-import com.thunderclouddev.deeplink.DbConstants
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.features.FileSystem
@@ -169,14 +167,6 @@ object Utilities {
                 .setShowNeverButton(false)
                 .setRemindInterval(2) //number of days since remind me later was clicked
                 .monitor()
-    }
-
-    fun getLinkInfo(dataSnapshot: DataSnapshot): DeepLinkInfo {
-        val updatedTime = java.lang.Long.parseLong(dataSnapshot.child(DbConstants.DL_UPDATED_TIME).value.toString())
-        return DeepLinkInfo(dataSnapshot.child(DbConstants.DL_DEEP_LINK).value.toString(),
-                dataSnapshot.child(DbConstants.DL_ACTIVITY_LABEL).value.toString(),
-                dataSnapshot.child(DbConstants.DL_PACKAGE_NAME).value.toString(),
-                updatedTime)
     }
 
     fun shareApp(context: Context) {
