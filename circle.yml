@@ -1,3 +1,6 @@
 dependencies:
   pre:
     - cp -r "ci/licenses/" "/usr/local/android-sdk-linux/"
+
+  override:
+    - ./gradlew assembleDebug assembleRelease
