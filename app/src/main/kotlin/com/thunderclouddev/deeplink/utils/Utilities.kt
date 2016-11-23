@@ -17,15 +17,15 @@ import com.thunderclouddev.deeplink.Constants
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.features.FileSystem
+import com.thunderclouddev.deeplink.isUri
 import com.thunderclouddev.deeplink.logging.Timber
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
-import hotchemi.android.rate.AppRate
 import org.greenrobot.eventbus.EventBus
 
 object Utilities {
     fun checkAndFireDeepLink(deepLinkUri: String, context: Context): Boolean {
-        if (isProperUri(deepLinkUri)) {
+        if (deepLinkUri.isUri()) {
             if (resolveAndFire(deepLinkUri, context)) {
                 return true
             } else {
@@ -43,12 +43,12 @@ object Utilities {
     }
 
     fun addShortcut(deepLinkUri: String, context: Context, shortcutName: String): Boolean {
-        val shortcutIntent = getDeepLinkIntent(deepLinkUri)
+        val shortcutIntent = createDeepLinkIntent(deepLinkUri)
         val intent = Intent()
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName)
         // Set the custom shortcut icon. Not sure about this, but seems to work
-        val resolveInfo = getResolveInfo(context, getDeepLinkIntent(deepLinkUri))
+        val resolveInfo = getResolveInfo(context, createDeepLinkIntent(deepLinkUri))
         try {
             val icon = context.packageManager.getApplicationIcon(resolveInfo!!.activityInfo.packageName)
             intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, (icon as BitmapDrawable).bitmap)
@@ -62,39 +62,33 @@ object Utilities {
 
     }
 
-    fun isProperUri(uriText: String): Boolean {
-        val uri = Uri.parse(uriText)
-        if (uri.scheme == null || uri.scheme.isEmpty()) {
-            return false
-        } else return !(uriText.contains("\n") || uriText.contains(" "))
-    }
-
     fun resolveAndFire(deepLinkUri: String, context: Context): Boolean {
-        val intent = getDeepLinkIntent(deepLinkUri)
+        val intent = createDeepLinkIntent(deepLinkUri)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val resolveInfo = getResolveInfo(context, intent)
-        if (resolveInfo != null) {
+
+        return if (resolveInfo != null) {
             context.startActivity(intent)
             val deepLinkInfo = getDeepLinkInfo(deepLinkUri, resolveInfo, context)
             val deepLinkFireEvent = DeepLinkFireEvent(ResultType.SUCCESS, deepLinkInfo)
             EventBus.getDefault().postSticky(deepLinkFireEvent)
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
-    private fun getResolveInfo(context: Context, intent: Intent): ResolveInfo? {
-        val pm = context.packageManager
-        return pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-    }
-
-    private fun getDeepLinkIntent(deepLinkUri: String): Intent {
+    fun createDeepLinkIntent(deepLinkUri: String): Intent {
         val uri = Uri.parse(deepLinkUri)
         val intent = Intent()
         intent.data = uri
         intent.action = Intent.ACTION_VIEW
         return intent
+    }
+
+    private fun getResolveInfo(context: Context, intent: Intent): ResolveInfo? {
+        val pm = context.packageManager
+        return pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
     }
 
     fun colorPartialString(text: String, startPos: Int, length: Int, color: Int): SpannableStringBuilder {
@@ -141,8 +135,8 @@ object Utilities {
         return FileSystem(context, Constants.GLOBAL_PREF_KEY)
     }
 
-    fun setAppTutorialSeen(context: Context) {
-        getOneTimeStore(context).write(Constants.APP_TUTORIAL_SEEN, "true")
+    fun setAppTutorialSeen(seen: Boolean, context: Context) {
+        getOneTimeStore(context).write(Constants.APP_TUTORIAL_SEEN, if (seen) "true" else "false")
     }
 
     fun setShortcutBannerSeen(context: Context) {
@@ -158,15 +152,6 @@ object Utilities {
         val windowContext = viewInWindow.context
         val imm = windowContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(viewInWindow.windowToken, 0)
-    }
-
-    fun initializeAppRateDialog(context: Context) {
-        AppRate.with(context)
-                .setInstallDays(0) //number of days since install, default 10
-                .setLaunchTimes(3) //number of minimum launches, default 10
-                .setShowNeverButton(false)
-                .setRemindInterval(2) //number of days since remind me later was clicked
-                .monitor()
     }
 
     fun shareApp(context: Context) {

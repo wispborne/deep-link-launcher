@@ -34,5 +34,5 @@ class FileSystem(context: Context, key: String) : IFileSystem {
 
     override fun values() = keyList().map { read(it) }.filterNotNull()
 
-    override fun all() = preferences.all.filterValues { it != null }.mapValues { it.toString() }
+    override fun all() = preferences.all.filterValues { it != null }.mapValues { it.value.toString() }
 }

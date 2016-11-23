@@ -14,9 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
-import com.thunderclouddev.deeplink.BaseApplication
-import com.thunderclouddev.deeplink.Constants
-import com.thunderclouddev.deeplink.R
+import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
@@ -38,7 +36,20 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deep_link_history)
-        initView()
+
+        supportActionBar!!.setTitle(R.string.title_activity_deep_link_history)
+        adapter = DeepLinkListAdapter(ArrayList<DeepLinkInfo>(), this)
+        configureListView()
+        configureInputs()
+        deepLink_btn_go.setOnClickListener { extractAndFireLink() }
+        deepLink_paste.setOnClickListener { pasteFromClipboard() }
+
+        if (Utilities.isAppTutorialSeen(this)) {
+            AppRate.showRateDialogIfMeetsConditions(this)
+        } else {
+            launchTutorial()
+            Utilities.setAppTutorialSeen(true, this@DeepLinkHistoryActivity)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -92,40 +103,24 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
         EventBus.getDefault().removeStickyEvent(deepLinkFireEvent)
     }
 
-    private fun showDeepLinkRootView() {
-        findViewById(R.id.deep_link_history_root).visibility = View.VISIBLE
-        deep_link_input.requestFocus()
-        Utilities.showKeyboard(this)
-    }
-
     private fun extractAndFireLink() {
-        val deepLinkUri = deep_link_input.text.toString()
+        val deepLinkUri = deepLink_edittext_input.text.toString()
         Utilities.checkAndFireDeepLink(deepLinkUri, this)
     }
 
     private fun initListViewData() {
         //Attach callback to init adapter from data
         attachDatabaseListener()
-        adapter!!.updateResults(deep_link_input.text.toString())
-    }
-
-    private fun initView() {
-        supportActionBar!!.setTitle(R.string.title_activity_deep_link_history)
-        adapter = DeepLinkListAdapter(ArrayList<DeepLinkInfo>(), this)
-        configureListView()
-        configureInput()
-        findViewById(R.id.deep_link_fire).setOnClickListener { extractAndFireLink() }
-        findViewById(R.id.deepLink_paste).setOnClickListener { pasteFromClipboard() }
-        setAppropriateLayout()
+        adapter!!.updateResults(deepLink_edittext_input.text.toString())
     }
 
     private fun configureListView() {
-        deep_link_list_view.adapter = adapter
-        deep_link_list_view.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, l ->
+        deepLink_listView.adapter = adapter
+        deepLink_listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, l ->
             val info = adapter!!.getItem(position)
             setdeep_link_inputText(info.deepLink)
         }
-        deep_link_list_view.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, id ->
+        deepLink_listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, id ->
             showConfirmShortcutDialog(adapter!!.getItem(position))
             true
         }
@@ -144,9 +139,9 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 .show(ft, TAG_DIALOG)
     }
 
-    private fun configureInput() {
-        deep_link_input.requestFocus()
-        deep_link_input.setOnEditorActionListener { textView, actionId, keyEvent ->
+    private fun configureInputs() {
+        deepLink_edittext_input.requestFocus()
+        deepLink_edittext_input.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (isDoneKey(actionId)) {
                 extractAndFireLink()
                 true
@@ -154,17 +149,24 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 false
             }
         }
-        deep_link_input.addTextChangedListener(object : TextChangedListener() {
+        deepLink_edittext_input.addTextChangedListener(object : TextChangedListener() {
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 adapter!!.updateResults(charSequence)
+
+                deepLink_btn_go.isEnabled = isValidUriWithHandlingActivity(deepLink_edittext_input.text.toString())
             }
         })
+
+        deepLink_btn_go.isEnabled = isValidUriWithHandlingActivity(deepLink_edittext_input.text.toString())
     }
+
+    private fun isValidUriWithHandlingActivity(deepLinkText: String) = deepLinkText.isUri()
+            && Utilities.createDeepLinkIntent(deepLinkText).hasHandlingActivity(packageManager)
 
     private fun pasteFromClipboard() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        if (!Utilities.isProperUri(deep_link_input.text.toString()) && clipboardManager.hasPrimaryClip()) {
+        if (!deepLink_edittext_input.text.toString().isUri() && clipboardManager.hasPrimaryClip()) {
             val clipItem = clipboardManager.primaryClip.getItemAt(0)
 
             if (clipItem != null) {
@@ -179,17 +181,6 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun setAppropriateLayout() {
-        showDeepLinkRootView()
-
-        if (Utilities.isAppTutorialSeen(this)) {
-            AppRate.showRateDialogIfMeetsConditions(this)
-        } else {
-            launchTutorial()
-            Utilities.setAppTutorialSeen(this@DeepLinkHistoryActivity)
-        }
-    }
-
     private fun launchTutorial() {
         val deepLinkInfo = DeepLinkInfo("deeplinktester://example", "Deep Link Tester", packageName,
                 Date().time)
@@ -198,7 +189,7 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 layoutInflater.inflate(R.layout.deep_link_info_layout, null, false), deepLinkInfo)
         demoHeaderView.setBackgroundColor(
                 ResourcesCompat.getColor(resources, R.color.white, theme))
-        deep_link_list_view.addHeaderView(demoHeaderView)
+        deepLink_listView.addHeaderView(demoHeaderView)
 
         TapTargetSequence(this).targets(
                 TapTarget.forView(deepLink_card_view,
@@ -208,7 +199,7 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                         .targetCircleColor(R.color.accent)
                         .tintTarget(false),
 
-                TapTarget.forView(deep_link_fire,
+                TapTarget.forView(deepLink_btn_go,
                         getString(R.string.onboarding_launch_title))
                         .dimColor(android.R.color.black)
                         .outerCircleColor(R.color.primary)
@@ -221,11 +212,11 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                         .targetCircleColor(R.color.accent)
                         .tintTarget(false)).listener(object : TapTargetSequence.Listener {
             override fun onSequenceFinish() {
-                deep_link_list_view.removeHeaderView(demoHeaderView)
+                deepLink_listView.removeHeaderView(demoHeaderView)
             }
 
             override fun onSequenceCanceled(lastTarget: TapTarget) {
-                deep_link_list_view.removeHeaderView(demoHeaderView)
+                deepLink_listView.removeHeaderView(demoHeaderView)
             }
         }).start()
     }
@@ -246,8 +237,8 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 progress_wheel.visibility = View.GONE
                 adapter!!.updateBaseData(dataSnapshot)
 
-                if (deep_link_input != null && deep_link_input.text.isNotEmpty()) {
-                    adapter!!.updateResults(deep_link_input.text.toString())
+                if (deepLink_edittext_input != null && deepLink_edittext_input.text.isNotEmpty()) {
+                    adapter!!.updateResults(deepLink_edittext_input.text.toString())
                 }
 
                 if (dataSnapshot.isNotEmpty()) {
@@ -261,7 +252,7 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
             findViewById(R.id.shortcut_hint_banner).visibility = View.VISIBLE
             findViewById(R.id.shortcut_hint_banner_cancel).setOnClickListener {
                 Utilities.setShortcutBannerSeen(this@DeepLinkHistoryActivity)
-                findViewById(R.id.shortcut_hint_banner).visibility = View.GONE
+                shortcut_hint_banner.visibility = View.GONE
             }
         }
     }
@@ -273,8 +264,8 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     }
 
     private fun setdeep_link_inputText(text: String) {
-        deep_link_input.setText(text)
-        deep_link_input.setSelection(text.length)
+        deepLink_edittext_input.setText(text)
+        deepLink_edittext_input.setSelection(text.length)
     }
 
     companion object {

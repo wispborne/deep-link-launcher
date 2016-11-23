@@ -1,16 +1,20 @@
 <resources>
-  <dimen name="spacingHuge">32dp</dimen>
-  <dimen name="spacingLarge">24dp</dimen>
-  <dimen name="spacingMedium">16dp</dimen>
-  <dimen name="spacingSmall">8dp</dimen>
-  <dimen name="spacingSmall_half">4dp</dimen>
-  <dimen name="spacingTiny">4dp</dimen>
+    <dimen name="spacingHuge">32dp</dimen>
+    <dimen name="spacingLarge">24dp</dimen>
+    <dimen name="spacingMedium">16dp</dimen>
+    <dimen name="spacingSmall">8dp</dimen>
+    <dimen name="spacingSmall_half">4dp</dimen>
+    <dimen name="spacingTiny">4dp</dimen>
 
-  <!-- Default screen margins, per the Android Design guidelines. -->
-  <dimen name="activity_horizontal_large_margin">16dp</dimen>
-  <dimen name="activity_vertical_margin">16dp</dimen>
-  <!-- -->
-  <dimen name="activity_vertical_custom_bottom_margin">64dp</dimen>
-  <dimen name="activity_horizontal_medium_margin">8dp</dimen>
-  <dimen name="icon_size">24dp</dimen>
+    <dimen name="textTitle">20sp</dimen>
+    <dimen name="textSubtitle">16sp</dimen>
+    <dimen name="textHint">12sp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_large_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- -->
+    <dimen name="activity_vertical_custom_bottom_margin">64dp</dimen>
+    <dimen name="activity_horizontal_medium_margin">8dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
 </resources>

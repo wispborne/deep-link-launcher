@@ -25,8 +25,20 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/deepLink_paste"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:paddingBottom="1dp"
+                    android:paddingEnd="2dp"
+                    android:paddingStart="2dp"
+                    android:paddingTop="3dp"
+                    android:src="@drawable/ic_content_paste_black_24dp"
+                    android:tint="?android:colorAccent" />
+
                 <EditText
-                    android:id="@+id/deep_link_input"
+                    android:id="@+id/deepLink_edittext_input"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -35,19 +47,8 @@
                     android:imeOptions="actionGo"
                     android:inputType="textUri"
                     android:minHeight="@dimen/spacingSmall"
-                    android:paddingLeft="@dimen/spacingSmall"
-                    android:paddingRight="@dimen/spacingTiny"
-                    android:textSize="@dimen/abc_text_size_large_material" />
-
-                <ImageView
-                    android:id="@+id/deepLink_paste"
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:layout_marginLeft="@dimen/spacingSmall"
-                    android:layout_marginRight="@dimen/spacingSmall"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_content_paste_black_24dp" />
+                    android:paddingEnd="@dimen/spacingTiny"
+                    android:paddingStart="@dimen/spacingSmall" />
 
                 <View
                     android:layout_width="1dp"
@@ -55,12 +56,14 @@
                     android:background="@color/gray" />
 
                 <ImageView
-                    android:id="@+id/deep_link_fire"
+                    android:id="@+id/deepLink_btn_go"
                     android:layout_width="@dimen/icon_size"
                     android:layout_height="@dimen/icon_size"
-                    android:layout_marginLeft="@dimen/spacingSmall_half"
+                    android:layout_marginStart="@dimen/spacingSmall_half"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/custom_go_24dp" />
+                    android:src="@drawable/deeplink_btn_go"
+                    android:tint="@color/accent_or_disabled"
+                    android:tintMode="src_in" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -71,13 +74,13 @@
             android:layout_weight="1">
 
             <ListView
-                android:id="@+id/deep_link_list_view"
+                android:id="@+id/deepLink_listView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@color/gray"
                 android:listSelector="?attr/selectableItemBackground"
-                android:paddingLeft="@dimen/activity_horizontal_medium_margin"
-                android:paddingRight="@dimen/activity_horizontal_medium_margin" />
+                android:paddingEnd="@dimen/activity_horizontal_medium_margin"
+                android:paddingStart="@dimen/activity_horizontal_medium_margin" />
 
             <ProgressBar
                 android:id="@+id/progress_wheel"
@@ -94,15 +97,15 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="12dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
             android:paddingTop="12dp"
             android:visibility="gone">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/spacingSmall"
+                android:layout_marginEnd="@dimen/spacingSmall"
                 android:layout_weight="1"
                 android:text="@string/deepLink_longPress_hint_message"
                 android:textColor="@color/white" />
@@ -111,7 +114,7 @@
                 android:id="@+id/shortcut_hint_banner_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/spacingSmall"
+                android:layout_marginStart="@dimen/spacingSmall"
                 android:text="@string/deepLink_longPress_hint_accept"
                 android:textColor="@color/yellow"
                 android:textSize="12sp" />
