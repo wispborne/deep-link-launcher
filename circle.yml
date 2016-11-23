@@ -1,8 +1,15 @@
 dependencies:
   pre:
     - cp -r "ci/licenses/" "/usr/local/android-sdk-linux/"
+  cache_directories:
+    - ~/.android
+    - ~/android
 
 test:
   override:
-    - ./gradlew assembleDebug assembleRelease
+    - ./gradlew assembleDebug:
+        parallel: true
+    - ./gradlew assembleRelease:
+        parallel: true
+        
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
