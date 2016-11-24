@@ -32,23 +32,42 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:paddingBottom="1dp"
                     android:paddingEnd="2dp"
-                    android:paddingStart="2dp"
+                    android:paddingStart="@dimen/spacingMicro"
                     android:paddingTop="3dp"
                     android:src="@drawable/ic_content_paste_black_24dp"
                     android:tint="?android:colorAccent" />
 
-                <EditText
-                    android:id="@+id/deepLink_edittext_input"
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/white"
-                    android:hint="@string/deep_link_search_hint"
-                    android:imeOptions="actionGo"
-                    android:inputType="textUri"
-                    android:minHeight="@dimen/spacingSmall"
                     android:paddingEnd="@dimen/spacingTiny"
-                    android:paddingStart="@dimen/spacingSmall" />
+                    android:paddingStart="@dimen/spacingSmall">
+
+                    <EditText
+                        android:id="@+id/deepLink_editText_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:hint="@string/deep_link_search_hint"
+                        android:imeOptions="actionGo"
+                        android:inputType="textUri"
+                        android:minHeight="@dimen/spacingSmall"
+                        android:paddingEnd="@dimen/spacingLarge"
+                        android:paddingStart="0dp" />
+
+                    <ImageView
+                        android:id="@+id/deepLink_btn_clearInput"
+                        android:layout_width="@dimen/icon_size"
+                        android:layout_height="@dimen/icon_size"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginTop="1dp"
+                        android:paddingEnd="@dimen/spacingTiny"
+                        android:paddingStart="0dp"
+                        android:src="@drawable/ic_x"
+                        android:tint="@color/grayDark" />
+
+                </FrameLayout>
 
                 <View
                     android:layout_width="1dp"
@@ -60,9 +79,10 @@
                     android:layout_width="@dimen/icon_size"
                     android:layout_height="@dimen/icon_size"
                     android:layout_marginStart="@dimen/spacingSmall_half"
+                    android:layout_marginTop="1dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/deeplink_btn_go"
-                    android:tint="@color/accent_or_disabled"
+                    android:tint="@color/accent"
                     android:tintMode="src_in" />
 
             </LinearLayout>
@@ -73,15 +93,15 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <ListView
-                android:id="@+id/deepLink_listView"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/deepLink_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@color/gray"
-                android:listSelector="?attr/selectableItemBackground"
-                android:paddingEnd="@dimen/activity_horizontal_medium_margin"
-                android:paddingStart="@dimen/activity_horizontal_medium_margin" />
+                android:paddingEnd="@dimen/spacingSmall"
+                android:paddingStart="@dimen/spacingSmall" />
 
+            <!--android:listSelector="?attr/selectableItemBackground"-->
             <ProgressBar
                 android:id="@+id/progress_wheel"
                 android:layout_width="80dp"

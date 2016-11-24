@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/deep_link_layout"
+    android:id="@+id/deepLinkItem_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="4dp"
-    android:paddingTop="4dp">
+    android:paddingBottom="@dimen/spacingTiny"
+    android:paddingTop="@dimen/spacingTiny">
 
     <ImageView
-        android:id="@+id/deep_link_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/deepLinkItem_icon"
+        android:layout_width="@dimen/appIconSize"
+        android:layout_height="@dimen/appIconSize"
         android:adjustViewBounds="true"
         android:padding="@dimen/spacingTiny"
         android:scaleType="fitXY"
@@ -21,29 +21,29 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacingTiny"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginLeft="@dimen/spacingTiny"
         android:padding="@dimen/spacingTiny">
 
         <TextView
-            android:id="@+id/deep_link_title"
+            android:id="@+id/deepLinkItem_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/abc_text_size_menu_material"
+            android:textSize="@dimen/textSubtitle"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/deep_link_package_name"
+            android:id="@+id/deepLinkItem_packageName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true" />
 
         <TextView
-            android:id="@+id/deep_link_activity_name"
+            android:id="@+id/deepLinkItem_activityName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -52,14 +52,24 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/deep_link_remove"
-        android:layout_width="40dp"
+        android:id="@+id/deepLinkItem_remove"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
+        android:layout_marginEnd="@dimen/spacingSmall_half"
+        android:layout_marginStart="@dimen/spacingSmall_half"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:elevation="4dp"
         android:scaleType="center"
-        android:src="@drawable/ic_cancel_red_24_px" />
+        android:src="@drawable/ic_cancel_red_24_px"
+        android:tint="@color/grayDark" />
+
+    <ImageView
+        android:id="@+id/deep_link_overflow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/spacingSmall_half"
+        android:layout_marginStart="@dimen/spacingSmall_half"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="center"
+        android:src="@drawable/ic_overflow"
+        android:tint="@color/grayDark" />
 </LinearLayout>

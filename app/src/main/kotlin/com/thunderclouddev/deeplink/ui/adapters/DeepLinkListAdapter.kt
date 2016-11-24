@@ -9,13 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.thunderclouddev.deeplink.R
+import com.thunderclouddev.deeplink.deepLinkListing.DeepLinkViewModel
 import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
-import com.thunderclouddev.deeplink.models.DeepLinkInfo
+import com.thunderclouddev.deeplink.ui.SortedListAdapter
 import com.thunderclouddev.deeplink.utils.Utilities
 import java.util.*
 
-class DeepLinkListAdapter(originalList: MutableList<DeepLinkInfo>, private val context: Context)
-    : FilterableListAdapter<DeepLinkInfo>(originalList, false) {
+class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewModel>)
+    : SortedListAdapter<DeepLinkViewModel>(context, DeepLinkViewModel::class.java, comparator) {
+    var stringToHighlight = ""
+
     private val defaultAppIcon: Drawable
     private val titleColor: Int
 
@@ -24,50 +27,51 @@ class DeepLinkListAdapter(originalList: MutableList<DeepLinkInfo>, private val c
         titleColor = ResourcesCompat.getColor(context.resources, R.color.primary, context.theme)
     }
 
-    override fun getItemId(i: Int): Long {
-        return 0
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(inflater.inflate(R.layout.deep_link_info_layout, parent, false))
     }
 
-    override fun getView(i: Int, existingView: View?, viewGroup: ViewGroup): View {
-        val convertView = existingView ?: LayoutInflater.from(context).inflate(R.layout.deep_link_info_layout, viewGroup, false)
-        val deepLinkInfo = getItem(i)
+    override fun areItemsTheSame(item1: DeepLinkViewModel, item2: DeepLinkViewModel)
+            = item1.deepLinkInfo.id == item2.deepLinkInfo.id
 
-        return createView(i, convertView, deepLinkInfo)
-    }
+    override fun areItemContentsTheSame(oldItem: DeepLinkViewModel, newItem: DeepLinkViewModel)
+            = oldItem == newItem
 
-    fun createView(position: Int, view: View, deepLinkInfo: DeepLinkInfo): View {
-        val deepLink = deepLinkInfo.deepLink
-        val deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(searchString),
-                searchString.length, titleColor)
-        Utilities.setTextViewText(view, R.id.deep_link_title, deepLinkTitle)
-        Utilities.setTextViewText(view, R.id.deep_link_package_name, deepLinkInfo.packageName)
-        Utilities.setTextViewText(view, R.id.deep_link_activity_name, deepLinkInfo.activityLabel)
-        try {
-            val icon = context.packageManager.getApplicationIcon(deepLinkInfo.packageName)
-            (view.findViewById(R.id.deep_link_icon) as ImageView).setImageDrawable(icon)
-        } catch (exception: PackageManager.NameNotFoundException) {
-            (view.findViewById(R.id.deep_link_icon) as ImageView).setImageDrawable(defaultAppIcon)
-        }
+//    override fun getMatchingResults(constraint: CharSequence): List<DeepLinkInfo> {
+//        val prefixList = ArrayList<DeepLinkInfo>()
+//        val suffixList = ArrayList<DeepLinkInfo>()
+//        for (info in originalList) {
+//            if (info.deepLink.startsWith(constraint.toString())) {
+//                prefixList.add(info)
+//            } else if (info.deepLink.contains(constraint)) {
+//                suffixList.add(info)
+//            }
+//        }
+//        prefixList.addAll(suffixList)
+//        return prefixList
+//    }
 
-        view.findViewById(R.id.deep_link_remove).setOnClickListener {
-            originalList.removeAt(position)
-            updateResults(searchString)
-            DeepLinkHistoryFeature.getInstance(context).removeLinkFromHistory(deepLinkInfo.id)
-        }
-        return view
-    }
+    inner class ViewHolder(val view: View) : SortedListAdapter.ViewHolder<DeepLinkViewModel>(view) {
+        override fun performBind(item: DeepLinkViewModel) {
+            val deepLinkInfo = item.deepLinkInfo
+            val deepLink = deepLinkInfo.deepLink
+            val deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(stringToHighlight),
+                    stringToHighlight.length, titleColor)
+            Utilities.setTextViewText(view, R.id.deepLinkItem_title, deepLinkTitle)
+            Utilities.setTextViewText(view, R.id.deepLinkItem_packageName, deepLinkInfo.packageName)
+            Utilities.setTextViewText(view, R.id.deepLinkItem_activityName, deepLinkInfo.activityLabel)
 
-    override fun getMatchingResults(constraint: CharSequence): List<DeepLinkInfo> {
-        val prefixList = ArrayList<DeepLinkInfo>()
-        val suffixList = ArrayList<DeepLinkInfo>()
-        for (info in originalList) {
-            if (info.deepLink.startsWith(constraint.toString())) {
-                prefixList.add(info)
-            } else if (info.deepLink.contains(constraint)) {
-                suffixList.add(info)
+            try {
+                val icon = view.context.packageManager.getApplicationIcon(deepLinkInfo.packageName)
+                (view.findViewById(R.id.deepLinkItem_icon) as ImageView).setImageDrawable(icon)
+            } catch (exception: PackageManager.NameNotFoundException) {
+                (view.findViewById(R.id.deepLinkItem_icon) as ImageView).setImageDrawable(defaultAppIcon)
+            }
+
+            view.findViewById(R.id.deepLinkItem_remove).setOnClickListener {
+                DeepLinkHistoryFeature.getInstance(view.context).removeLinkFromHistory(deepLinkInfo.id)
+                edit().remove(item).commit()
             }
         }
-        prefixList.addAll(suffixList)
-        return prefixList
     }
 }

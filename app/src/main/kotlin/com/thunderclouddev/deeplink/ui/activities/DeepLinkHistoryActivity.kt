@@ -7,20 +7,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
+import com.thunderclouddev.deeplink.deepLinkListing.DeepLinkViewModel
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.ConfirmShortcutDialog
 import com.thunderclouddev.deeplink.ui.adapters.DeepLinkListAdapter
+import com.thunderclouddev.deeplink.ui.utils.ItemClickSupport
+import com.thunderclouddev.deeplink.ui.utils.tint
 import com.thunderclouddev.deeplink.utils.TextChangedListener
 import com.thunderclouddev.deeplink.utils.Utilities
 import hotchemi.android.rate.AppRate
@@ -32,13 +34,22 @@ import java.util.*
 
 class DeepLinkHistoryActivity : AppCompatActivity() {
     private var adapter: DeepLinkListAdapter? = null
+    // TODO Don't store this in the activity, rotation will killlll it
+    private var deepLinkViewModels: List<DeepLinkViewModel> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deep_link_history)
 
         supportActionBar!!.setTitle(R.string.title_activity_deep_link_history)
-        adapter = DeepLinkListAdapter(ArrayList<DeepLinkInfo>(), this)
+        // Alphabetical sorting for now
+        adapter = DeepLinkListAdapter(this, Comparator { t1, t2 ->
+            val packageComparison = t1.deepLinkInfo.packageName.compareTo(t2.deepLinkInfo.packageName, true)
+            if (packageComparison == 0)
+                packageComparison
+            else
+                t1.deepLinkInfo.deepLink.compareTo(t2.deepLinkInfo.deepLink, true)
+        })
         configureListView()
         configureInputs()
         deepLink_btn_go.setOnClickListener { extractAndFireLink() }
@@ -87,9 +98,13 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onEvent(deepLinkFireEvent: DeepLinkFireEvent) {
         val deepLinkString = deepLinkFireEvent.info.deepLink
-        setdeep_link_inputText(deepLinkString)
+        setAndSelectInput(deepLinkString)
+
         if (deepLinkFireEvent.resultType == ResultType.SUCCESS) {
-            adapter!!.updateResults(deepLinkString)
+            adapter!!.stringToHighlight = deepLinkString
+            adapter!!.edit()
+                    .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
+                    .commit()
         } else {
             if (DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND == deepLinkFireEvent.failureReason) {
                 Utilities.raiseError(
@@ -104,26 +119,36 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     }
 
     private fun extractAndFireLink() {
-        val deepLinkUri = deepLink_edittext_input.text.toString()
+        val deepLinkUri = deepLink_editText_input.text.toString()
         Utilities.checkAndFireDeepLink(deepLinkUri, this)
     }
 
     private fun initListViewData() {
         //Attach callback to init adapter from data
         attachDatabaseListener()
-        adapter!!.updateResults(deepLink_edittext_input.text.toString())
+        val deepLinkString = deepLink_editText_input.text.toString()
+        adapter!!.stringToHighlight = deepLinkString
+        adapter!!.edit()
+                .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
+                .commit()
     }
 
     private fun configureListView() {
-        deepLink_listView.adapter = adapter
-        deepLink_listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, l ->
-            val info = adapter!!.getItem(position)
-            setdeep_link_inputText(info.deepLink)
-        }
-        deepLink_listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, id ->
-            showConfirmShortcutDialog(adapter!!.getItem(position))
-            true
-        }
+        deepLink_list.layoutManager = LinearLayoutManager(this)
+        deepLink_list.adapter = adapter
+        val clickSupport = ItemClickSupport.addTo(deepLink_list)
+        clickSupport.setOnItemClickListener(object : ItemClickSupport.OnItemClickListener {
+            override fun onItemClicked(recyclerView: RecyclerView, position: Int, v: View) {
+                val info = adapter!!.getItem(position)
+                setAndSelectInput(info.deepLinkInfo.deepLink)
+            }
+        })
+        clickSupport.setOnItemLongClickListener(object : ItemClickSupport.OnItemLongClickListener {
+            override fun onItemLongClicked(recyclerView: RecyclerView, position: Int, v: View): Boolean {
+                showConfirmShortcutDialog(adapter!!.getItem(position).deepLinkInfo)
+                return true
+            }
+        })
     }
 
     private fun showConfirmShortcutDialog(info: DeepLinkInfo) {
@@ -140,8 +165,11 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     }
 
     private fun configureInputs() {
-        deepLink_edittext_input.requestFocus()
-        deepLink_edittext_input.setOnEditorActionListener { textView, actionId, keyEvent ->
+        val accentColor = ResourcesCompat.getColor(resources, R.color.accent, theme)
+        val disabledColor = ResourcesCompat.getColor(resources, R.color.grayDark, theme)
+
+        deepLink_editText_input.requestFocus()
+        deepLink_editText_input.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (isDoneKey(actionId)) {
                 extractAndFireLink()
                 true
@@ -149,15 +177,28 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 false
             }
         }
-        deepLink_edittext_input.addTextChangedListener(object : TextChangedListener() {
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                adapter!!.updateResults(charSequence)
 
-                deepLink_btn_go.isEnabled = isValidUriWithHandlingActivity(deepLink_edittext_input.text.toString())
+        deepLink_btn_clearInput.setOnClickListener { deepLink_editText_input.text.clear() }
+
+        deepLink_editText_input.addTextChangedListener(object : TextChangedListener() {
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                val deepLinkString = charSequence.toString()
+                adapter!!.stringToHighlight = deepLinkString
+                adapter!!.edit()
+                        .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
+                        .commit()
+
+                deepLink_btn_go.drawable.tint(if (isValidUriWithHandlingActivity(deepLink_editText_input.text.toString()))
+                    accentColor
+                else
+                    disabledColor)
+
+                deepLink_btn_clearInput.visibility = if (charSequence.isEmpty()) View.INVISIBLE else View.VISIBLE
             }
         })
 
-        deepLink_btn_go.isEnabled = isValidUriWithHandlingActivity(deepLink_edittext_input.text.toString())
+        // Trigger text changed listener
+        deepLink_editText_input.setText("")
     }
 
     private fun isValidUriWithHandlingActivity(deepLinkText: String) = deepLinkText.isUri()
@@ -166,16 +207,16 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     private fun pasteFromClipboard() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        if (!deepLink_edittext_input.text.toString().isUri() && clipboardManager.hasPrimaryClip()) {
+        if (!deepLink_editText_input.text.toString().isUri() && clipboardManager.hasPrimaryClip()) {
             val clipItem = clipboardManager.primaryClip.getItemAt(0)
 
             if (clipItem != null) {
                 if (clipItem.text != null) {
                     val clipBoardText = clipItem.text.toString()
-                    setdeep_link_inputText(clipBoardText)
+                    setAndSelectInput(clipBoardText)
                 } else if (clipItem.uri != null) {
                     val clipBoardText = clipItem.uri.toString()
-                    setdeep_link_inputText(clipBoardText)
+                    setAndSelectInput(clipBoardText)
                 }
             }
         }
@@ -185,40 +226,40 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
         val deepLinkInfo = DeepLinkInfo("deeplinktester://example", "Deep Link Tester", packageName,
                 Date().time)
 
-        val demoHeaderView = adapter!!.createView(0,
-                layoutInflater.inflate(R.layout.deep_link_info_layout, null, false), deepLinkInfo)
-        demoHeaderView.setBackgroundColor(
-                ResourcesCompat.getColor(resources, R.color.white, theme))
-        deepLink_listView.addHeaderView(demoHeaderView)
-
-        TapTargetSequence(this).targets(
-                TapTarget.forView(deepLink_card_view,
-                        getString(R.string.onboarding_input_title))
-                        .dimColor(android.R.color.black)
-                        .outerCircleColor(R.color.primary)
-                        .targetCircleColor(R.color.accent)
-                        .tintTarget(false),
-
-                TapTarget.forView(deepLink_btn_go,
-                        getString(R.string.onboarding_launch_title))
-                        .dimColor(android.R.color.black)
-                        .outerCircleColor(R.color.primary)
-                        .targetCircleColor(R.color.accent)
-                        .tintTarget(true),
-
-                TapTarget.forView(demoHeaderView, getString(R.string.onboarding_history_title))
-                        .dimColor(android.R.color.black)
-                        .outerCircleColor(R.color.primary)
-                        .targetCircleColor(R.color.accent)
-                        .tintTarget(false)).listener(object : TapTargetSequence.Listener {
-            override fun onSequenceFinish() {
-                deepLink_listView.removeHeaderView(demoHeaderView)
-            }
-
-            override fun onSequenceCanceled(lastTarget: TapTarget) {
-                deepLink_listView.removeHeaderView(demoHeaderView)
-            }
-        }).start()
+//        val demoHeaderView = adapter!!.(0,
+//                layoutInflater.inflate(R.layout.deep_link_info_layout, null, false), deepLinkInfo)
+//        demoHeaderView.setBackgroundColor(
+//                ResourcesCompat.getColor(resources, R.color.white, theme))
+//        deepLink_list.addHeaderView(demoHeaderView)
+//
+//        TapTargetSequence(this).targets(
+//                TapTarget.forView(deepLink_card_view,
+//                        getString(R.string.onboarding_input_title))
+//                        .dimColor(android.R.color.black)
+//                        .outerCircleColor(R.color.primary)
+//                        .targetCircleColor(R.color.accent)
+//                        .tintTarget(false),
+//
+//                TapTarget.forView(deepLink_btn_go,
+//                        getString(R.string.onboarding_launch_title))
+//                        .dimColor(android.R.color.black)
+//                        .outerCircleColor(R.color.primary)
+//                        .targetCircleColor(R.color.accent)
+//                        .tintTarget(true),
+//
+//                TapTarget.forView(demoHeaderView, getString(R.string.onboarding_history_title))
+//                        .dimColor(android.R.color.black)
+//                        .outerCircleColor(R.color.primary)
+//                        .targetCircleColor(R.color.accent)
+//                        .tintTarget(false)).listener(object : TapTargetSequence.Listener {
+//            override fun onSequenceFinish() {
+//                deepLink_list.removeHeaderView(demoHeaderView)
+//            }
+//
+//            override fun onSequenceCanceled(lastTarget: TapTarget) {
+//                deepLink_list.removeHeaderView(demoHeaderView)
+//            }
+//        }).start()
     }
 
     private var databaseListenerId: Int = 0
@@ -235,11 +276,12 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
         get() = object : DeepLinkDatabase.Listener {
             override fun onDataChanged(dataSnapshot: List<DeepLinkInfo>) {
                 progress_wheel.visibility = View.GONE
-                adapter!!.updateBaseData(dataSnapshot)
+                deepLinkViewModels = dataSnapshot.map(::DeepLinkViewModel)
+                adapter!!.edit().replaceAll(deepLinkViewModels).commit()
 
-                if (deepLink_edittext_input != null && deepLink_edittext_input.text.isNotEmpty()) {
-                    adapter!!.updateResults(deepLink_edittext_input.text.toString())
-                }
+//                if (deepLink_editText_input != null && deepLink_editText_input.text.isNotEmpty()) {
+//                    adapter!!.updateResults(deepLink_editText_input.text.toString())
+//                }
 
                 if (dataSnapshot.isNotEmpty()) {
                     showShortcutBannerIfNeeded()
@@ -263,9 +305,9 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 || actionId == EditorInfo.IME_ACTION_NEXT
     }
 
-    private fun setdeep_link_inputText(text: String) {
-        deepLink_edittext_input.setText(text)
-        deepLink_edittext_input.setSelection(text.length)
+    private fun setAndSelectInput(text: String) {
+        deepLink_editText_input.setText(text)
+        deepLink_editText_input.setSelection(text.length)
     }
 
     companion object {
