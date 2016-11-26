@@ -37,19 +37,15 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     // TODO Don't store this in the activity, rotation will killlll it
     private var deepLinkViewModels: List<DeepLinkViewModel> = emptyList()
 
+    private val listComparator by lazy { createListComparator() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deep_link_history)
 
         supportActionBar!!.setTitle(R.string.title_activity_deep_link_history)
         // Alphabetical sorting for now
-        adapter = DeepLinkListAdapter(this, Comparator { t1, t2 ->
-            val packageComparison = t1.deepLinkInfo.packageName.compareTo(t2.deepLinkInfo.packageName, true)
-            if (packageComparison == 0)
-                packageComparison
-            else
-                t1.deepLinkInfo.deepLink.compareTo(t2.deepLinkInfo.deepLink, true)
-        })
+        adapter = DeepLinkListAdapter(this, listComparator)
         configureListView()
         configureInputs()
         deepLink_btn_go.setOnClickListener { extractAndFireLink() }
@@ -136,6 +132,7 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     private fun configureListView() {
         deepLink_list.layoutManager = LinearLayoutManager(this)
         deepLink_list.adapter = adapter
+        deepLink_list.itemAnimator
         val clickSupport = ItemClickSupport.addTo(deepLink_list)
         clickSupport.setOnItemClickListener(object : ItemClickSupport.OnItemClickListener {
             override fun onItemClicked(recyclerView: RecyclerView, position: Int, v: View) {
@@ -185,7 +182,8 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 val deepLinkString = charSequence.toString()
                 adapter!!.stringToHighlight = deepLinkString
                 adapter!!.edit()
-                        .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
+                        .replaceAll(deepLinkViewModels
+                                .filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
                         .commit()
 
                 deepLink_btn_go.drawable.tint(if (isValidUriWithHandlingActivity(deepLink_editText_input.text.toString()))
@@ -308,6 +306,16 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     private fun setAndSelectInput(text: String) {
         deepLink_editText_input.setText(text)
         deepLink_editText_input.setSelection(text.length)
+    }
+
+    private fun createListComparator(): Comparator<DeepLinkViewModel> {
+        return Comparator { t1, t2 ->
+            val packageComparison = t1.deepLinkInfo.packageName.compareTo(t2.deepLinkInfo.packageName, true)
+            if (packageComparison == 0)
+                packageComparison
+            else
+                t1.deepLinkInfo.deepLink.compareTo(t2.deepLinkInfo.deepLink, true)
+        }
     }
 
     companion object {

@@ -6,13 +6,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.thunderclouddev.deeplink.utils.SafeSortedList
 import java.util.*
 
 /**
  * https://github.com/Wrdlbrnft/SortedListAdapter
  * v0.2.0.1
  */
-abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Context, itemClass: Class<T>, private val mComparator: Comparator<T>) : RecyclerView.Adapter<SortedListAdapter.ViewHolder<out T>>() {
+abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Context, itemClass: Class<T>, private val mComparator: Comparator<T>)
+    : RecyclerView.Adapter<SortedListAdapter.ViewHolder<out T>>() {
     interface Editor<T : ViewModel> {
         fun add(item: T): Editor<T>
         fun add(items: List<T>): Editor<T>
@@ -45,7 +47,7 @@ abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Conte
     init {
         inflater = LayoutInflater.from(context)
 
-        sortedList = SortedList(itemClass, object : SortedList.Callback<T>() {
+        sortedList = SafeSortedList(itemClass, object : SortedList.Callback<T>() {
             override fun compare(a: T, b: T): Int {
                 return mComparator.compare(a, b)
             }

@@ -37,26 +37,13 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     override fun areItemContentsTheSame(oldItem: DeepLinkViewModel, newItem: DeepLinkViewModel)
             = oldItem == newItem
 
-//    override fun getMatchingResults(constraint: CharSequence): List<DeepLinkInfo> {
-//        val prefixList = ArrayList<DeepLinkInfo>()
-//        val suffixList = ArrayList<DeepLinkInfo>()
-//        for (info in originalList) {
-//            if (info.deepLink.startsWith(constraint.toString())) {
-//                prefixList.add(info)
-//            } else if (info.deepLink.contains(constraint)) {
-//                suffixList.add(info)
-//            }
-//        }
-//        prefixList.addAll(suffixList)
-//        return prefixList
-//    }
-
     inner class ViewHolder(val view: View) : SortedListAdapter.ViewHolder<DeepLinkViewModel>(view) {
         override fun performBind(item: DeepLinkViewModel) {
             val deepLinkInfo = item.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
             val deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(stringToHighlight),
                     stringToHighlight.length, titleColor)
+
             Utilities.setTextViewText(view, R.id.deepLinkItem_title, deepLinkTitle)
             Utilities.setTextViewText(view, R.id.deepLinkItem_packageName, deepLinkInfo.packageName)
             Utilities.setTextViewText(view, R.id.deepLinkItem_activityName, deepLinkInfo.activityLabel)
@@ -69,6 +56,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
             }
 
             view.findViewById(R.id.deepLinkItem_remove).setOnClickListener {
+                // TODO yuck. Refactor to not call singleton from adapter
                 DeepLinkHistoryFeature.getInstance(view.context).removeLinkFromHistory(deepLinkInfo.id)
                 edit().remove(item).commit()
             }

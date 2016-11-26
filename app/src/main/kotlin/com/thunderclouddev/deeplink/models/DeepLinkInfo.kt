@@ -6,7 +6,7 @@ import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
 
-class DeepLinkInfo(val deepLink: String, val activityLabel: String, val packageName: String, val updatedTime: Long //Milliseconds
+data class DeepLinkInfo(val deepLink: String, val activityLabel: String, val packageName: String, val updatedTime: Long //Milliseconds
 ) : Comparable<DeepLinkInfo> {
     //Deep link without params itself is the unique identifier for the model
     val id: String

@@ -6,4 +6,4 @@ import com.thunderclouddev.deeplink.ui.SortedListAdapter
 /**
  * Created by David Whitman on 24 Nov, 2016.
  */
-class DeepLinkViewModel(val deepLinkInfo: DeepLinkInfo) : SortedListAdapter.ViewModel
+data class DeepLinkViewModel(val deepLinkInfo: DeepLinkInfo) : SortedListAdapter.ViewModel
