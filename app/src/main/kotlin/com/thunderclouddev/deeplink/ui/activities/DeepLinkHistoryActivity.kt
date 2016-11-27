@@ -17,6 +17,7 @@ import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.deepLinkListing.DeepLinkViewModel
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
+import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.ConfirmShortcutDialog
@@ -39,13 +40,15 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
 
     private val listComparator by lazy { createListComparator() }
 
+    private val menuItemListener by lazy { createMenuItemListener() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deep_link_history)
 
         supportActionBar!!.setTitle(R.string.title_activity_deep_link_history)
         // Alphabetical sorting for now
-        adapter = DeepLinkListAdapter(this, listComparator)
+        adapter = DeepLinkListAdapter(this, listComparator, menuItemListener)
         configureListView()
         configureInputs()
         deepLink_btn_go.setOnClickListener { extractAndFireLink() }
@@ -60,7 +63,7 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -137,7 +140,7 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
         clickSupport.setOnItemClickListener(object : ItemClickSupport.OnItemClickListener {
             override fun onItemClicked(recyclerView: RecyclerView, position: Int, v: View) {
                 val info = adapter!!.getItem(position)
-                setAndSelectInput(info.deepLinkInfo.deepLink)
+                Utilities.resolveAndFire(info.deepLinkInfo.deepLink, this@DeepLinkHistoryActivity)
             }
         })
         clickSupport.setOnItemLongClickListener(object : ItemClickSupport.OnItemLongClickListener {
@@ -315,6 +318,40 @@ class DeepLinkHistoryActivity : AppCompatActivity() {
                 packageComparison
             else
                 t1.deepLinkInfo.deepLink.compareTo(t2.deepLinkInfo.deepLink, true)
+        }
+    }
+
+    private fun createMenuItemListener(): DeepLinkListAdapter.MenuItemListener {
+        return object : DeepLinkListAdapter.MenuItemListener {
+            override fun onMenuItemClick(menuItem: MenuItem, deepLinkViewModel: DeepLinkViewModel): Boolean {
+                val deepLinkInfo = deepLinkViewModel.deepLinkInfo
+
+                return when (menuItem.itemId) {
+                    R.id.menu_list_item_edit -> {
+                        // bring up editor
+                        true
+                    }
+                    R.id.menu_list_item_delete -> {
+                        DeepLinkHistoryFeature.getInstance(this@DeepLinkHistoryActivity).removeLinkFromHistory(deepLinkInfo.id)
+                        adapter!!.edit().remove(deepLinkViewModel).commit()
+                        true
+                    }
+                    R.id.menu_list_item_createShortcut -> {
+//                    val ft = supportFragmentManager.beginTransaction()
+//                    val prev = supportFragmentManager.findFragmentByTag("dialog")
+//                    if (prev != null) {
+//                        ft.remove(prev)
+//                    }
+//                    ft.addToBackStack(null)
+
+                        // Create and show the dialog.
+                        ConfirmShortcutDialog.newInstance(deepLinkInfo.deepLink, deepLinkInfo.activityLabel)
+                                .show(supportFragmentManager, DeepLinkHistoryActivity.TAG_DIALOG)
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
     }
 

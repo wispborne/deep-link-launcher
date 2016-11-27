@@ -5,18 +5,23 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.deepLinkListing.DeepLinkViewModel
-import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
 import com.thunderclouddev.deeplink.utils.Utilities
 import java.util.*
 
-class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewModel>)
-    : SortedListAdapter<DeepLinkViewModel>(context, DeepLinkViewModel::class.java, comparator) {
+class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewModel>,
+                          val menuItemListener: MenuItemListener) :
+        SortedListAdapter<DeepLinkViewModel>(context, DeepLinkViewModel::class.java, comparator) {
+    interface MenuItemListener {
+        fun onMenuItemClick(menuItem: MenuItem, deepLinkViewModel: DeepLinkViewModel): Boolean
+    }
+
     var stringToHighlight = ""
 
     private val defaultAppIcon: Drawable
@@ -37,9 +42,11 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     override fun areItemContentsTheSame(oldItem: DeepLinkViewModel, newItem: DeepLinkViewModel)
             = oldItem == newItem
 
-    inner class ViewHolder(val view: View) : SortedListAdapter.ViewHolder<DeepLinkViewModel>(view) {
-        override fun performBind(item: DeepLinkViewModel) {
-            val deepLinkInfo = item.deepLinkInfo
+    inner class ViewHolder(val view: View) :
+            SortedListAdapter.ViewHolder<DeepLinkViewModel>(view) {
+
+        override fun performBind(deepLinkInfoModel: DeepLinkViewModel) {
+            val deepLinkInfo = deepLinkInfoModel.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
             val deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(stringToHighlight),
                     stringToHighlight.length, titleColor)
@@ -55,10 +62,13 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
                 (view.findViewById(R.id.deepLinkItem_icon) as ImageView).setImageDrawable(defaultAppIcon)
             }
 
-            view.findViewById(R.id.deepLinkItem_remove).setOnClickListener {
-                // TODO yuck. Refactor to not call singleton from adapter
-                DeepLinkHistoryFeature.getInstance(view.context).removeLinkFromHistory(deepLinkInfo.id)
-                edit().remove(item).commit()
+            val overflowMenu = view.findViewById(R.id.deepLinkItem_overflow)
+            overflowMenu.setOnClickListener {
+                val menu = android.support.v7.widget.PopupMenu(view.context, overflowMenu)
+                menu.setOnMenuItemClickListener { menuItemListener.onMenuItemClick(it, deepLinkInfoModel) }
+                menu.inflate(R.menu.menu_list_item)
+
+                menu.show()
             }
         }
     }

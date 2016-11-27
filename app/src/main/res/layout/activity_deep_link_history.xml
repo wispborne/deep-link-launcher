@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/deep_link_history_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +15,7 @@
             android:id="@+id/deepLink_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center|top"
             android:layout_margin="@dimen/spacingSmall">
 
             <LinearLayout
@@ -88,31 +88,28 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <FrameLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/deepLink_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@color/gray"
+            android:paddingEnd="@dimen/spacingSmall"
+            android:paddingStart="@dimen/spacingSmall"
+            android:paddingTop="54dp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/deepLink_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@color/gray"
-                android:paddingEnd="@dimen/spacingSmall"
-                android:paddingStart="@dimen/spacingSmall" />
-
-            <!--android:listSelector="?attr/selectableItemBackground"-->
-            <ProgressBar
-                android:id="@+id/progress_wheel"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center" />
-        </FrameLayout>
+        <!--android:listSelector="?attr/selectableItemBackground"-->
+        <ProgressBar
+            android:id="@+id/progress_wheel"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center" />
 
         <LinearLayout
             android:id="@+id/shortcut_hint_banner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:background="@color/black"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -139,5 +136,5 @@
                 android:textColor="@color/yellow"
                 android:textSize="12sp" />
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 </FrameLayout>

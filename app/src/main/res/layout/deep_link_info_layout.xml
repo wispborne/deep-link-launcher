@@ -52,18 +52,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/deepLinkItem_remove"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/spacingSmall_half"
-        android:layout_marginStart="@dimen/spacingSmall_half"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="center"
-        android:src="@drawable/ic_cancel_red_24_px"
-        android:tint="@color/grayDark" />
-
-    <ImageView
-        android:id="@+id/deep_link_overflow"
+        android:id="@+id/deepLinkItem_overflow"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/spacingSmall_half"
