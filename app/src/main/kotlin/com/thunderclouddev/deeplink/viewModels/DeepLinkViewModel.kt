@@ -1,4 +1,4 @@
-package com.thunderclouddev.deeplink.deepLinkListing
+package com.thunderclouddev.deeplink.viewModels
 
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.ui.SortedListAdapter

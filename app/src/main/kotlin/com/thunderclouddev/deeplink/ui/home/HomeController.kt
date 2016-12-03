@@ -1,4 +1,4 @@
-package com.thunderclouddev.deeplink.ui.activities
+package com.thunderclouddev.deeplink.ui.home
 
 import android.app.Activity
 import android.content.ClipboardManager
@@ -18,13 +18,12 @@ import android.widget.Toast
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.databinding.ActivityDeepLinkHistoryBinding
-import com.thunderclouddev.deeplink.deepLinkListing.DeepLinkViewModel
+import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.BaseController
-import com.thunderclouddev.deeplink.ui.adapters.DeepLinkListAdapter
 import com.thunderclouddev.deeplink.ui.utils.ItemClickSupport
 import com.thunderclouddev.deeplink.ui.utils.tint
 import com.thunderclouddev.deeplink.utils.TextChangedListener

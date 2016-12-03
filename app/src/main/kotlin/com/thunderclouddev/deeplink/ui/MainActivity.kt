@@ -9,7 +9,7 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.ui.activities.HomeController
+import com.thunderclouddev.deeplink.ui.home.HomeController
 
 
 /**

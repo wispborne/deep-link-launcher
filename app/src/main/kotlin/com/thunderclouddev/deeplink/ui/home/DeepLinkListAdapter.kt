@@ -1,4 +1,4 @@
-package com.thunderclouddev.deeplink.ui.adapters
+package com.thunderclouddev.deeplink.ui.home
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.deepLinkListing.DeepLinkViewModel
+import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
 import com.thunderclouddev.deeplink.utils.Utilities
 import java.util.*
@@ -45,8 +45,8 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     inner class ViewHolder(val view: View) :
             SortedListAdapter.ViewHolder<DeepLinkViewModel>(view) {
 
-        override fun performBind(deepLinkInfoModel: DeepLinkViewModel) {
-            val deepLinkInfo = deepLinkInfoModel.deepLinkInfo
+        override fun performBind(item: DeepLinkViewModel) {
+            val deepLinkInfo = item.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
             val deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(stringToHighlight),
                     stringToHighlight.length, titleColor)
@@ -65,7 +65,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
             val overflowMenu = view.findViewById(R.id.deepLinkItem_overflow)
             overflowMenu.setOnClickListener {
                 val menu = android.support.v7.widget.PopupMenu(view.context, overflowMenu)
-                menu.setOnMenuItemClickListener { menuItemListener.onMenuItemClick(it, deepLinkInfoModel) }
+                menu.setOnMenuItemClickListener { menuItemListener.onMenuItemClick(it, item) }
                 menu.inflate(R.menu.menu_list_item)
 
                 menu.show()
