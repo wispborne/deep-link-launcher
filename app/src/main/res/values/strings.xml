@@ -30,4 +30,10 @@
     <string name="menu_list_item_edit">Edit</string>
     <string name="menu_list_item_delete">Remove</string>
     <string name="menu_list_item_createShortcut">Place Shortcut</string>
+
+    <string name="placeShortcut_title">Place shortcut on desktop?</string>
+    <string name="placeShortcut_cancel">Cancel</string>
+    <string name="placeShortcut_ok">Create</string>
+    <string name="placeShortcut_success">Shortcut placed on desktop</string>
+    <string name="placeShortcut_failure">Error creating shortcut</string>
 </resources>

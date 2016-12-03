@@ -16,17 +16,22 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.activities.DeepLinkHistoryActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/main_app_name"
             android:windowSoftInputMode="adjustPan">
-            <!--<intent-filter>-->
-                <!--<data-->
-                    <!--android:host="deeplinklauncher"-->
-                    <!--android:scheme="example" />-->
-            <!--</intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="link"
+                    android:scheme="deeplinklauncher" />
             </intent-filter>
         </activity>
 

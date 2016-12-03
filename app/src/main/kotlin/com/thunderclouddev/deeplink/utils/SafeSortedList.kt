@@ -25,21 +25,13 @@ class SafeSortedList<T> : SortedList<T> {
                 return indexOf(item)
             }
         }
+
         return super.add(item)
     }
 
-    override fun addAll(items: Array<T>, mayModifyInput: Boolean) {
-        for (item in items)
-            add(item)
-    }
+    override fun addAll(items: Array<T>, mayModifyInput: Boolean) = items.forEach { add(it) }
 
-    override fun addAll(vararg items: T) {
-        for (item in items)
-            add(item)
-    }
+    override fun addAll(vararg items: T) = items.forEach { add(it) }
 
-    override fun addAll(items: Collection<T>) {
-        for (item in items)
-            add(item)
-    }
+    override fun addAll(items: Collection<T>) = items.forEach { add(it) }
 }
