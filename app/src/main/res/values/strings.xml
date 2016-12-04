@@ -45,4 +45,8 @@
     <string name="editDialog_queryKeyHint">key</string>
     <string name="editDialog_queryValueHint">value</string>
     <string name="editDialog_title">Edit deep link</string>
+    <string name="editDialog_preview_label">Preview</string>
+    <string name="editDialog_path_label">Path</string>
+    <string name="editDialog_queryString_label">Query string parameters</string>
+    <string name="editDialog_title_label">Name</string>
 </resources>

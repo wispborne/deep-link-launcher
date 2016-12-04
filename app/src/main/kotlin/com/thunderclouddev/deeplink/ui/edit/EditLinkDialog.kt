@@ -42,27 +42,29 @@ class EditLinkDialog : DialogFragment() {
             dismiss()
         }
 
-        binding.info = ViewModel(deepLinkInfo!!)
+        val viewModel = ViewModel(deepLinkInfo!!)
+        binding.info = viewModel
 
-        deepLinkInfo.deepLink.queryParameterNames
-                .associateBy({ it }, { deepLinkInfo.deepLink.getQueryParameter(it) })
+        viewModel.queryParams
                 .forEach { param ->
                     val rowBinding = DataBindingUtil.inflate<ItemEditParamRowBinding>(
                             activity!!.layoutInflater, R.layout.item_edit_param_row, null, false)
                     rowBinding.param = param
-                    // TODO: Two-way bind the querystring params
                     binding.editQueryLayout.addView(rowBinding.root)
                 }
 
-        val alertDialog = AlertDialog.Builder(activity)
-                .setTitle(R.string.editDialog_title)
+        val alertDialog = buildAlertDialog()
+
+        return alertDialog.create()
+    }
+
+    private fun buildAlertDialog(): AlertDialog.Builder {
+        return AlertDialog.Builder(activity)
                 .setView(binding.root)
                 .setPositiveButton(R.string.save, { dialog, which ->
                     // TODO: Save updated link
                 })
                 .setNegativeButton(R.string.cancel, null)
-
-        return alertDialog.create()
     }
 
     class ViewModel(deepLinkInfo: DeepLinkInfo) : BaseObservable() {
@@ -70,33 +72,49 @@ class EditLinkDialog : DialogFragment() {
         private val scheme = uri.scheme
         private val authority = uri.authority
 
-        @Bindable var path = ObservableField(uri.path ?: String.empty)
+        @Bindable var path = ObservableField((uri.path ?: String.empty).removePrefix("/"))
         @Bindable var label = ObservableField(deepLinkInfo.activityLabel)
-
-        var queryParams = emptyMap<String, String>()
+        @Bindable var queryParams = listOf<QueryParamModel>()
 
         @Bindable fun getFullDeepLink(): String = Uri.decode(Uri.Builder()
                 .scheme(scheme)
                 .authority(authority)
                 .path(path.get())
-                .query(queryParams.entries.joinToString(separator = "/"))
+                .query(queryParams.map { it.toString() }.joinToString(separator = "&"))
                 .toString())
 
         init {
-            queryParams = if (uri.query.isNotNullOrBlank())
-                uri.queryParameterNames.associateBy({ it }, { uri.getQueryParameter(it) })
-            else emptyMap<String, String>()
-
-            notifyPropertyChanged(BR.fullDeepLink)
-
             val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                     notifyPropertyChanged(BR.fullDeepLink)
                 }
             }
 
+            queryParams =
+                    (if (uri.query.isNotNullOrBlank())
+                        uri.queryParameterNames.map {
+                            QueryParamModel(
+                                    ObservableField(it),
+                                    ObservableField(uri.getQueryParameter(it)),
+                                    fullDeepLinkNotifierCallback)
+                        }
+                    else emptyList<QueryParamModel>())
+
+            notifyPropertyChanged(BR.fullDeepLink)
+
             path.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
             label.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
+        }
+
+        class QueryParamModel(@Bindable var key: ObservableField<String>,
+                              @Bindable var value: ObservableField<String>,
+                              val listener: Observable.OnPropertyChangedCallback) : BaseObservable() {
+            init {
+                key.addOnPropertyChangedCallback(listener)
+                value.addOnPropertyChangedCallback(listener)
+            }
+
+            override fun toString(): String = "${Uri.encode(key.get())}=${Uri.encode(value.get())}"
         }
     }
 }
