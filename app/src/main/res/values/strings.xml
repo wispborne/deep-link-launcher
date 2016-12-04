@@ -1,6 +1,9 @@
 <resources>
     <string name="main_app_name">Deep Link Launcher</string>
 
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="error_no_activity_resolved">"No activity found to resolve the given deep link"</string>
@@ -36,4 +39,10 @@
     <string name="placeShortcut_ok">Create</string>
     <string name="placeShortcut_success">Shortcut placed on desktop</string>
     <string name="placeShortcut_failure">Error creating shortcut</string>
+    <string name="label">Label</string>
+
+    <string name="editDialog_pathHint">path</string>
+    <string name="editDialog_queryKeyHint">key</string>
+    <string name="editDialog_queryValueHint">value</string>
+    <string name="editDialog_title">Edit deep link</string>
 </resources>

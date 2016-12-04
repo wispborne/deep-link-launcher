@@ -26,23 +26,25 @@ import org.greenrobot.eventbus.EventBus
 object Utilities {
     fun checkAndFireDeepLink(deepLinkUri: String, context: Context): Boolean {
         if (deepLinkUri.isUri()) {
-            if (resolveAndFire(deepLinkUri, context)) {
+            val uri = Uri.parse(deepLinkUri)
+
+            if (resolveAndFire(uri, context)) {
                 return true
             } else {
-                val deepLinkInfo = DeepLinkInfo(deepLinkUri, "", "", -1)
+                val deepLinkInfo = DeepLinkInfo(uri, "", "", -1)
                 val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND)
                 EventBus.getDefault().postSticky(deepLinkFireEvent)
                 return false
             }
         } else {
-            val deepLinkInfo = DeepLinkInfo(deepLinkUri, "", "", -1)
+            val deepLinkInfo = DeepLinkInfo(Uri.EMPTY, "", "", -1)
             val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI)
             EventBus.getDefault().postSticky(deepLinkFireEvent)
             return false
         }
     }
 
-    fun addShortcut(deepLinkUri: String, context: Context, shortcutName: String): Boolean {
+    fun addShortcut(deepLinkUri: Uri, context: Context, shortcutName: String): Boolean {
         val shortcutIntent = createDeepLinkIntent(deepLinkUri)
         val intent = Intent()
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
@@ -62,7 +64,7 @@ object Utilities {
 
     }
 
-    fun resolveAndFire(deepLinkUri: String, context: Context): Boolean {
+    fun resolveAndFire(deepLinkUri: Uri, context: Context): Boolean {
         val intent = createDeepLinkIntent(deepLinkUri)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val resolveInfo = getResolveInfo(context, intent)
@@ -78,10 +80,9 @@ object Utilities {
         }
     }
 
-    fun createDeepLinkIntent(deepLinkUri: String): Intent {
-        val uri = Uri.parse(deepLinkUri)
+    fun createDeepLinkIntent(deepLinkUri: Uri): Intent {
         val intent = Intent()
-        intent.data = uri
+        intent.data = deepLinkUri
         intent.action = Intent.ACTION_VIEW
         return intent
     }
@@ -114,7 +115,7 @@ object Utilities {
         (ancestor.findViewById(textViewId) as TextView).text = text
     }
 
-    fun getDeepLinkInfo(deepLink: String, resolveInfo: ResolveInfo, context: Context): DeepLinkInfo {
+    fun getDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo, context: Context): DeepLinkInfo {
         val packageName = resolveInfo.activityInfo.packageName
         val activityLabel = resolveInfo.loadLabel(context.packageManager).toString()
         val deepLinkInfo = DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis())

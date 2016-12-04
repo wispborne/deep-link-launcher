@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="info"
+            type="com.thunderclouddev.deeplink.ui.edit.EditLinkDialog.ViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edit_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacingLarge"
+            android:layout_marginStart="@dimen/spacingLarge"
+            android:hint="@string/label"
+            android:inputType="textPersonName"
+            android:text="@={info.label}" />
+
+        <EditText
+            android:id="@+id/edit_deepLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacingLarge"
+            android:layout_marginStart="@dimen/spacingLarge"
+            android:hint="@string/editDialog_pathHint"
+            android:inputType="textUri"
+            android:text="@={info.path}" />
+
+        <LinearLayout
+            android:id="@+id/edit_queryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacingLarge"
+            android:layout_marginStart="@dimen/spacingLarge"
+            android:text="@{info.fullDeepLink}" />
+    </LinearLayout>
+</layout>

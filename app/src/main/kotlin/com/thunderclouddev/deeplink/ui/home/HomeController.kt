@@ -17,17 +17,18 @@ import android.widget.EditText
 import android.widget.Toast
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
-import com.thunderclouddev.deeplink.databinding.ActivityDeepLinkHistoryBinding
-import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
+import com.thunderclouddev.deeplink.databinding.ActivityHomeBinding
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.BaseController
+import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
 import com.thunderclouddev.deeplink.ui.utils.ItemClickSupport
 import com.thunderclouddev.deeplink.ui.utils.tint
 import com.thunderclouddev.deeplink.utils.TextChangedListener
 import com.thunderclouddev.deeplink.utils.Utilities
+import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import hotchemi.android.rate.AppRate
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -44,15 +45,15 @@ class HomeController : BaseController() {
 
     private val menuItemListener by lazy { createMenuItemListener() }
 
-    private lateinit var binding: ActivityDeepLinkHistoryBinding
+    private lateinit var binding: ActivityHomeBinding
 
     init {
         setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.activity_deep_link_history, container, false)
-//        val view = inflater.inflate(R.layout.activity_deep_link_history, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_home, container, false)
+//        val view = inflater.inflate(R.layout.activity_home, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
 
         // Alphabetical sorting for now
@@ -106,13 +107,13 @@ class HomeController : BaseController() {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onEvent(deepLinkFireEvent: DeepLinkFireEvent) {
-        val deepLinkString = deepLinkFireEvent.info.deepLink
-        setAndSelectInput(deepLinkString)
+        val deepLinkString = deepLinkFireEvent.info.deepLink.toString()
+        setAndSelectInput(deepLinkString.toString())
 
         if (deepLinkFireEvent.resultType == ResultType.SUCCESS) {
             adapter!!.stringToHighlight = deepLinkString
             adapter!!.edit()
-                    .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
+                    .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.toString().contains(deepLinkString) })
                     .commit()
         } else {
             if (DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND == deepLinkFireEvent.failureReason) {
@@ -138,7 +139,7 @@ class HomeController : BaseController() {
         val deepLinkString = binding.deepLinkEditTextInput.text.toString()
         adapter!!.stringToHighlight = deepLinkString
         adapter!!.edit()
-                .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
+                .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.toString().contains(deepLinkString) })
                 .commit()
     }
 
@@ -214,7 +215,7 @@ class HomeController : BaseController() {
                 adapter!!.stringToHighlight = deepLinkString
                 adapter!!.edit()
                         .replaceAll(deepLinkViewModels
-                                .filter { it.deepLinkInfo.deepLink.contains(deepLinkString) })
+                                .filter { it.deepLinkInfo.deepLink.toString().contains(deepLinkString) })
                         .commit()
 
                 binding.deepLinkBtnGo.drawable.tint(if (isValidUriWithHandlingActivity(binding.deepLinkEditTextInput.text.toString()))
@@ -231,7 +232,7 @@ class HomeController : BaseController() {
     }
 
     private fun isValidUriWithHandlingActivity(deepLinkText: String) = deepLinkText.isUri()
-            && Utilities.createDeepLinkIntent(deepLinkText).hasHandlingActivity(activity!!.packageManager)
+            && Utilities.createDeepLinkIntent(Uri.parse(deepLinkText)).hasHandlingActivity(activity!!.packageManager)
 
     private fun pasteFromClipboard() {
         val clipboardManager = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -294,6 +295,7 @@ class HomeController : BaseController() {
     private var databaseListenerId: Int = 0
 
     private fun attachDatabaseListener() {
+        binding.progressWheel.visibility = View.VISIBLE
         databaseListenerId = BaseApplication.database.addListener(firebaseHistoryListener)
     }
 
@@ -345,7 +347,7 @@ class HomeController : BaseController() {
             if (packageComparison == 0)
                 packageComparison
             else
-                t1.deepLinkInfo.deepLink.compareTo(t2.deepLinkInfo.deepLink, true)
+                t1.deepLinkInfo.deepLink.compareTo(t2.deepLinkInfo.deepLink)
         }
     }
 
@@ -356,7 +358,8 @@ class HomeController : BaseController() {
 
                 return when (menuItem.itemId) {
                     R.id.menu_list_item_edit -> {
-                        // bring up editor
+                        EditLinkDialog.newInstance(deepLinkInfo)
+                                .show(activity!!.fragmentManager, "EditDialogTag")
                         true
                     }
                     R.id.menu_list_item_delete -> {

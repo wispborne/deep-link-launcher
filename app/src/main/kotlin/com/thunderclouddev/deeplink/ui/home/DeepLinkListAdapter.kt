@@ -48,7 +48,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
         override fun performBind(item: DeepLinkViewModel) {
             val deepLinkInfo = item.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
-            val deepLinkTitle = Utilities.colorPartialString(deepLink, deepLink.indexOf(stringToHighlight),
+            val deepLinkTitle = Utilities.colorPartialString(deepLink.toString(), deepLink.toString().indexOf(stringToHighlight),
                     stringToHighlight.length, titleColor)
 
             Utilities.setTextViewText(view, R.id.deepLinkItem_title, deepLinkTitle)

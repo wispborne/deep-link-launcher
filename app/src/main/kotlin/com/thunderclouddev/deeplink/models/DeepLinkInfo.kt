@@ -6,7 +6,7 @@ import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
 
-data class DeepLinkInfo(val deepLink: String, val activityLabel: String, val packageName: String, val updatedTime: Long //Milliseconds
+data class DeepLinkInfo(val deepLink: Uri, val activityLabel: String, val packageName: String, val updatedTime: Long //Milliseconds
 ) : Comparable<DeepLinkInfo> {
     //Deep link without params itself is the unique identifier for the model
     val id: String
@@ -20,13 +20,12 @@ data class DeepLinkInfo(val deepLink: String, val activityLabel: String, val pac
 
     // unique id for each deep link entry. similar deep links, varying in query or fragments are combined
     private fun generateId(): String {
-        val uri = Uri.parse(deepLink)
-        var id = uri.toString()
-        if (uri.fragment != null) {
-            id = id.replace(uri.fragment, "").replace("#", "")
+        var id = deepLink.toString()
+        if (deepLink.fragment != null) {
+            id = id.replace(deepLink.fragment, "").replace("#", "")
         }
-        if (uri.query != null) {
-            id = id.replace(uri.query, "").replace("?", "")
+        if (deepLink.query != null) {
+            id = id.replace(deepLink.query, "").replace("?", "")
         }
         id = id.replace("/", "")
         //replace '.' since firebase does not support them in paths
@@ -42,7 +41,6 @@ data class DeepLinkInfo(val deepLink: String, val activityLabel: String, val pac
     }
 
     companion object {
-
         fun toJson(deepLinkInfo: DeepLinkInfo): String {
             try {
                 val jsonObject = JSONObject()
@@ -65,7 +63,7 @@ data class DeepLinkInfo(val deepLink: String, val activityLabel: String, val pac
                 val activityLable = jsonObject.getString(JSON_KEYS.KEY_ACTIVITY_LABEL)
                 val packageName = jsonObject.getString(JSON_KEYS.KEY_PACKAGE_NAME)
                 val updatedTime = jsonObject.getLong(JSON_KEYS.KEY_UPDATED_TIME)
-                return DeepLinkInfo(deepLink, activityLable, packageName, updatedTime)
+                return DeepLinkInfo(Uri.parse(deepLink), activityLable, packageName, updatedTime)
             } catch (jsonException: JSONException) {
                 Log.d("deeplink", "returning null for deep link info, exception = " + jsonException)
                 return null
