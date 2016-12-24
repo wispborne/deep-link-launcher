@@ -33,7 +33,7 @@ val String.getOrNullIfBlank: String?
     get() = if (this.isNullOrBlank()) null else this
 
 
-fun String?.isNotNullOrBlank() = !this.isNullOrBlank()
+fun CharSequence?.isNotNullOrBlank() = !this.isNullOrBlank()
 
 
 fun String?.isUri() = this != null

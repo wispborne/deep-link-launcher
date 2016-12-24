@@ -6,6 +6,8 @@ import android.app.DialogFragment
 import android.databinding.*
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.BR
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.ActivityEditBinding
@@ -25,11 +27,8 @@ class EditLinkDialog : DialogFragment() {
         private val BUNDLE_DEEP_LINK = "BUNDLE_DEEP_LINK"
 
         fun newInstance(deeplink: DeepLinkInfo): EditLinkDialog {
-            val frag = EditLinkDialog()
-            val args = Bundle()
-            args.putString(BUNDLE_DEEP_LINK, DeepLinkInfo.toJson(deeplink))
-            frag.arguments = args
-            return frag
+            val args = Bundle().apply { putString(BUNDLE_DEEP_LINK, DeepLinkInfo.toJson(deeplink)) }
+            return EditLinkDialog().apply { arguments = args }
         }
     }
 
@@ -45,17 +44,41 @@ class EditLinkDialog : DialogFragment() {
         val viewModel = ViewModel(deepLinkInfo!!)
         binding.info = viewModel
 
+        // Extra blank param pair so user may add new param
+        viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())
+        refreshQueryParamsUi(binding, viewModel)
+
+        return buildAlertDialog().create()
+    }
+
+    private fun refreshQueryParamsUi(binding: ActivityEditBinding, viewModel: ViewModel) {
+        binding.editQueryLayout.removeAllViews()
         viewModel.queryParams
                 .forEach { param ->
-                    val rowBinding = DataBindingUtil.inflate<ItemEditParamRowBinding>(
-                            activity!!.layoutInflater, R.layout.item_edit_param_row, null, false)
-                    rowBinding.param = param
-                    binding.editQueryLayout.addView(rowBinding.root)
+                    val (editQueryLayout, view) = createQueryParamRow(viewModel, param)
+                    editQueryLayout.addView(view)
                 }
+    }
 
-        val alertDialog = buildAlertDialog()
+    private fun createQueryParamRow(viewModel: ViewModel, param: ViewModel.QueryParamModel): Pair<LinearLayout, View> {
+        val rowBinding = DataBindingUtil.inflate<ItemEditParamRowBinding>(
+                activity!!.layoutInflater, R.layout.item_edit_param_row, null, false)
+        rowBinding.param = param
+        val editQueryLayout = binding.editQueryLayout
+        val onFocusChangeListener = View.OnFocusChangeListener { view, focused ->
+            if (editQueryLayout.childCount > 0) {
+                val lastQueryLayout = editQueryLayout.getChildAt(editQueryLayout.childCount - 1)
 
-        return alertDialog.create()
+                // If the selected field is in the final row, add a query param and renew the querystring UI
+                if (lastQueryLayout.findViewById(R.id.edit_key) == view || lastQueryLayout.findViewById(R.id.edit_value) == view) {
+                    viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())
+                    refreshQueryParamsUi(binding, viewModel)
+                }
+            }
+        }
+        rowBinding.editKey.onFocusChangeListener = onFocusChangeListener
+        val view = rowBinding.root
+        return Pair(editQueryLayout, view)
     }
 
     private fun buildAlertDialog(): AlertDialog.Builder {
@@ -72,24 +95,27 @@ class EditLinkDialog : DialogFragment() {
         private val scheme = uri.scheme
         private val authority = uri.authority
 
+        private val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                notifyPropertyChanged(BR.fullDeepLink)
+            }
+        }
+
         @Bindable var path = ObservableField((uri.path ?: String.empty).removePrefix("/"))
         @Bindable var label = ObservableField(deepLinkInfo.activityLabel)
-        @Bindable var queryParams = listOf<QueryParamModel>()
+        @Bindable var queryParams = mutableListOf<QueryParamModel>()
 
         @Bindable fun getFullDeepLink(): String = Uri.decode(Uri.Builder()
                 .scheme(scheme)
                 .authority(authority)
                 .path(path.get())
-                .query(queryParams.map { it.toString() }.joinToString(separator = "&"))
+                .query(queryParams
+                        .map { it.toString() }
+                        .filter(String::isNotBlank)
+                        .joinToString(separator = "&"))
                 .toString())
 
         init {
-            val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
-                override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                    notifyPropertyChanged(BR.fullDeepLink)
-                }
-            }
-
             queryParams =
                     (if (uri.query.isNotNullOrBlank())
                         uri.queryParameterNames.map {
@@ -98,7 +124,7 @@ class EditLinkDialog : DialogFragment() {
                                     ObservableField(uri.getQueryParameter(it)),
                                     fullDeepLinkNotifierCallback)
                         }
-                    else emptyList<QueryParamModel>())
+                    else emptyList<QueryParamModel>()).toMutableList()
 
             notifyPropertyChanged(BR.fullDeepLink)
 
@@ -106,15 +132,25 @@ class EditLinkDialog : DialogFragment() {
             label.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
         }
 
+        fun addQueryParam(key: ObservableField<String>, value: ObservableField<String>) {
+            queryParams.add(QueryParamModel(key, value, fullDeepLinkNotifierCallback))
+        }
+
         class QueryParamModel(@Bindable var key: ObservableField<String>,
                               @Bindable var value: ObservableField<String>,
-                              val listener: Observable.OnPropertyChangedCallback) : BaseObservable() {
+                              listener: Observable.OnPropertyChangedCallback) : BaseObservable() {
             init {
                 key.addOnPropertyChangedCallback(listener)
                 value.addOnPropertyChangedCallback(listener)
             }
 
-            override fun toString(): String = "${Uri.encode(key.get())}=${Uri.encode(value.get())}"
+            override fun toString(): String {
+                return if (key.get().isNullOrBlank()) {
+                    String.empty
+                } else {
+                    "${Uri.encode(key.get() ?: String.empty)}=${Uri.encode(value.get() ?: String.empty)}"
+                }
+            }
         }
     }
 }

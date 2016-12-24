@@ -108,7 +108,7 @@ class HomeController : BaseController() {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onEvent(deepLinkFireEvent: DeepLinkFireEvent) {
         val deepLinkString = deepLinkFireEvent.info.deepLink.toString()
-        setAndSelectInput(deepLinkString.toString())
+        setAndSelectInput(deepLinkString)
 
         if (deepLinkFireEvent.resultType == ResultType.SUCCESS) {
             adapter!!.stringToHighlight = deepLinkString
