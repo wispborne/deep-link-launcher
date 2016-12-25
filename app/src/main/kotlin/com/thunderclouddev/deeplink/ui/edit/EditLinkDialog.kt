@@ -7,6 +7,7 @@ import android.databinding.*
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.BR
 import com.thunderclouddev.deeplink.R
@@ -46,18 +47,15 @@ class EditLinkDialog : DialogFragment() {
 
         // Extra blank param pair so user may add new param
         viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())
-        refreshQueryParamsUi(binding, viewModel)
-
-        return buildAlertDialog().create()
-    }
-
-    private fun refreshQueryParamsUi(binding: ActivityEditBinding, viewModel: ViewModel) {
-        binding.editQueryLayout.removeAllViews()
         viewModel.queryParams
                 .forEach { param ->
                     val (editQueryLayout, view) = createQueryParamRow(viewModel, param)
                     editQueryLayout.addView(view)
                 }
+
+        val dialog = buildAlertDialog().create()
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        return dialog
     }
 
     private fun createQueryParamRow(viewModel: ViewModel, param: ViewModel.QueryParamModel): Pair<LinearLayout, View> {
@@ -71,8 +69,9 @@ class EditLinkDialog : DialogFragment() {
 
                 // If the selected field is in the final row, add a query param and renew the querystring UI
                 if (lastQueryLayout.findViewById(R.id.edit_key) == view || lastQueryLayout.findViewById(R.id.edit_value) == view) {
-                    viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())
-                    refreshQueryParamsUi(binding, viewModel)
+                    val newQueryParam = viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())
+                    val (newEditQueryLayout, newView) = createQueryParamRow(viewModel, newQueryParam)
+                    editQueryLayout.addView(newView)
                 }
             }
         }
@@ -132,8 +131,10 @@ class EditLinkDialog : DialogFragment() {
             label.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
         }
 
-        fun addQueryParam(key: ObservableField<String>, value: ObservableField<String>) {
-            queryParams.add(QueryParamModel(key, value, fullDeepLinkNotifierCallback))
+        fun addQueryParam(key: ObservableField<String>, value: ObservableField<String>): QueryParamModel {
+            val queryParamModel = QueryParamModel(key, value, fullDeepLinkNotifierCallback)
+            queryParams.add(queryParamModel)
+            return queryParamModel
         }
 
         class QueryParamModel(@Bindable var key: ObservableField<String>,

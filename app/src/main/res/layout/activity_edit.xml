@@ -80,7 +80,7 @@
             android:layout_above="@+id/editDialog_preview"
             android:layout_marginEnd="@dimen/spacingMedium"
             android:layout_marginStart="@dimen/spacingMedium"
-            android:layout_marginTop="@dimen/spacingMedium"
+            android:layout_marginTop="@dimen/spacingSmall"
             android:labelFor="@+id/editDialog_preview"
             android:text="@string/editDialog_preview_label"
             android:textStyle="bold" />
