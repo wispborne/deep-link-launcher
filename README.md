@@ -4,6 +4,9 @@
 
 This is a small but useful Android app to launch deep links. 
 
+[download nightly](https://circleci.com/api/v1/project/davidwhitman/deep-link-launcher/latest/artifacts/0/$CIRCLE_ARTIFACTS/outputs/apk/app-debug.apk?filter=successful
+)
+
 A deep link is a url that can take you to a specific page within a mobile app; for example, directly to somebody's Facebook profile page. 
 
 [See: What is deep linking?](https://branch.io/what-is-deep-linking/)
