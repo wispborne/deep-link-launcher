@@ -21,14 +21,14 @@ class SharedPrefsDeepLinkDatabase(context: Context) : DeepLinkDatabase {
         listeners.remove(id)
     }
 
-    override fun addLinkToHistory(deepLinkInfo: DeepLinkInfo): String {
+    override fun putLink(deepLinkInfo: DeepLinkInfo): String {
         fileSystem.write(deepLinkInfo.id, DeepLinkInfo.toJson(deepLinkInfo))
 
         notifyListeners()
         return deepLinkInfo.id
     }
 
-    override fun removeLinkFromHistory(deepLinkId: String) {
+    override fun removeLink(deepLinkId: String) {
         fileSystem.clear(deepLinkId)
         notifyListeners()
     }

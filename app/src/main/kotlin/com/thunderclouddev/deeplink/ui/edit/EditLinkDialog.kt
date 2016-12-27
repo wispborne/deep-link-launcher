@@ -4,19 +4,18 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.app.DialogFragment
 import android.databinding.*
+import android.databinding.Observable
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
-import com.thunderclouddev.deeplink.BR
-import com.thunderclouddev.deeplink.R
+import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.databinding.ActivityEditBinding
 import com.thunderclouddev.deeplink.databinding.ItemEditParamRowBinding
-import com.thunderclouddev.deeplink.empty
-import com.thunderclouddev.deeplink.isNotNullOrBlank
 import com.thunderclouddev.deeplink.logging.Timber
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
+import java.util.*
 
 /**
  * Created by David Whitman on 01 Dec, 2016.
@@ -53,7 +52,7 @@ class EditLinkDialog : DialogFragment() {
                     editQueryLayout.addView(view)
                 }
 
-        val dialog = buildAlertDialog().create()
+        val dialog = buildAlertDialog(viewModel, deepLinkInfo).create()
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return dialog
     }
@@ -80,11 +79,17 @@ class EditLinkDialog : DialogFragment() {
         return Pair(editQueryLayout, view)
     }
 
-    private fun buildAlertDialog(): AlertDialog.Builder {
+    private fun buildAlertDialog(viewModel: ViewModel, deepLinkInfo: DeepLinkInfo): AlertDialog.Builder {
         return AlertDialog.Builder(activity)
                 .setView(binding.root)
                 .setPositiveButton(R.string.save, { dialog, which ->
-                    // TODO: Save updated link
+                    val deepLink = Uri.parse(viewModel.getFullDeepLink())
+
+                    if (deepLink != null) {
+                        BaseApplication.database.removeLink(deepLinkInfo.id)
+                        BaseApplication.database.putLink(DeepLinkInfo(deepLink, viewModel.label.get(),
+                                deepLinkInfo.packageName, Date().time))
+                    }
                 })
                 .setNegativeButton(R.string.cancel, null)
     }

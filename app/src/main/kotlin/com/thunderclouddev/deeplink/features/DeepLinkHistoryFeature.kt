@@ -21,11 +21,11 @@ class DeepLinkHistoryFeature private constructor(private val _context: Context) 
     }
 
     override fun addLinkToHistory(deepLinkInfo: DeepLinkInfo) {
-        BaseApplication.database.addLinkToHistory(deepLinkInfo)
+        BaseApplication.database.putLink(deepLinkInfo)
     }
 
     override fun removeLinkFromHistory(deepLinkId: String) {
-        BaseApplication.database.removeLinkFromHistory(deepLinkId)
+        BaseApplication.database.removeLink(deepLinkId)
     }
 
     override fun clearAllHistory() {
