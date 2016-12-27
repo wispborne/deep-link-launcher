@@ -1,5 +1,8 @@
 package com.thunderclouddev.deeplink.ui.home
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
@@ -210,6 +213,12 @@ class HomeController : BaseController() {
         binding.deepLinkBtnClearInput.setOnClickListener { binding.deepLinkEditTextInput.text.clear() }
 
         binding.deepLinkEditTextInput.addTextChangedListener(object : TextChangedListener() {
+            var oldText: String = String.empty
+
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                oldText = charSequence.toString()
+            }
+
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 val deepLinkString = charSequence.toString()
                 adapter!!.stringToHighlight = deepLinkString
@@ -218,17 +227,54 @@ class HomeController : BaseController() {
                                 .filter { it.deepLinkInfo.deepLink.toString().contains(deepLinkString) })
                         .commit()
 
-                binding.deepLinkBtnGo.drawable.tint(if (isValidUriWithHandlingActivity(binding.deepLinkEditTextInput.text.toString()))
-                    accentColor
-                else
-                    disabledColor)
+                val isOldStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(oldText)
+                val isNewStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(deepLinkString)
+                val didValidityChange = isOldStringValidUriWithHandlingActivity xor isNewStringValidUriWithHandlingActivity
+
+                if (didValidityChange) {
+                    // animation!
+                    if (isNewStringValidUriWithHandlingActivity) {
+                        binding.deepLinkBtnGoForAnims.visibility = View.VISIBLE
+                        val fadeAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "alpha", 1f, .1f)
+                        val scaleXAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "scaleX", 1f, 2f)
+                        val scaleYAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "scaleY", 1f, 2f)
+                        val animSet = AnimatorSet()
+                        animSet.playTogether(fadeAnim, scaleXAnim, scaleYAnim)
+                        animSet.duration = 160
+                        animSet.start()
+                        animSet.addListener(object : Animator.AnimatorListener {
+                            override fun onAnimationEnd(p0: Animator?) {
+                                animSet.removeListener(this)
+                                binding.deepLinkBtnGoForAnims.visibility = View.GONE
+                                binding.deepLinkBtnGoForAnims.clearAnimation()
+                            }
+
+                            override fun onAnimationCancel(p0: Animator?) {
+
+                            }
+
+                            override fun onAnimationStart(p0: Animator?) {
+                            }
+
+                            override fun onAnimationRepeat(p0: Animator?) {
+
+                            }
+
+                        })
+                    }
+
+                    binding.deepLinkBtnGo.drawable.tint(if (isNewStringValidUriWithHandlingActivity)
+                        accentColor
+                    else
+                        disabledColor)
+                }
 
                 binding.deepLinkBtnClearInput.visibility = if (charSequence.isEmpty()) View.INVISIBLE else View.VISIBLE
             }
         })
 
-        // Trigger text changed listener
-        binding.deepLinkEditTextInput.setText("")
+        // Set disabled by default
+        binding.deepLinkBtnGo.drawable.tint(disabledColor)
     }
 
     private fun isValidUriWithHandlingActivity(deepLinkText: String) = deepLinkText.isUri()

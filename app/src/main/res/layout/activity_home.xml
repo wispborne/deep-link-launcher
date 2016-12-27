@@ -76,16 +76,33 @@
                         android:layout_height="match_parent"
                         android:background="@color/gray" />
 
-                    <ImageView
-                        android:id="@+id/deepLink_btn_go"
-                        android:layout_width="@dimen/icon_size"
-                        android:layout_height="@dimen/icon_size"
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacingSmall_half"
-                        android:layout_marginTop="1dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/deeplink_btn_go"
-                        android:tint="@color/accent"
-                        android:tintMode="src_in" />
+                        android:layout_marginTop="1dp">
+
+                        <ImageView
+                            android:id="@+id/deepLink_btn_go"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Go button"
+                            android:src="@drawable/deeplink_btn_go"
+                            android:tint="@color/accent"
+                            android:tintMode="src_in" />
+
+                        <ImageView
+                            android:id="@+id/deepLink_btn_go_forAnims"
+                            android:layout_width="@dimen/icon_size"
+                            android:layout_height="@dimen/icon_size"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Go button"
+                            android:src="@drawable/deeplink_btn_go"
+                            android:tint="@color/accent"
+                            android:tintMode="src_in"
+                            android:visibility="gone" />
+                    </FrameLayout>
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
