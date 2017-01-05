@@ -29,7 +29,7 @@ abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Conte
         fun test(item: T): Boolean
     }
 
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val sortedList: SortedList<T>
 
     fun items(): List<T> {
@@ -45,8 +45,6 @@ abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Conte
     }
 
     init {
-        inflater = LayoutInflater.from(context)
-
         sortedList = SafeSortedList(itemClass, object : SortedList.Callback<T>() {
             override fun compare(a: T, b: T): Int {
                 return mComparator.compare(a, b)

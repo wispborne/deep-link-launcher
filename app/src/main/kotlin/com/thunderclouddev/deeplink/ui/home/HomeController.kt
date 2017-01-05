@@ -235,9 +235,9 @@ class HomeController : BaseController() {
                     // animation!
                     if (isNewStringValidUriWithHandlingActivity) {
                         binding.deepLinkBtnGoForAnims.visibility = View.VISIBLE
-                        val fadeAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "alpha", 1f, .1f)
-                        val scaleXAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "scaleX", 1f, 2f)
-                        val scaleYAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "scaleY", 1f, 2f)
+                        val fadeAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "alpha", 1f, 0f)
+                        val scaleXAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "scaleX", 1f, 2.5f)
+                        val scaleYAnim = ObjectAnimator.ofFloat(binding.deepLinkBtnGoForAnims, "scaleY", 1f, 2.5f)
                         val animSet = AnimatorSet()
                         animSet.playTogether(fadeAnim, scaleXAnim, scaleYAnim)
                         animSet.duration = 160

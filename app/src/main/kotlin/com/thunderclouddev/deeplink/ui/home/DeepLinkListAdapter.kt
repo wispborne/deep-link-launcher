@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
 import com.thunderclouddev.deeplink.utils.Utilities
+import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import java.util.*
 
 class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewModel>,
@@ -24,13 +24,8 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
 
     var stringToHighlight = ""
 
-    private val defaultAppIcon: Drawable
-    private val titleColor: Int
-
-    init {
-        defaultAppIcon = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_warning_red_24_px, context.theme)!!
-        titleColor = ResourcesCompat.getColor(context.resources, R.color.primary, context.theme)
-    }
+    private val defaultAppIcon: Drawable = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_warning_red_24_px, context.theme)!!
+    private val titleColor: Int = ResourcesCompat.getColor(context.resources, R.color.primary, context.theme)
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(inflater.inflate(R.layout.deep_link_info_layout, parent, false))
@@ -48,8 +43,9 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
         override fun performBind(item: DeepLinkViewModel) {
             val deepLinkInfo = item.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
-            val deepLinkTitle = Utilities.colorPartialString(deepLink.toString(), deepLink.toString().indexOf(stringToHighlight),
-                    stringToHighlight.length, titleColor)
+            val startPos = deepLink.toString().indexOf(stringToHighlight)
+            val deepLinkTitle = if (startPos >= 0) Utilities.colorPartialString(deepLink.toString(), startPos,
+                    stringToHighlight.length, titleColor) else deepLink.toString()
 
             Utilities.setTextViewText(view, R.id.deepLinkItem_title, deepLinkTitle)
             Utilities.setTextViewText(view, R.id.deepLinkItem_packageName, deepLinkInfo.packageName)
