@@ -33,7 +33,6 @@ android {
 
         def keysFile = file('keystore.properties')
 
-
         release {
             storeFile file('releaseKeystore.jks')
             keyAlias 'key0'
@@ -46,6 +45,21 @@ android {
             } else {
                 storePassword "${System.env.releaseKeystorePwd}"
                 keyPassword "${System.env.releaseKeystoreKeyPwd}"
+            }
+        }
+
+        releasePlayStore {
+            storeFile file('releaseKeystore.jks')
+            keyAlias 'key0'
+
+            if (keysFile.canRead()) {
+                def props = new Properties()
+                props.load(new FileInputStream(keysFile))
+                storePassword props.releaseKeystorePassword2
+                keyPassword props.releaseKeystoreKeyPassword2
+            } else {
+                storePassword "${System.env.releaseKeystorePwd2}"
+                keyPassword "${System.env.releaseKeystoreKeyPwd2}"
             }
         }
     }
@@ -72,6 +86,7 @@ android {
         releasePlayStore {
             minifyEnabled true
             shrinkResources true
+            signingConfig signingConfigs.releasePlayStore
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

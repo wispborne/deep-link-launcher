@@ -6,7 +6,6 @@ dependencies:
 
 test:
   override:
-    - case $CIRCLE_NODE_INDEX in 0) ./gradlew assembleRelease;; 1) ./gradlew assembleDebug  ;; esac:
-        parallel: true
+    - ./gradlew assembleDebug
 
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
