@@ -15,7 +15,7 @@
     <dimen name="activity_horizontal_large_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <!-- -->
-    <dimen name="appIconSize">64dp</dimen>
+    <dimen name="appIconSize">48dp</dimen>
     <dimen name="activity_horizontal_medium_margin">8dp</dimen>
     <dimen name="icon_size">24dp</dimen>
 </resources>

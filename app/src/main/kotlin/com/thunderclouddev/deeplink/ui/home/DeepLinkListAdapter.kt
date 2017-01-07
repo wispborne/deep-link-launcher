@@ -2,18 +2,19 @@ package com.thunderclouddev.deeplink.ui.home
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
 import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.thunderclouddev.deeplink.R
+import com.thunderclouddev.deeplink.databinding.DeepLinkInfoLayoutBinding
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import java.util.*
+
 
 class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewModel>,
                           val menuItemListener: MenuItemListener) :
@@ -24,11 +25,14 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
 
     var stringToHighlight = ""
 
-    private val defaultAppIcon: Drawable = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_warning_red_24_px, context.theme)!!
-    private val titleColor: Int = ResourcesCompat.getColor(context.resources, R.color.primary, context.theme)
+    private val defaultAppIcon: Drawable = ResourcesCompat.getDrawable(context.resources,
+            R.drawable.ic_warning_red_24_px, context.theme)!!
+    private val titleColor: Int = ResourcesCompat.getColor(context.resources, R.color.primary,
+            context.theme)
 
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(inflater.inflate(R.layout.deep_link_info_layout, parent, false))
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup,
+                                    viewType: Int): ViewHolder {
+        return ViewHolder(DataBindingUtil.inflate<DeepLinkInfoLayoutBinding>(inflater, R.layout.deep_link_info_layout, parent, false))
     }
 
     override fun areItemsTheSame(item1: DeepLinkViewModel, item2: DeepLinkViewModel)
@@ -37,35 +41,40 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     override fun areItemContentsTheSame(oldItem: DeepLinkViewModel, newItem: DeepLinkViewModel)
             = oldItem == newItem
 
-    inner class ViewHolder(val view: View) :
-            SortedListAdapter.ViewHolder<DeepLinkViewModel>(view) {
+    inner class ViewHolder(val binding: DeepLinkInfoLayoutBinding) :
+            SortedListAdapter.ViewHolder<DeepLinkViewModel>(binding) {
 
         override fun performBind(item: DeepLinkViewModel) {
             val deepLinkInfo = item.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
             val startPos = deepLink.toString().indexOf(stringToHighlight)
-            val deepLinkTitle = if (startPos >= 0) Utilities.colorPartialString(deepLink.toString(), startPos,
+            val deepLinkTitle = if (startPos >= 0) Utilities.colorPartialString(deepLink.toString(),
+                    startPos,
                     stringToHighlight.length, titleColor) else deepLink.toString()
 
-            Utilities.setTextViewText(view, R.id.deepLinkItem_title, deepLinkTitle)
-            Utilities.setTextViewText(view, R.id.deepLinkItem_packageName, deepLinkInfo.packageName)
-            Utilities.setTextViewText(view, R.id.deepLinkItem_activityName, deepLinkInfo.activityLabel)
+            binding.deepLinkItemTitle.text = deepLinkTitle
+            binding.deepLinkItemPackageName.text = deepLinkInfo.packageName
 
             try {
-                val icon = view.context.packageManager.getApplicationIcon(deepLinkInfo.packageName)
-                (view.findViewById(R.id.deepLinkItem_icon) as ImageView).setImageDrawable(icon)
+                val icon = binding.root.context.packageManager.getApplicationIcon(deepLinkInfo.packageName)
+                binding.deepLinkItemIcon.setImageDrawable(icon)
             } catch (exception: PackageManager.NameNotFoundException) {
-                (view.findViewById(R.id.deepLinkItem_icon) as ImageView).setImageDrawable(defaultAppIcon)
+                binding.deepLinkItemIcon.setImageDrawable(defaultAppIcon)
             }
 
-            val overflowMenu = view.findViewById(R.id.deepLinkItem_overflow)
+            val overflowMenu = binding.deepLinkItemOverflow
             overflowMenu.setOnClickListener {
-                val menu = android.support.v7.widget.PopupMenu(view.context, overflowMenu)
+                val menu = android.support.v7.widget.PopupMenu(binding.root.context, overflowMenu)
                 menu.setOnMenuItemClickListener { menuItemListener.onMenuItemClick(it, item) }
                 menu.inflate(R.menu.menu_list_item)
 
                 menu.show()
             }
+
+//            view.findViewById(R.id.deepLinkItem_icon).setOnClickListener {
+//                AlertDialog.Builder(view.context)
+//                    .setView()
+//            }
         }
     }
 }

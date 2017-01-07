@@ -1,10 +1,10 @@
 package com.thunderclouddev.deeplink.ui
 
 import android.content.Context
+import android.databinding.ViewDataBinding
 import android.support.v7.util.SortedList
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.thunderclouddev.deeplink.utils.SafeSortedList
 import java.util.*
@@ -211,7 +211,7 @@ abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Conte
         }
     }
 
-    abstract class ViewHolder<T : ViewModel>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract class ViewHolder<T : ViewModel>(itemView: ViewDataBinding) : RecyclerView.ViewHolder(itemView.root) {
 
         var currentItem: T? = null
             private set

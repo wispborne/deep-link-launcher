@@ -12,7 +12,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import com.thunderclouddev.deeplink.Constants
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
@@ -109,10 +108,6 @@ object Utilities {
         AlertDialog.Builder(context).setTitle(title)
                 .setMessage(message)
                 .show()
-    }
-
-    fun setTextViewText(ancestor: View, textViewId: Int, text: CharSequence) {
-        (ancestor.findViewById(textViewId) as TextView).text = text
     }
 
     fun getDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo, context: Context): DeepLinkInfo {

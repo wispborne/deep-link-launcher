@@ -77,11 +77,13 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.5.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //    compile 'com.google.zxing:core:3.3.1'
+    compile 'com.google.zxing:core:3.3.0'
 
     compile 'com.bluelinelabs:conductor:2.0.4'
-// If you want the components that go along with
-// Android's support libraries (currently just a PagerAdapter):
-//    compile 'com.bluelinelabs:conductor-support:2.0.4'
+    // If you want the components that go along with
+    // Android's support libraries (currently just a PagerAdapter):
+    //    compile 'com.bluelinelabs:conductor-support:2.0.4'
 
     kapt 'com.android.databinding:compiler:2.2.0'
 
