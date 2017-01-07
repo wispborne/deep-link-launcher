@@ -60,6 +60,12 @@ android {
             keyAlias 'key0'
             keyPassword 'password'
         }
+        release {
+            storeFile file('releaseKeystore.jks')
+            storePassword System.getenv('releaseKeystorePwd')
+            keyAlias 'key0'
+            keyPassword System.getenv('releaseKeystoreKeyPwd')
+        }
     }
     dataBinding.enabled = true
 }
