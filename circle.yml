@@ -3,7 +3,6 @@ dependencies:
     - cp -r "ci/licenses/" "/usr/local/android-sdk-linux/"
   cache_directories:
     - ~/.android
-    - ~/android
 
 test:
   override:

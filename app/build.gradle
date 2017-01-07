@@ -22,6 +22,34 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
 
+    signingConfigs {
+        // Debug keystore keeps signature consistent across CI builds
+        debug {
+            storeFile file('debugKeystore.jks')
+            storePassword 'password'
+            keyAlias 'key0'
+            keyPassword 'password'
+        }
+
+        def keysFile = file('keystore.properties')
+
+
+        release {
+            storeFile file('releaseKeystore.jks')
+            keyAlias 'key0'
+
+            if (keysFile.canRead()) {
+                def props = new Properties()
+                props.load(new FileInputStream(keysFile))
+                storePassword props.releaseKeystorePassword
+                keyPassword props.releaseKeystoreKeyPassword
+            } else {
+                storePassword "${System.env.releaseKeystorePwd}"
+                keyPassword "${System.env.releaseKeystoreKeyPwd}"
+            }
+        }
+    }
+
     defaultConfig {
         applicationId "com.thunderclouddev.deeplink"
         minSdkVersion 21
@@ -32,11 +60,13 @@ android {
         debug {
             minifyEnabled false
             shrinkResources false
+            signingConfig signingConfigs.debug
             applicationIdSuffix '.debug'
         }
         release {
             minifyEnabled true
             shrinkResources true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         releasePlayStore {
@@ -51,21 +81,6 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-    }
-    signingConfigs {
-        // Debug keystore keeps signature consistent across CI builds
-        debug {
-            storeFile file('debugKeystore.jks')
-            storePassword 'password'
-            keyAlias 'key0'
-            keyPassword 'password'
-        }
-        release {
-            storeFile file('releaseKeystore.jks')
-            storePassword System.getenv('releaseKeystorePwd')
-            keyAlias 'key0'
-            keyPassword System.getenv('releaseKeystoreKeyPwd')
-        }
     }
     dataBinding.enabled = true
 }
