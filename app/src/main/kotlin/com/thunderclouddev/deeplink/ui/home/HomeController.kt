@@ -18,11 +18,12 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.bluelinelabs.conductor.RouterTransaction
 import com.thunderclouddev.deeplink.*
+import com.thunderclouddev.deeplink.barcode.ScannerController
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.databinding.ActivityHomeBinding
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
-import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.BaseController
@@ -90,6 +91,13 @@ class HomeController : BaseController() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_PLAY_URI)))
                 // Do not show app rate dialog anymore
                 AppRate.with(activity!!).setAgreeShowDialog(false)
+            }
+            R.id.menu_scan -> {
+//                val cameraIntent = IntentIntegrator(activity)
+//                cameraIntent.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
+//                cameraIntent.setOrientationLocked(false)
+//                cameraIntent.initiateScan()
+                router.pushController(RouterTransaction.with(ScannerController()))
             }
         }
 
@@ -179,7 +187,7 @@ class HomeController : BaseController() {
         builder.setMessage(activity!!.getString(R.string.placeShortcut_title))
         builder.setNegativeButton(R.string.placeShortcut_cancel, null)
         builder.setPositiveButton(R.string.placeShortcut_ok) { dialog, buttonId ->
-            val shortcutAdded = Utilities.addShortcut(info.deepLink, activity!!, input.text.toString())
+            val shortcutAdded = Utilities.addShortcut(info, activity!!, input.text.toString())
 
             if (shortcutAdded) {
                 Toast.makeText(activity, R.string.placeShortcut_success, Toast.LENGTH_LONG).show()
@@ -342,11 +350,11 @@ class HomeController : BaseController() {
 
     private fun attachDatabaseListener() {
         binding.progressWheel.visibility = View.VISIBLE
-        databaseListenerId = BaseApplication.database.addListener(firebaseHistoryListener)
+        databaseListenerId = BaseApplication.deepLinkHistory.addListener(firebaseHistoryListener)
     }
 
     private fun removeFirebaseListener() {
-        BaseApplication.database.removeListener(databaseListenerId)
+        BaseApplication.deepLinkHistory.removeListener(databaseListenerId)
     }
 
     private val firebaseHistoryListener: DeepLinkDatabase.Listener
@@ -409,7 +417,7 @@ class HomeController : BaseController() {
                         true
                     }
                     R.id.menu_list_item_delete -> {
-                        DeepLinkHistoryFeature.getInstance(activity!!).removeLinkFromHistory(deepLinkInfo.id)
+                        BaseApplication.deepLinkHistory.removeLink(deepLinkInfo.id)
                         adapter!!.edit().remove(deepLinkViewModel).commit()
                         true
                     }

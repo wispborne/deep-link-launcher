@@ -1,13 +1,15 @@
 package com.thunderclouddev.deeplink.interfaces
 
+import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 
 interface IDeepLinkHistory {
-    fun addLinkToHistory(deepLinkInfo: DeepLinkInfo)
+    fun addLink(deepLinkInfo: DeepLinkInfo)
 
-    fun removeLinkFromHistory(deepLinkId: String)
+    fun removeLink(deepLinkId: String)
 
-    fun clearAllHistory()
+    fun clearAll()
 
-    val linkHistoryFromFileSystem: List<DeepLinkInfo>
+    fun addListener(listener: DeepLinkDatabase.Listener): Int
+    fun removeListener(id: Int)
 }

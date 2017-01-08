@@ -3,22 +3,20 @@ package com.thunderclouddev.deeplink
 import android.app.Application
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.database.SharedPrefsDeepLinkDatabase
-import com.thunderclouddev.deeplink.features.DeepLinkHistoryFeature
+import com.thunderclouddev.deeplink.features.DeepLinkHistory
 import hotchemi.android.rate.AppRate
 
 open class BaseApplication : Application() {
     companion object {
-        lateinit var database: DeepLinkDatabase
+        lateinit var deepLinkHistory: DeepLinkHistory
     }
+
 
     override fun onCreate() {
         super.onCreate()
 
-        database = SharedPrefsDeepLinkDatabase(this)
-
-        DeepLinkHistoryFeature.getInstance(applicationContext)
+        deepLinkHistory = DeepLinkHistory(createDatabase())
 
         val arePlayServicesAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
 
@@ -31,4 +29,6 @@ open class BaseApplication : Application() {
                     .monitor()
         }
     }
+
+    protected open fun createDatabase() = SharedPrefsDeepLinkDatabase(this)
 }

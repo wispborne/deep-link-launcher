@@ -1,10 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
-    package="com.thunderclouddev.qrcodelib">
-
-    <application android:allowBackup="true" android:label=""
-        android:supportsRtl="true">
-
-    </application>
-
-</manifest>
+<manifest package="com.thunderclouddev.qrcodelib"/>

@@ -43,15 +43,14 @@ object Utilities {
         }
     }
 
-    fun addShortcut(deepLinkUri: Uri, context: Context, shortcutName: String): Boolean {
-        val shortcutIntent = createDeepLinkIntent(deepLinkUri)
+    fun addShortcut(deepLink: DeepLinkInfo, context: Context, shortcutName: String): Boolean {
+        val shortcutIntent = createDeepLinkIntent(deepLink.deepLink)
         val intent = Intent()
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName)
-        // Set the custom shortcut icon. Not sure about this, but seems to work
-        val resolveInfo = getResolveInfo(context, createDeepLinkIntent(deepLinkUri))
+
         try {
-            val icon = context.packageManager.getApplicationIcon(resolveInfo!!.activityInfo.packageName)
+            val icon = context.packageManager.getApplicationIcon(deepLink.packageName)
             intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, (icon as BitmapDrawable).bitmap)
             intent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
             context.sendBroadcast(intent)
@@ -70,7 +69,7 @@ object Utilities {
 
         return if (resolveInfo != null) {
             context.startActivity(intent)
-            val deepLinkInfo = getDeepLinkInfo(deepLinkUri, resolveInfo, context)
+            val deepLinkInfo = createDeepLinkInfo(deepLinkUri, resolveInfo, context)
             val deepLinkFireEvent = DeepLinkFireEvent(ResultType.SUCCESS, deepLinkInfo)
             EventBus.getDefault().postSticky(deepLinkFireEvent)
             true
@@ -84,11 +83,6 @@ object Utilities {
         intent.data = deepLinkUri
         intent.action = Intent.ACTION_VIEW
         return intent
-    }
-
-    private fun getResolveInfo(context: Context, intent: Intent): ResolveInfo? {
-        val pm = context.packageManager
-        return pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
     }
 
     fun colorPartialString(text: String, startPos: Int, length: Int, color: Int): SpannableStringBuilder {
@@ -110,11 +104,22 @@ object Utilities {
                 .show()
     }
 
-    fun getDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo, context: Context): DeepLinkInfo {
+    fun createDeepLinkInfo(deepLink: Uri, context: Context): DeepLinkInfo? {
+        val resolveInfo = getResolveInfo(context, createDeepLinkIntent(deepLink))
+        return if (resolveInfo != null)
+            createDeepLinkInfo(deepLink, resolveInfo, context)
+        else
+            null
+    }
+
+    private fun createDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo, context: Context): DeepLinkInfo {
         val packageName = resolveInfo.activityInfo.packageName
         val activityLabel = resolveInfo.loadLabel(context.packageManager).toString()
-        val deepLinkInfo = DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis())
-        return deepLinkInfo
+        return DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis())
+    }
+
+    private fun getResolveInfo(context: Context, intent: Intent): ResolveInfo? {
+        return context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
     }
 
     fun isAppTutorialSeen(context: Context): Boolean {

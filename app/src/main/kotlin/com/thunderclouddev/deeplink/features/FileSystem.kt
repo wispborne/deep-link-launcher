@@ -6,11 +6,7 @@ import com.thunderclouddev.deeplink.interfaces.IFileSystem
 import java.util.*
 
 class FileSystem(context: Context, key: String) : IFileSystem {
-    private val preferences: SharedPreferences
-
-    init {
-        preferences = context.getSharedPreferences(key, Context.MODE_PRIVATE)
-    }
+    private val preferences: SharedPreferences = context.getSharedPreferences(key, Context.MODE_PRIVATE)
 
     override fun write(key: String, value: String) {
         preferences.edit().putString(key, value).apply()

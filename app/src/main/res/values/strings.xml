@@ -49,4 +49,6 @@
     <string name="editDialog_path_label">Path</string>
     <string name="editDialog_queryString_label">Query string parameters</string>
     <string name="editDialog_title_label">Name</string>
+    <string name="menu_scan_title">Scan</string>
+    <string name="scanner_continuous">Continuous Capture</string>
 </resources>

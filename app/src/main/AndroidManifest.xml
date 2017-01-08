@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.thunderclouddev.deeplink"
-    android:versionCode="1"
-    android:versionName="1.0.0">
+          package="com.thunderclouddev.deeplink"
+          android:versionCode="1"
+          android:versionName="1.0.0">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
 
     <application
-        android:name="com.thunderclouddev.deeplink.BaseApplication"
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/main_app_name"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/main_app_name"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="link"
-                    android:scheme="deeplinklauncher" />
+                    android:scheme="deeplinklauncher"/>
             </intent-filter>
         </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="b4a77f44bd99b72575a76efca9417b05542694df" />
+            android:value="b4a77f44bd99b72575a76efca9417b05542694df"/>
+
+        <activity android:name=".barcode.ScannerController">
+        </activity>
     </application>
 
 </manifest>

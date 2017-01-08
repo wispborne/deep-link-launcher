@@ -86,8 +86,8 @@ class EditLinkDialog : DialogFragment() {
                     val deepLink = Uri.parse(viewModel.getFullDeepLink())
 
                     if (deepLink != null) {
-                        BaseApplication.database.removeLink(deepLinkInfo.id)
-                        BaseApplication.database.putLink(DeepLinkInfo(deepLink, viewModel.label.get(),
+                        BaseApplication.deepLinkHistory.removeLink(deepLinkInfo.id)
+                        BaseApplication.deepLinkHistory.addLink(DeepLinkInfo(deepLink, viewModel.label.get(),
                                 deepLinkInfo.packageName, Date().time))
                     }
                 })

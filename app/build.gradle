@@ -113,8 +113,8 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.5.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    //    compile 'com.google.zxing:core:3.3.1'
-    compile 'com.google.zxing:core:3.3.0'
+
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1'
 
     compile 'com.bluelinelabs:conductor:2.0.4'
     // If you want the components that go along with
@@ -130,6 +130,8 @@ dependencies {
 
     debugCompile 'com.facebook.stetho:stetho:1.4.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+
+    compile project(':qrcodelib')
 }
 
 kapt.generateStubs = true
