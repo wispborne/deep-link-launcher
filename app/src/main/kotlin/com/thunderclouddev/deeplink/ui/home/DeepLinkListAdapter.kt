@@ -36,10 +36,10 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     }
 
     override fun areItemsTheSame(item1: DeepLinkViewModel, item2: DeepLinkViewModel)
-            = item1.deepLinkInfo.id == item2.deepLinkInfo.id
+            = item1.deepLinkInfo.id.equals(item2.deepLinkInfo.id, ignoreCase = true)
 
     override fun areItemContentsTheSame(oldItem: DeepLinkViewModel, newItem: DeepLinkViewModel)
-            = oldItem == newItem
+            = oldItem.deepLinkInfo.id.equals(newItem.deepLinkInfo.id, ignoreCase = true)
 
     inner class ViewHolder(val binding: DeepLinkInfoLayoutBinding) :
             SortedListAdapter.ViewHolder<DeepLinkViewModel>(binding) {
@@ -47,7 +47,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
         override fun performBind(item: DeepLinkViewModel) {
             val deepLinkInfo = item.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
-            val startPos = deepLink.toString().indexOf(stringToHighlight)
+            val startPos = deepLink.toString().indexOf(stringToHighlight, ignoreCase = true)
             val deepLinkTitle = if (startPos >= 0) Utilities.colorPartialString(deepLink.toString(),
                     startPos,
                     stringToHighlight.length, titleColor) else deepLink.toString()

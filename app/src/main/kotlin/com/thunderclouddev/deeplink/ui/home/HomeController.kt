@@ -119,13 +119,10 @@ class HomeController : BaseController() {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onEvent(deepLinkFireEvent: DeepLinkFireEvent) {
         val deepLinkString = deepLinkFireEvent.info.deepLink.toString()
-        setAndSelectInput(deepLinkString)
 
         if (deepLinkFireEvent.resultType == ResultType.SUCCESS) {
-            adapter!!.stringToHighlight = deepLinkString
-            adapter!!.edit()
-                    .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.toString().contains(deepLinkString) })
-                    .commit()
+            setAndSelectInput(deepLinkString)
+            updateFilter(deepLinkString)
         } else {
             if (DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND == deepLinkFireEvent.failureReason) {
                 Utilities.raiseError(
@@ -148,10 +145,7 @@ class HomeController : BaseController() {
         //Attach callback to init adapter from data
         attachDatabaseListener()
         val deepLinkString = binding.deepLinkEditTextInput.text.toString()
-        adapter!!.stringToHighlight = deepLinkString
-        adapter!!.edit()
-                .replaceAll(deepLinkViewModels.filter { it.deepLinkInfo.deepLink.toString().contains(deepLinkString) })
-                .commit()
+        updateFilter(deepLinkString)
     }
 
     private fun configureListView() {
@@ -229,11 +223,7 @@ class HomeController : BaseController() {
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                 val deepLinkString = charSequence.toString()
-                adapter!!.stringToHighlight = deepLinkString
-                adapter!!.edit()
-                        .replaceAll(deepLinkViewModels
-                                .filter { it.deepLinkInfo.deepLink.toString().contains(deepLinkString) })
-                        .commit()
+                updateFilter(deepLinkString)
 
                 val isOldStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(oldText)
                 val isNewStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(deepLinkString.trim())
@@ -283,6 +273,14 @@ class HomeController : BaseController() {
 
         // Set disabled by default
         binding.deepLinkBtnGo.drawable.tint(disabledColor)
+    }
+
+    private fun updateFilter(newDeepLinkString: String) {
+        adapter!!.stringToHighlight = newDeepLinkString
+        adapter!!.edit()
+                .replaceAll(deepLinkViewModels
+                        .filter { it.deepLinkInfo.deepLink.toString().contains(newDeepLinkString, ignoreCase = true) })
+                .commit()
     }
 
     private fun isValidUriWithHandlingActivity(deepLinkText: String) = deepLinkText.isUri()
