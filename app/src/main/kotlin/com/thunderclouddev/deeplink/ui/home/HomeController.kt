@@ -140,7 +140,7 @@ class HomeController : BaseController() {
     }
 
     private fun extractAndFireLink() {
-        val deepLinkUri = binding.deepLinkEditTextInput.text.toString()
+        val deepLinkUri = binding.deepLinkEditTextInput.text.toString().trim()
         Utilities.checkAndFireDeepLink(deepLinkUri, activity!!)
     }
 
@@ -224,7 +224,7 @@ class HomeController : BaseController() {
             var oldText: String = String.empty
 
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                oldText = charSequence.toString()
+                oldText = charSequence.toString().trim()
             }
 
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -236,7 +236,7 @@ class HomeController : BaseController() {
                         .commit()
 
                 val isOldStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(oldText)
-                val isNewStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(deepLinkString)
+                val isNewStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(deepLinkString.trim())
                 val didValidityChange = isOldStringValidUriWithHandlingActivity xor isNewStringValidUriWithHandlingActivity
 
                 if (didValidityChange) {
