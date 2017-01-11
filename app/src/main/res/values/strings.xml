@@ -29,8 +29,9 @@
     <string name="menu_rate_title">Rate</string>
     <string name="menu_share_title">Share</string>
     <string name="menu_list_item_edit">Edit</string>
-    <string name="menu_list_item_delete">Remove</string>
-    <string name="menu_list_item_createShortcut">Place Shortcut</string>
+    <string name="menu_list_item_qr">View QR code</string>
+    <string name="menu_list_item_delete">Delete</string>
+    <string name="menu_list_item_createShortcut">Create shortcut</string>
 
     <string name="placeShortcut_title">Place shortcut on desktop?</string>
     <string name="placeShortcut_cancel">Cancel</string>
@@ -55,4 +56,6 @@
     <string name="contentDesc_clear">Clear input</string>
     <string name="contentDesc_deepLink_appIcon">App icon</string>
     <string name="contentDesc_deepLink_overflow">Deep Link overflow menu</string>
+    <string name="contentDesc_qrCode">QR code</string>
+    <string name="qrcode_title">QR Code</string>
 </resources>

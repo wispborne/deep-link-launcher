@@ -54,6 +54,8 @@ class ScannerController : BaseController() {
     private var scanContinuously: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+        super.onCreateView(inflater, container)
+
         val binding = DataBindingUtil.inflate<ScannerActivityBinding>(inflater, R.layout.scanner_activity, container, false)
 
         barcodeView = binding.scannerBarcodeView

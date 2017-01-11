@@ -21,6 +21,7 @@ import android.widget.Toast
 import com.bluelinelabs.conductor.RouterTransaction
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.barcode.ScannerController
+import com.thunderclouddev.deeplink.barcode.ViewQrCodeController
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.databinding.HomeActivityBinding
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
@@ -56,6 +57,8 @@ class HomeController : BaseController() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+        super.onCreateView(inflater, container)
+
         binding = DataBindingUtil.inflate(inflater, R.layout.home_activity, container, false)
 //        val view = inflater.inflate(R.layout.home_activity, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
@@ -83,14 +86,16 @@ class HomeController : BaseController() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val itemId = item.itemId
-
-        when (itemId) {
-            R.id.menu_share -> Utilities.shareApp(activity!!)
+        return when (item.itemId) {
+            R.id.menu_share -> {
+                Utilities.shareApp(activity!!)
+                true
+            }
             R.id.menu_rate -> {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_PLAY_URI)))
                 // Do not show app rate dialog anymore
                 AppRate.with(activity!!).setAgreeShowDialog(false)
+                true
             }
             R.id.menu_scan -> {
 //                val cameraIntent = IntentIntegrator(activity)
@@ -98,10 +103,10 @@ class HomeController : BaseController() {
 //                cameraIntent.setOrientationLocked(false)
 //                cameraIntent.initiateScan()
                 router.pushController(RouterTransaction.with(ScannerController()))
+                true
             }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityStarted(activity: Activity) {
@@ -398,6 +403,11 @@ class HomeController : BaseController() {
                     R.id.menu_list_item_edit -> {
                         EditLinkDialog.newInstance(deepLinkInfo)
                                 .show(activity!!.fragmentManager, "EditDialogTag")
+                        true
+                    }
+                    R.id.menu_list_item_qr -> {
+                        router.pushController(
+                                RouterTransaction.with(ViewQrCodeController.createController(deepLinkInfo.deepLink.toString())))
                         true
                     }
                     R.id.menu_list_item_delete -> {
