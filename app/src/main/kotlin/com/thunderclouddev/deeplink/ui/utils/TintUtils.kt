@@ -8,13 +8,10 @@ import android.support.v4.graphics.drawable.DrawableCompat
 
 /**
  * Uses compatibility library to create a tinted a drawable. Supports all important versions of Android.
-
- * @param drawable Drawable to tint
- * *
+ *
  * @param color    Color to tint to, *not* R.color.whatever, must be resolved
- * *
  * @param mode     Mode of tinting to use
- * *
+ *
  * @return A tinted Drawable. Wraps the Drawable in a new class - instanceof will NOT match the old type
  */
 fun Drawable?.tint(@ColorInt color: Int, mode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN): Drawable? {
@@ -30,13 +27,9 @@ fun Drawable?.tint(@ColorInt color: Int, mode: PorterDuff.Mode = PorterDuff.Mode
 
 /**
  * Uses compatibility library to create a tinted a drawable. Supports all important versions of Android.
-
- * @param drawable Drawable to tint
- * *
  * @param color    Color to tint to
- * *
  * @param mode     Mode of tinting to use
- * *
+ *
  * @return A tinted Drawable. Wraps the Drawable in a new class - instanceof will NOT match the old type
  */
 fun Drawable?.tint(color: ColorStateList, mode: PorterDuff.Mode): Drawable? {

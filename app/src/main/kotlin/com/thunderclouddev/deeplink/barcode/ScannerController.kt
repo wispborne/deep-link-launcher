@@ -14,7 +14,7 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.tbruyelle.rxpermissions.RxPermissions
 import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.databinding.ActivityScannerBinding
+import com.thunderclouddev.deeplink.databinding.ScannerActivityBinding
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.utils.Utilities
 
@@ -54,7 +54,7 @@ class ScannerController : BaseController() {
     private var scanContinuously: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val binding = DataBindingUtil.inflate<ActivityScannerBinding>(inflater, R.layout.activity_scanner, container, false)
+        val binding = DataBindingUtil.inflate<ScannerActivityBinding>(inflater, R.layout.scanner_activity, container, false)
 
         barcodeView = binding.scannerBarcodeView
         barcodeView?.setStatusText(String.empty)

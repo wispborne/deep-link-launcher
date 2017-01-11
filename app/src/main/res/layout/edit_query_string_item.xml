@@ -5,7 +5,7 @@
         <!-- below: <String, String> -->
         <variable
             name="param"
-            type="com.thunderclouddev.deeplink.ui.edit.EditLinkDialog.ViewModel.QueryParamModel" />
+            type="com.thunderclouddev.deeplink.ui.edit.EditLinkDialog.ViewModel.QueryParamModel"/>
     </data>
 
     <LinearLayout
@@ -21,7 +21,7 @@
             android:layout_marginEnd="@dimen/spacingSmall_half"
             android:layout_weight="1"
             android:hint="@string/editDialog_queryKeyHint"
-            android:text="@={param.key}" />
+            android:text="@={param.key}"/>
 
         <EditText
             android:id="@+id/edit_value"
@@ -30,7 +30,7 @@
             android:layout_marginStart="@dimen/spacingSmall_half"
             android:layout_weight="1"
             android:hint="@string/editDialog_queryValueHint"
-            android:text="@={param.value}" />
+            android:text="@={param.value}"/>
 
     </LinearLayout>
 </layout>

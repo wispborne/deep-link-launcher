@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.databinding.DeepLinkInfoLayoutBinding
+import com.thunderclouddev.deeplink.databinding.DeeplinkItemBinding
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
@@ -32,7 +32,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup,
                                     viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate<DeepLinkInfoLayoutBinding>(inflater, R.layout.deep_link_info_layout, parent, false))
+        return ViewHolder(DataBindingUtil.inflate<DeeplinkItemBinding>(inflater, R.layout.deeplink_item, parent, false))
     }
 
     override fun areItemsTheSame(item1: DeepLinkViewModel, item2: DeepLinkViewModel)
@@ -41,7 +41,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     override fun areItemContentsTheSame(oldItem: DeepLinkViewModel, newItem: DeepLinkViewModel)
             = oldItem.deepLinkInfo.id.equals(newItem.deepLinkInfo.id, ignoreCase = true)
 
-    inner class ViewHolder(val binding: DeepLinkInfoLayoutBinding) :
+    inner class ViewHolder(val binding: DeeplinkItemBinding) :
             SortedListAdapter.ViewHolder<DeepLinkViewModel>(binding) {
 
         override fun performBind(item: DeepLinkViewModel) {
@@ -66,7 +66,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
             overflowMenu.setOnClickListener {
                 val menu = android.support.v7.widget.PopupMenu(binding.root.context, overflowMenu)
                 menu.setOnMenuItemClickListener { menuItemListener.onMenuItemClick(it, item) }
-                menu.inflate(R.menu.menu_list_item)
+                menu.inflate(R.menu.list_item)
 
                 menu.show()
             }

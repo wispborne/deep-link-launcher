@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), ActionBarProvider {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_activity)
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
         router = Conductor.attachRouter(this, findViewById(R.id.controller_container) as ViewGroup, savedInstanceState)

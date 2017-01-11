@@ -163,7 +163,7 @@ inline fun wtf(noinline message: () -> String) = Timber.wtf("%s", LazyString(mes
 inline fun wtf(t: Throwable, noinline message: () -> String) = Timber.wtf(t, "%s", LazyString(message))
 
 /** @suppress */
-class LazyString(val initializer: () -> String) {
+class LazyString(initializer: () -> String) {
     val string: String by lazy(initializer)
     override fun toString() = string
 }

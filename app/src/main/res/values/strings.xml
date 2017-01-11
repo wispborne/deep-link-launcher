@@ -28,8 +28,6 @@
     <string name="menu_web_title">Fire from web</string>
     <string name="menu_rate_title">Rate</string>
     <string name="menu_share_title">Share</string>
-    <string name="deepLink_longPress_hint_accept">GOT IT</string>
-    <string name="deepLink_longPress_hint_message">Long click a deep link to add shortcut</string>
     <string name="menu_list_item_edit">Edit</string>
     <string name="menu_list_item_delete">Remove</string>
     <string name="menu_list_item_createShortcut">Place Shortcut</string>
@@ -51,4 +49,10 @@
     <string name="editDialog_title_label">Name</string>
     <string name="menu_scan_title">Scan</string>
     <string name="scanner_continuous">Continuous Capture</string>
+
+    <string name="contentDesc_goButton">Launch deep link</string>
+    <string name="contentDesc_paste">Paste clipboard contents</string>
+    <string name="contentDesc_clear">Clear input</string>
+    <string name="contentDesc_deepLink_appIcon">App icon</string>
+    <string name="contentDesc_deepLink_overflow">Deep Link overflow menu</string>
 </resources>

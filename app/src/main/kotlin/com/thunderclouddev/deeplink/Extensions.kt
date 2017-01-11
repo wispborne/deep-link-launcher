@@ -11,7 +11,7 @@ fun Throwable.hasCause(type: Class<*>): Boolean {
     while (cause.cause != null) {
         cause = cause.cause!!
 
-        if (cause.javaClass.name.equals(type.name)) {
+        if (cause.javaClass.name == type.name) {
             return true
         }
     }

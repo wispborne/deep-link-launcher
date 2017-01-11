@@ -630,30 +630,10 @@ public final class Timber {
             prepareLog(priority, t, null);
         }
 
-        /**
-         * Return whether a message at {@code priority} should be logged.
-         *
-         * @deprecated use {@link #isLoggable(String, int)} instead.
-         */
-        @Deprecated
-        protected boolean isLoggable(int priority) {
-            return true;
-        }
-
-        /**
-         * Return whether a message at {@code priority} or {@code tag} should be logged.
-         */
-        protected boolean isLoggable(String tag, int priority) {
-            return isLoggable(priority);
-        }
-
         private void prepareLog(int priority, Throwable t, String message, Object... args) {
             // Consume tag even when message is not loggable so that next message is correctly tagged.
             String tag = getTag();
 
-            if (!isLoggable(tag, priority)) {
-                return;
-            }
             if (TextUtils.isEmpty(message)) {
                 if (t == null) {
                     return; // Swallow message if it's null and there's no throwable.

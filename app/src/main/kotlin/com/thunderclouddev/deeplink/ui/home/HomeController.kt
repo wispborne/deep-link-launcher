@@ -22,7 +22,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.barcode.ScannerController
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
-import com.thunderclouddev.deeplink.databinding.ActivityHomeBinding
+import com.thunderclouddev.deeplink.databinding.HomeActivityBinding
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
@@ -49,15 +49,15 @@ class HomeController : BaseController() {
 
     private val menuItemListener by lazy { createMenuItemListener() }
 
-    private lateinit var binding: ActivityHomeBinding
+    private lateinit var binding: HomeActivityBinding
 
     init {
         setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.activity_home, container, false)
-//        val view = inflater.inflate(R.layout.activity_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.home_activity, container, false)
+//        val view = inflater.inflate(R.layout.home_activity, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
 
         // Alphabetical sorting for now
@@ -78,7 +78,7 @@ class HomeController : BaseController() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
+        inflater.inflate(R.menu.main, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -309,7 +309,7 @@ class HomeController : BaseController() {
 //                Date().time)
 
 //        val demoHeaderView = adapter!!.(0,
-//                layoutInflater.inflate(R.layout.deep_link_info_layout, null, false), deepLinkInfo)
+//                layoutInflater.inflate(R.layout.deeplink_item, null, false), deepLinkInfo)
 //        demoHeaderView.setBackgroundColor(
 //                ResourcesCompat.getColor(resources, R.color.white, theme))
 //        binding.deepLinkList.addHeaderView(demoHeaderView)

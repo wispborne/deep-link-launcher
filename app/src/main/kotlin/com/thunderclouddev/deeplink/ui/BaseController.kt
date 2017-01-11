@@ -1,6 +1,5 @@
 package com.thunderclouddev.deeplink.ui
 
-import android.support.annotation.StringRes
 import android.support.v7.app.ActionBar
 import android.view.View
 import com.bluelinelabs.conductor.Controller
@@ -35,13 +34,11 @@ abstract class BaseController : Controller() {
         val title = getTitle()
         val actionBar = getActionBar()
         if (title != null) {
-            actionBar.setTitle(title)
+            actionBar.title = title
         }
     }
 
     protected fun getTitle(): String? {
         return null
     }
-
-    protected fun getString(@StringRes stringRes: Int) = activity!!.getString(stringRes)
 }

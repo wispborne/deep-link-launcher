@@ -30,6 +30,7 @@
                 android:layout_marginStart="@dimen/spacingMedium"
                 android:checked="@{model.bulkCapture}"
                 android:gravity="center_vertical"
+                android:paddingEnd="0dp"
                 android:paddingStart="@dimen/spacingSmall"
                 android:text="@string/scanner_continuous"/>
         </FrameLayout>

@@ -12,8 +12,9 @@
         android:name=".BaseApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/main_app_name"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.MainActivity"
@@ -39,9 +40,6 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b4a77f44bd99b72575a76efca9417b05542694df"/>
-
-        <activity android:name=".barcode.ScannerController">
-        </activity>
     </application>
 
 </manifest>

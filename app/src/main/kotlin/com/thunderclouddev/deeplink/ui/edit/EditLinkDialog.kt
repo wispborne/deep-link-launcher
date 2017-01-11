@@ -11,8 +11,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.databinding.ActivityEditBinding
-import com.thunderclouddev.deeplink.databinding.ItemEditParamRowBinding
+import com.thunderclouddev.deeplink.databinding.EditActivityBinding
+import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
 import com.thunderclouddev.deeplink.logging.Timber
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import java.util.*
@@ -21,7 +21,7 @@ import java.util.*
  * Created by David Whitman on 01 Dec, 2016.
  */
 class EditLinkDialog : DialogFragment() {
-    private lateinit var binding: ActivityEditBinding
+    private lateinit var binding: EditActivityBinding
 
     companion object {
         private val BUNDLE_DEEP_LINK = "BUNDLE_DEEP_LINK"
@@ -33,7 +33,7 @@ class EditLinkDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DataBindingUtil.inflate<ActivityEditBinding>(activity!!.layoutInflater, R.layout.activity_edit, null, false)
+        binding = DataBindingUtil.inflate<EditActivityBinding>(activity!!.layoutInflater, R.layout.edit_activity, null, false)
         val deepLinkInfo = DeepLinkInfo.fromJson(arguments.getString(BUNDLE_DEEP_LINK))
 
         if (deepLinkInfo == null) {
@@ -58,8 +58,8 @@ class EditLinkDialog : DialogFragment() {
     }
 
     private fun createQueryParamRow(viewModel: ViewModel, param: ViewModel.QueryParamModel): Pair<LinearLayout, View> {
-        val rowBinding = DataBindingUtil.inflate<ItemEditParamRowBinding>(
-                activity!!.layoutInflater, R.layout.item_edit_param_row, null, false)
+        val rowBinding = DataBindingUtil.inflate<EditQueryStringItemBinding>(
+                activity!!.layoutInflater, R.layout.edit_query_string_item, null, false)
         rowBinding.param = param
         val editQueryLayout = binding.editQueryLayout
         val onFocusChangeListener = View.OnFocusChangeListener { view, focused ->
