@@ -10,8 +10,6 @@ import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import com.thunderclouddev.deeplink.Constants
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
@@ -127,32 +125,12 @@ object Utilities {
         return tutSeenBool != null && tutSeenBool == "true"
     }
 
-    fun isShortcutHintSeen(context: Context): Boolean {
-        val shortcutSeenString = getOneTimeStore(context).read(Constants.SHORTCUT_HINT_SEEN)
-        return shortcutSeenString != null && shortcutSeenString == "true"
-    }
-
     fun getOneTimeStore(context: Context): FileSystem {
         return FileSystem(context, Constants.GLOBAL_PREF_KEY)
     }
 
     fun setAppTutorialSeen(seen: Boolean, context: Context) {
         getOneTimeStore(context).write(Constants.APP_TUTORIAL_SEEN, if (seen) "true" else "false")
-    }
-
-    fun setShortcutBannerSeen(context: Context) {
-        getOneTimeStore(context).write(Constants.SHORTCUT_HINT_SEEN, "true")
-    }
-
-    fun showKeyboard(activityContext: Context) {
-        val imm = activityContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-    }
-
-    fun hideKeyboard(viewInWindow: View) {
-        val windowContext = viewInWindow.context
-        val imm = windowContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(viewInWindow.windowToken, 0)
     }
 
     fun shareApp(context: Context) {

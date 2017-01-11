@@ -365,22 +365,8 @@ class HomeController : BaseController() {
 //                if (deepLinkEditTextInput != null && deepLinkEditTextInput.text.isNotEmpty()) {
 //                    adapter!!.updateResults(deepLinkEditTextInput.text.toString())
 //                }
-
-                if (dataSnapshot.isNotEmpty()) {
-                    showShortcutBannerIfNeeded()
-                }
             }
         }
-
-    private fun showShortcutBannerIfNeeded() {
-        if (!Utilities.isShortcutHintSeen(activity!!)) {
-            binding.shortcutHintBanner.visibility = View.VISIBLE
-            binding.shortcutHintBannerCancel.setOnClickListener {
-                Utilities.setShortcutBannerSeen(activity!!)
-                binding.shortcutHintBanner.visibility = View.GONE
-            }
-        }
-    }
 
     private fun isDoneKey(actionId: Int): Boolean {
         return actionId == EditorInfo.IME_ACTION_DONE
