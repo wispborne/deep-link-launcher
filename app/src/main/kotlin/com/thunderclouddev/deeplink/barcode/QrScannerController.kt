@@ -22,7 +22,7 @@ import com.thunderclouddev.deeplink.utils.Utilities
 /**
  * Created by David Whitman on 07 Jan, 2017.
  */
-class ScannerController : BaseController() {
+class QrScannerController : BaseController() {
     private val scanCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             Toast.makeText(activity, result?.text, Toast.LENGTH_SHORT).show()
@@ -77,6 +77,11 @@ class ScannerController : BaseController() {
     override fun onActivityResumed(activity: Activity) {
         super.onActivityResumed(activity)
         barcodeView?.resume()
+    }
+
+    override fun onDestroyView(view: View) {
+        barcodeView?.pause()
+        super.onDestroyView(view)
     }
 
     private fun startCapture(scanContinuously: Boolean) {

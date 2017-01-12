@@ -20,7 +20,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.bluelinelabs.conductor.RouterTransaction
 import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.barcode.ScannerController
+import com.thunderclouddev.deeplink.barcode.QrScannerController
 import com.thunderclouddev.deeplink.barcode.ViewQrCodeController
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.databinding.HomeActivityBinding
@@ -101,7 +101,7 @@ class HomeController : BaseController() {
 //                cameraIntent.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
 //                cameraIntent.setOrientationLocked(false)
 //                cameraIntent.initiateScan()
-                router.pushController(RouterTransaction.with(ScannerController()))
+                router.pushController(RouterTransaction.with(QrScannerController()))
                 true
             }
             else -> super.onOptionsItemSelected(item)
