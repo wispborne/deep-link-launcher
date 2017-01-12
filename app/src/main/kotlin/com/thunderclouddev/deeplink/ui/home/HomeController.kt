@@ -38,7 +38,6 @@ import hotchemi.android.rate.AppRate
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.*
 
 
 class HomeController : BaseController() {
@@ -46,9 +45,9 @@ class HomeController : BaseController() {
     // TODO Don't store this in the activity, rotation will killlll it
     private var deepLinkViewModels: List<DeepLinkViewModel> = emptyList()
 
-    private val listComparator by lazy { createListComparator() }
+    private val listComparator = DeepLinkViewModel.DefaultComparator()
 
-    private val menuItemListener by lazy { createMenuItemListener() }
+    private val menuItemListener = createMenuItemListener()
 
     private lateinit var binding: HomeActivityBinding
 
@@ -150,7 +149,7 @@ class HomeController : BaseController() {
         //Attach callback to init adapter from data
         attachDatabaseListener()
         val deepLinkString = binding.deepLinkEditTextInput.text.toString()
-        updateFilter(deepLinkString)
+//        updateFilter(deepLinkString)
     }
 
     private fun configureListView() {
@@ -286,6 +285,7 @@ class HomeController : BaseController() {
                 .replaceAll(deepLinkViewModels
                         .filter { it.deepLinkInfo.deepLink.toString().contains(newDeepLinkString, ignoreCase = true) })
                 .commit()
+        binding.deepLinkList.scrollToPosition(0)
     }
 
     private fun isValidUriWithHandlingActivity(deepLinkText: String) = deepLinkText.isUri()
@@ -382,16 +382,6 @@ class HomeController : BaseController() {
     private fun setAndSelectInput(text: String) {
         binding.deepLinkEditTextInput.setText(text)
         binding.deepLinkEditTextInput.setSelection(text.length)
-    }
-
-    private fun createListComparator(): Comparator<DeepLinkViewModel> {
-        return Comparator { t1, t2 ->
-            val packageComparison = t1.deepLinkInfo.packageName.compareTo(t2.deepLinkInfo.packageName, true)
-            if (packageComparison == 0)
-                packageComparison
-            else
-                t1.deepLinkInfo.deepLink.compareTo(t2.deepLinkInfo.deepLink)
-        }
     }
 
     private fun createMenuItemListener(): DeepLinkListAdapter.MenuItemListener {

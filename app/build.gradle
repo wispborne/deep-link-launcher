@@ -114,6 +114,9 @@ dependencies {
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.5.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    // Copied into project as SortedListAdapter
+//    compile 'com.github.wrdlbrnft:sorted-list-adapter:0.2.0.1'
+
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1'
 
     compile 'com.bluelinelabs:conductor:2.0.4'
