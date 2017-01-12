@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.Constants
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
@@ -18,7 +19,6 @@ import com.thunderclouddev.deeplink.isUri
 import com.thunderclouddev.deeplink.logging.Timber
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
-import org.greenrobot.eventbus.EventBus
 
 object Utilities {
     fun checkAndFireDeepLink(deepLinkUri: String, context: Context): Boolean {
@@ -30,13 +30,13 @@ object Utilities {
             } else {
                 val deepLinkInfo = DeepLinkInfo(uri, "", "", -1)
                 val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND)
-                EventBus.getDefault().postSticky(deepLinkFireEvent)
+                BaseApplication.bus.postSticky(deepLinkFireEvent)
                 return false
             }
         } else {
             val deepLinkInfo = DeepLinkInfo(Uri.EMPTY, "", "", -1)
             val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI)
-            EventBus.getDefault().postSticky(deepLinkFireEvent)
+            BaseApplication.bus.postSticky(deepLinkFireEvent)
             return false
         }
     }
@@ -69,7 +69,7 @@ object Utilities {
             context.startActivity(intent)
             val deepLinkInfo = createDeepLinkInfo(deepLinkUri, resolveInfo, context)
             val deepLinkFireEvent = DeepLinkFireEvent(ResultType.SUCCESS, deepLinkInfo)
-            EventBus.getDefault().postSticky(deepLinkFireEvent)
+            BaseApplication.bus.postSticky(deepLinkFireEvent)
             true
         } else {
             false

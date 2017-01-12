@@ -6,10 +6,13 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.thunderclouddev.deeplink.database.SharedPrefsDeepLinkDatabase
 import com.thunderclouddev.deeplink.features.DeepLinkHistory
 import hotchemi.android.rate.AppRate
+import org.greenrobot.eventbus.EventBus
 
 open class BaseApplication : Application() {
     companion object {
         lateinit var deepLinkHistory: DeepLinkHistory
+
+        val bus = EventBus()
     }
 
 

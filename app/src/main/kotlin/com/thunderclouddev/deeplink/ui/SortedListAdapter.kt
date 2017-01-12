@@ -29,7 +29,6 @@ abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Conte
         fun test(item: T): Boolean
     }
 
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val sortedList: SortedList<T>
 
     fun items(): List<T> {
@@ -77,7 +76,7 @@ abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Conte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<out T> {
-        return onCreateViewHolder(inflater, parent, viewType)
+        return onCreateViewHolder(LayoutInflater.from(parent.context), parent, viewType)
     }
 
     protected abstract fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder<out T>

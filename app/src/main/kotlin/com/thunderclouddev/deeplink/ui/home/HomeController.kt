@@ -35,7 +35,6 @@ import com.thunderclouddev.deeplink.utils.TextChangedListener
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import hotchemi.android.rate.AppRate
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -110,13 +109,13 @@ class HomeController : BaseController() {
 
     override fun onActivityStarted(activity: Activity) {
         super.onActivityStarted(activity)
-        EventBus.getDefault().register(this)
+        BaseApplication.bus.register(this)
         attachDatabaseListener()
     }
 
     override fun onActivityStopped(activity: Activity) {
         super.onActivityStopped(activity)
-        EventBus.getDefault().unregister(this)
+        BaseApplication.bus.unregister(this)
         removeDatabaseListener()
     }
 
@@ -137,7 +136,7 @@ class HomeController : BaseController() {
                         activity!!.getString(R.string.error_improper_uri) + ": " + deepLinkString, activity!!)
             }
         }
-        EventBus.getDefault().removeStickyEvent(deepLinkFireEvent)
+        BaseApplication.bus.removeStickyEvent(deepLinkFireEvent)
     }
 
     private fun extractAndFireLink() {

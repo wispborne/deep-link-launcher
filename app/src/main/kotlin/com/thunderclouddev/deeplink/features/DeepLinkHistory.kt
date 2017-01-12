@@ -1,5 +1,6 @@
 package com.thunderclouddev.deeplink.features
 
+import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
@@ -10,7 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 
 class DeepLinkHistory(val database: DeepLinkDatabase) : IDeepLinkHistory {
     init {
-        EventBus.getDefault().register(this)
+        BaseApplication.bus.register(this)
     }
 
     override fun addLink(deepLinkInfo: DeepLinkInfo) {
