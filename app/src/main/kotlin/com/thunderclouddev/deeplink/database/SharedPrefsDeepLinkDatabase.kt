@@ -13,7 +13,7 @@ class SharedPrefsDeepLinkDatabase(context: Context) : DeepLinkDatabase {
     override fun addListener(listener: DeepLinkDatabase.Listener): Int {
         val id = Random().nextInt()
         listeners.put(id, listener)
-        notifyListeners()
+        notifyListener(id)
         return id
     }
 
@@ -38,9 +38,12 @@ class SharedPrefsDeepLinkDatabase(context: Context) : DeepLinkDatabase {
     }
 
     private fun notifyListeners() {
-        val data = fileSystem.all().values
-                .map { DeepLinkInfo.fromJson(it) }
-                .filterNotNull()
-        listeners.values.forEach { it.onDataChanged(data) }
+        listeners.values.forEach { it.onDataChanged(fetchData()) }
     }
+
+    private fun notifyListener(id: Int) = listeners[id]?.onDataChanged(fetchData())
+
+    private fun fetchData(): List<DeepLinkInfo> = fileSystem.all().values
+            .map { DeepLinkInfo.fromJson(it) }
+            .filterNotNull()
 }

@@ -92,6 +92,11 @@ class EditLinkDialog : DialogFragment() {
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
+                .setNeutralButton(R.string.saveAsNew, { dialog, which ->
+                    val deepLink = Uri.parse(viewModel.getFullDeepLink())
+                    BaseApplication.deepLinkHistory.addLink(DeepLinkInfo(deepLink, viewModel.label.get(),
+                            deepLinkInfo.packageName, Date().time))
+                })
     }
 
     class ViewModel(deepLinkInfo: DeepLinkInfo) : BaseObservable() {

@@ -110,14 +110,14 @@ class HomeController : BaseController() {
 
     override fun onActivityStarted(activity: Activity) {
         super.onActivityStarted(activity)
-        initListViewData()
         EventBus.getDefault().register(this)
+        attachDatabaseListener()
     }
 
     override fun onActivityStopped(activity: Activity) {
         super.onActivityStopped(activity)
         EventBus.getDefault().unregister(this)
-        removeFirebaseListener()
+        removeDatabaseListener()
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -143,13 +143,6 @@ class HomeController : BaseController() {
     private fun extractAndFireLink() {
         val deepLinkUri = binding.deepLinkEditTextInput.text.toString().trim()
         Utilities.checkAndFireDeepLink(deepLinkUri, activity!!)
-    }
-
-    private fun initListViewData() {
-        //Attach callback to init adapter from data
-        attachDatabaseListener()
-        val deepLinkString = binding.deepLinkEditTextInput.text.toString()
-//        updateFilter(deepLinkString)
     }
 
     private fun configureListView() {
@@ -353,23 +346,19 @@ class HomeController : BaseController() {
 
     private fun attachDatabaseListener() {
         binding.progressWheel.visibility = View.VISIBLE
-        databaseListenerId = BaseApplication.deepLinkHistory.addListener(firebaseHistoryListener)
+        databaseListenerId = BaseApplication.deepLinkHistory.addListener(databaseListener)
     }
 
-    private fun removeFirebaseListener() {
+    private fun removeDatabaseListener() {
         BaseApplication.deepLinkHistory.removeListener(databaseListenerId)
     }
 
-    private val firebaseHistoryListener: DeepLinkDatabase.Listener
+    private val databaseListener: DeepLinkDatabase.Listener
         get() = object : DeepLinkDatabase.Listener {
             override fun onDataChanged(dataSnapshot: List<DeepLinkInfo>) {
                 binding.progressWheel.visibility = View.GONE
                 deepLinkViewModels = dataSnapshot.map(::DeepLinkViewModel)
-                adapter!!.edit().replaceAll(deepLinkViewModels).commit()
-
-//                if (deepLinkEditTextInput != null && deepLinkEditTextInput.text.isNotEmpty()) {
-//                    adapter!!.updateResults(deepLinkEditTextInput.text.toString())
-//                }
+                updateFilter(binding.deepLinkEditTextInput.text.toString())
             }
         }
 
