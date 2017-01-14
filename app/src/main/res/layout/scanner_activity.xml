@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/scanner_barcodeView"
@@ -28,11 +28,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacingMedium"
-                android:checked="@{model.bulkCapture}"
+                android:checked="@={model.scanContinuously}"
                 android:gravity="center_vertical"
                 android:paddingEnd="0dp"
                 android:paddingStart="@dimen/spacingSmall"
                 android:text="@string/scanner_continuous"/>
-        </FrameLayout>
+
+            <TextView
+                android:id="@+id/scanner_lastScannedUri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/scanner_continuous"
+                android:text="@{model.lastScannedUri}"
+                android:visibility="@{model.scanContinuously ? android.view.View.VISIBLE : android.view.View.GONE}"/>
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

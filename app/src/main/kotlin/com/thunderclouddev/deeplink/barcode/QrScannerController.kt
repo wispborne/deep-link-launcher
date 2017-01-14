@@ -2,6 +2,8 @@ package com.thunderclouddev.deeplink.barcode
 
 import android.Manifest
 import android.app.Activity
+import android.databinding.BaseObservable
+import android.databinding.Bindable
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.view.LayoutInflater
@@ -28,12 +30,14 @@ class QrScannerController : BaseController() {
             Toast.makeText(activity, result?.text, Toast.LENGTH_SHORT).show()
 
             if (result != null && result.text.isUri()) {
-                if (scanContinuously) {
+                if (model.scanContinuously) {
                     val uri = Uri.parse(result.text)
+
                     if (Utilities.createDeepLinkIntent(uri).hasHandlingActivity(activity!!.packageManager)) {
                         val deepLinkInfo = Utilities.createDeepLinkInfo(uri, activity!!)
 
                         if (deepLinkInfo != null) {
+                            model.lastScannedUri = deepLinkInfo.deepLink.toString()
                             BaseApplication.deepLinkHistory.addLink(deepLinkInfo)
                         }
                     }
@@ -50,22 +54,21 @@ class QrScannerController : BaseController() {
     }
 
     private var barcodeView: DecoratedBarcodeView? = null
-
-    private var scanContinuously: Boolean = false
+    private val model = ViewModel(false, String.empty)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
 
         val binding = DataBindingUtil.inflate<ScannerActivityBinding>(inflater, R.layout.scanner_activity, container, false)
 
+        binding.model = model
         barcodeView = binding.scannerBarcodeView
         barcodeView?.setStatusText(String.empty)
-        scanContinuously = binding.scannerContinuous.isChecked
-        binding.scannerContinuous.setOnCheckedChangeListener { compoundButton, checked ->
-            startCapture(checked)
-        }
+//        binding.scannerContinuous.setOnCheckedChangeListener { compoundButton, checked ->
+//            startCapture(checked)
+//        }
 
-        startCapture(scanContinuously)
+        startCapture(binding.scannerContinuous.isChecked)
         return binding.root
     }
 
@@ -90,10 +93,11 @@ class QrScannerController : BaseController() {
                 .requestEach(Manifest.permission.CAMERA)
                 .subscribe { granted ->
                     if (granted.granted) {
-                        if (scanContinuously)
-                            barcodeView?.decodeContinuous(scanCallback)
-                        else
-                            barcodeView?.decodeSingle(scanCallback)
+                        barcodeView?.decodeContinuous(scanCallback)
+//                        if (scanContinuously)
+//                            barcodeView?.decodeContinuous(scanCallback)
+//                        else
+//                            barcodeView?.decodeSingle(scanCallback)
                         barcodeView?.resume()
                     } else {
                         router.handleBack()
@@ -101,7 +105,6 @@ class QrScannerController : BaseController() {
                 }
     }
 
-    data class ViewModel(
-            val bulkCapture: Boolean
-    )
+    class ViewModel(@Bindable var scanContinuously: Boolean,
+                    var lastScannedUri: String) : BaseObservable()
 }

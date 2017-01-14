@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.support.v4.content.res.ResourcesCompat
@@ -221,8 +222,9 @@ class HomeController : BaseController() {
                 val deepLinkString = charSequence.toString()
                 updateFilter(deepLinkString)
 
-                val isOldStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(oldText)
-                val isNewStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(deepLinkString.trim())
+                val activityVal = activity ?: return
+                val isOldStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(oldText, activityVal.packageManager)
+                val isNewStringValidUriWithHandlingActivity = isValidUriWithHandlingActivity(deepLinkString.trim(), activityVal.packageManager)
                 val didValidityChange = isOldStringValidUriWithHandlingActivity xor isNewStringValidUriWithHandlingActivity
 
                 if (didValidityChange) {
@@ -280,8 +282,8 @@ class HomeController : BaseController() {
         binding.deepLinkList.scrollToPosition(0)
     }
 
-    private fun isValidUriWithHandlingActivity(deepLinkText: String) = deepLinkText.isUri()
-            && Utilities.createDeepLinkIntent(Uri.parse(deepLinkText)).hasHandlingActivity(activity!!.packageManager)
+    private fun isValidUriWithHandlingActivity(deepLinkText: String, packageManager: PackageManager) = deepLinkText.isUri()
+            && Utilities.createDeepLinkIntent(Uri.parse(deepLinkText)).hasHandlingActivity(packageManager)
 
     private fun pasteFromClipboard() {
         val clipboardManager = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

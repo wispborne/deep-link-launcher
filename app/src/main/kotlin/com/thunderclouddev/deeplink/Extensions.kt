@@ -35,6 +35,8 @@ val String.getOrNullIfBlank: String?
 
 fun CharSequence?.isNotNullOrBlank() = !this.isNullOrBlank()
 
+val Boolean.visibleOrGone: Int
+    get() = if (this) android.view.View.VISIBLE else android.view.View.GONE
 
 fun String?.isUri() = this != null
         && Uri.parse(this).scheme.isNotNullOrBlank()
