@@ -10,7 +10,7 @@ import android.widget.ImageView
  * Created by https://gist.github.com/martintreurnicht/f6bbb20a43211bc2060e
  */
 object ColorUtils {
-    fun lighten(@ColorRes color: Int, fraction: Double): Int {
+    fun lighten(@ColorRes color: Int, fraction: Double = .2): Int {
         var red = Color.red(color)
         var green = Color.green(color)
         var blue = Color.blue(color)
@@ -21,7 +21,7 @@ object ColorUtils {
         return Color.argb(alpha, red, green, blue)
     }
 
-    fun darken(@ColorRes color: Int, fraction: Double): Int {
+    fun darken(@ColorRes color: Int, fraction: Double = .2): Int {
         var red = Color.red(color)
         var green = Color.green(color)
         var blue = Color.blue(color)

@@ -6,8 +6,12 @@
     <color name="grayDark">#bdbdbd</color>
     <color name="black">#000</color>
     <color name="yellow">#FFD600</color>
+
     <color name="primary">#00bcd4</color>
     <color name="primary_dark">#0097a7</color>
+    <color name="primary_darker">#006775</color>
     <color name="accent">#ff6e40</color>
+    <color name="accent_dark">#d84315</color>
+    <!--<color name="accentBlueDark">#002081</color>-->
     <!--<color name="color_accent_dark">#E65100</color>-->
 </resources>

@@ -35,6 +35,20 @@ val String.getOrNullIfBlank: String?
 
 fun CharSequence?.isNotNullOrBlank() = !this.isNullOrBlank()
 
+fun CharSequence.allIndicesOf(terms: Collection<String>): MutableList<Int> {
+    val indices = mutableListOf<Int>()
+
+    terms.forEach { term ->
+        var index = this.indexOf(term)
+        while (index >= 0) {
+            indices.add(index)
+            index = this.indexOf(term, index + 1)
+        }
+    }
+
+    return indices
+}
+
 val Boolean.visibleOrGone: Int
     get() = if (this) android.view.View.VISIBLE else android.view.View.GONE
 

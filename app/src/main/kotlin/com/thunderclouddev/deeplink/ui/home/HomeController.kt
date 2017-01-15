@@ -120,6 +120,14 @@ class HomeController : BaseController() {
         removeDatabaseListener()
     }
 
+    override fun handleBack() =
+            if (binding.deepLinkEditTextInput.text.isNullOrBlank()) {
+                super.handleBack()
+            } else {
+                binding.deepLinkEditTextInput.setText(String.empty)
+                true
+            }
+
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onEvent(deepLinkFireEvent: DeepLinkFireEvent) {
         val deepLinkString = deepLinkFireEvent.info.deepLink.toString()

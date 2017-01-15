@@ -23,10 +23,10 @@
             android:layout_width="@dimen/appIconSize"
             android:layout_height="@dimen/appIconSize"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/contentDesc_deepLink_appIcon"
             android:padding="@dimen/spacingTiny"
             android:scaleType="fitXY"
-            android:src="@drawable/link"
-            android:contentDescription="@string/contentDesc_deepLink_appIcon"/>
+            android:src="@drawable/link"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -44,12 +44,15 @@
                 android:textSize="@dimen/textSubtitle"
                 android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/deepLinkItem_packageName"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"/>
+                android:layout_height="wrap_content">
+
+                <!--<ImageView-->
+                    <!--android:layout_width="@dimen/spacingLarge"-->
+                    <!--android:layout_height="@dimen/spacingLarge"-->
+                    <!--android:src="@drawable/ic_edit"/>-->
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -60,9 +63,9 @@
             android:layout_marginEnd="@dimen/spacingSmall_half"
             android:layout_marginStart="@dimen/spacingSmall_half"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/contentDesc_deepLink_overflow"
             android:scaleType="center"
             android:src="@drawable/ic_overflow"
-            android:tint="@color/grayDark"
-            android:contentDescription="@string/contentDesc_deepLink_overflow"/>
+            android:tint="@color/grayDark"/>
     </LinearLayout>
 </layout>

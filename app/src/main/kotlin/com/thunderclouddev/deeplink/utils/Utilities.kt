@@ -83,14 +83,6 @@ object Utilities {
         return intent
     }
 
-    fun colorPartialString(text: String, startPos: Int, length: Int, color: Int): SpannableStringBuilder {
-        val builder = SpannableStringBuilder()
-        val spannable = SpannableString(text)
-        spannable.setSpan(ForegroundColorSpan(color), startPos, startPos + length, 0)
-        builder.append(spannable)
-        return builder
-    }
-
     fun raiseError(errorText: String, context: Context) {
         showAlert(context.getString(R.string.error_title), errorText, context)
         Timber.e(Exception(errorText), { errorText })
