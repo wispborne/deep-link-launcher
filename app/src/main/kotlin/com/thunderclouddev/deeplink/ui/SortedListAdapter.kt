@@ -1,6 +1,5 @@
 package com.thunderclouddev.deeplink.ui
 
-import android.content.Context
 import android.databinding.ViewDataBinding
 import android.support.v7.util.SortedList
 import android.support.v7.widget.RecyclerView
@@ -13,8 +12,8 @@ import java.util.*
  * https://github.com/Wrdlbrnft/SortedListAdapter
  * v0.2.0.1
  */
-abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(context: Context, itemClass: Class<T>, private val mComparator: Comparator<T>)
-    : RecyclerView.Adapter<SortedListAdapter.ViewHolder<out T>>() {
+abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(itemClass: Class<T>, private val mComparator: Comparator<T>)
+    : BaseRecyclerViewAdapter<SortedListAdapter.ViewHolder<out T>>() {
     interface Editor<T : ViewModel> {
         fun add(item: T): Editor<T>
         fun add(items: List<T>): Editor<T>

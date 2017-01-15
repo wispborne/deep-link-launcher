@@ -113,6 +113,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.5.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'org.jetbrains.anko:anko-sdk21:0.8.2'
 
     // Copied into project as SortedListAdapter
 //    compile 'com.github.wrdlbrnft:sorted-list-adapter:0.2.0.1'

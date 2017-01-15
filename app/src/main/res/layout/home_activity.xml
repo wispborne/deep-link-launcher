@@ -111,8 +111,6 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:divider="@color/gray"
-            android:paddingEnd="@dimen/spacingSmall"
-            android:paddingStart="@dimen/spacingSmall"
             android:paddingTop="54dp"/>
 
         <!--android:listSelector="?attr/selectableItemBackground"-->

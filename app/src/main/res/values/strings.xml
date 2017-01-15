@@ -59,4 +59,5 @@
     <string name="contentDesc_qrCode">QR code</string>
     <string name="qrcode_title">QR Code</string>
     <string name="saveAsNew">Save as new</string>
+    <string name="contentDesc_edit">Edit button</string>
 </resources>

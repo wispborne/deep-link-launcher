@@ -13,7 +13,6 @@ import android.net.Uri
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -29,8 +28,8 @@ import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.BaseController
+import com.thunderclouddev.deeplink.ui.BaseRecyclerViewAdapter
 import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
-import com.thunderclouddev.deeplink.ui.utils.ItemClickSupport
 import com.thunderclouddev.deeplink.ui.utils.tint
 import com.thunderclouddev.deeplink.utils.TextChangedListener
 import com.thunderclouddev.deeplink.utils.Utilities
@@ -38,6 +37,7 @@ import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import hotchemi.android.rate.AppRate
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.AnkoComponent
 
 
 class HomeController : BaseController() {
@@ -48,6 +48,7 @@ class HomeController : BaseController() {
     private val listComparator = DeepLinkViewModel.DefaultComparator()
 
     private val menuItemListener = createMenuItemListener()
+    private val listItemListener = createListItemListener()
 
     private lateinit var binding: HomeActivityBinding
 
@@ -63,7 +64,7 @@ class HomeController : BaseController() {
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
 
         // Alphabetical sorting for now
-        adapter = DeepLinkListAdapter(activity!!, listComparator, menuItemListener)
+        adapter = DeepLinkListAdapter(activity!!, listComparator, menuItemListener, createListItemListener())
         configureListView()
         configureInputs()
         binding.deepLinkBtnGo.setOnClickListener { extractAndFireLink() }
@@ -157,19 +158,6 @@ class HomeController : BaseController() {
         binding.deepLinkList.layoutManager = LinearLayoutManager(activity!!)
         binding.deepLinkList.adapter = adapter
         binding.deepLinkList.itemAnimator
-        val clickSupport = ItemClickSupport.addTo(binding.deepLinkList)
-        clickSupport.setOnItemClickListener(object : ItemClickSupport.OnItemClickListener {
-            override fun onItemClicked(recyclerView: RecyclerView, position: Int, v: View) {
-                val info = adapter!!.getItem(position)
-                Utilities.resolveAndFire(info.deepLinkInfo.deepLink, activity!!)
-            }
-        })
-        clickSupport.setOnItemLongClickListener(object : ItemClickSupport.OnItemLongClickListener {
-            override fun onItemLongClicked(recyclerView: RecyclerView, position: Int, v: View): Boolean {
-                showConfirmShortcutDialog(adapter!!.getItem(position).deepLinkInfo)
-                return true
-            }
-        })
     }
 
     private fun showConfirmShortcutDialog(info: DeepLinkInfo) {
@@ -409,6 +397,14 @@ class HomeController : BaseController() {
                     }
                     else -> false
                 }
+            }
+        }
+    }
+
+    private fun createListItemListener(): BaseRecyclerViewAdapter.OnClickListener<DeepLinkViewModel> {
+        return object : BaseRecyclerViewAdapter.OnClickListener<DeepLinkViewModel> {
+            override fun onItemClick(item: DeepLinkViewModel) {
+                Utilities.resolveAndFire(item.deepLinkInfo.deepLink, activity!!)
             }
         }
     }

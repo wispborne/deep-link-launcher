@@ -3,6 +3,7 @@ package com.thunderclouddev.deeplink
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.view.View
 
 
 fun Throwable.hasCause(type: Class<*>): Boolean {
@@ -51,6 +52,12 @@ fun CharSequence.allIndicesOf(terms: Collection<String>): MutableList<Int> {
 
 val Boolean.visibleOrGone: Int
     get() = if (this) android.view.View.VISIBLE else android.view.View.GONE
+
+var View.showing: Boolean
+    get() = this.visibility == View.VISIBLE
+    set(value) {
+        this.visibility = value.visibleOrGone
+    }
 
 fun String?.isUri() = this != null
         && Uri.parse(this).scheme.isNotNullOrBlank()

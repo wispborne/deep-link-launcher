@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="960dp"
+        android:height="960dp"
+        android:viewportWidth="960"
+        android:viewportHeight="960">
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M140 900c-19-19-20-33-20-420 0-387 1-401 20-420 19-19 33-20 260-20 291 0 280-5
+280 120l0 80-40 0-40 0 0-40 0-40-200 0-200 0 0 320 0 320 200 0 200 0 0-40 0-40
+40 0 40 0 0 80c0 125 11 120-280 120-227 0-241-1-260-20z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M240 640l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M360 640l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M480 640l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M595 560l-80-80 83-83 82-82 0 43 0 42 80 0 80 0 0 80 0 80-79 0-80 0-3 40-3
+41-80-81z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M240 480l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M360 480l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M240 320l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M360 320l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M480 320l0-40 40 0 40 0 0 40 0 40-40 0-40 0 0-40z" />
+</vector>
