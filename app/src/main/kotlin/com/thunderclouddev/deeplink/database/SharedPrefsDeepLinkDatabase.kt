@@ -9,6 +9,8 @@ import java.util.*
 class SharedPrefsDeepLinkDatabase(context: Context) : DeepLinkDatabase {
     private val fileSystem = FileSystem(context, Constants.DEEP_LINK_HISTORY_KEY)
     private val listeners = mutableMapOf<Int, DeepLinkDatabase.Listener>()
+    private val currentSchemaVersion = 2
+    private val deepLinkInfoSerializer = DeepLinkInfoSerializer()
 
     override fun addListener(listener: DeepLinkDatabase.Listener): Int {
         val id = Random().nextInt()
@@ -22,7 +24,7 @@ class SharedPrefsDeepLinkDatabase(context: Context) : DeepLinkDatabase {
     }
 
     override fun putLink(deepLinkInfo: DeepLinkInfo): String {
-        fileSystem.write(deepLinkInfo.id, DeepLinkInfo.toJson(deepLinkInfo))
+        fileSystem.write(deepLinkInfo.id, deepLinkInfoSerializer.toJson(deepLinkInfo, currentSchemaVersion))
 
         notifyListeners()
         return deepLinkInfo.id
@@ -44,6 +46,6 @@ class SharedPrefsDeepLinkDatabase(context: Context) : DeepLinkDatabase {
     private fun notifyListener(id: Int) = listeners[id]?.onDataChanged(fetchData())
 
     private fun fetchData(): List<DeepLinkInfo> = fileSystem.all().values
-            .map { DeepLinkInfo.fromJson(it) }
+            .map { deepLinkInfoSerializer.fromJson(it) }
             .filterNotNull()
 }

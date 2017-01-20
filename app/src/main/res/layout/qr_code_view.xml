@@ -5,15 +5,26 @@
 
         <variable
             name="encodedString"
-            type="String"/>
+            type="android.text.SpannableString"/>
+
+        <variable
+            name="deepLink"
+            type="com.thunderclouddev.deeplink.models.DeepLinkInfo"/>
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/spacingMedium"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/spacingMedium">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacingMedium"
+            android:gravity="center_horizontal"
+            android:text="@{deepLink.packageName}"/>
 
         <TextView
             android:layout_width="match_parent"

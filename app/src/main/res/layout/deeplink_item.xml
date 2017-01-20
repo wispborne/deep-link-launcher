@@ -43,8 +43,14 @@
                     android:id="@+id/deepLinkItem_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/textSubtitle"
+                    android:textSize="@dimen/textBody"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/deepLinkItem_subTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/textHint"
                     android:textStyle="bold"/>
 
             </LinearLayout>

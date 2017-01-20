@@ -1,13 +1,15 @@
 package com.thunderclouddev.deeplink.models
 
 import android.net.Uri
-import android.util.Log
+import android.os.Parcel
+import android.os.Parcelable
 
-import org.json.JSONException
-import org.json.JSONObject
 
-data class DeepLinkInfo(val deepLink: Uri, val activityLabel: String, val packageName: String, val updatedTime: Long //Milliseconds
-) : Comparable<DeepLinkInfo> {
+data class DeepLinkInfo(val deepLink: Uri,
+                        val activityLabel: String,
+                        val packageName: String,
+                        val name: String? = null,
+                        val updatedTime: Long) : Comparable<DeepLinkInfo>, Parcelable {
     //Deep link without params itself is the unique identifier for the model
     val id: String
 
@@ -33,41 +35,34 @@ data class DeepLinkInfo(val deepLink: Uri, val activityLabel: String, val packag
         return id
     }
 
-    private object JSON_KEYS {
-        var KEY_DEEP_LINK = "deep_link"
-        var KEY_PACKAGE_NAME = "pacakage_name"
-        var KEY_ACTIVITY_LABEL = "label"
-        var KEY_UPDATED_TIME = "update_time"
+    // Generated [Parcelable] implementation below
+    constructor(input: Parcel) : this(
+            deepLink = input.readValue(Uri::class.java.classLoader) as Uri,
+            activityLabel = input.readString(),
+            packageName = input.readString(),
+            name = input.readString(),
+            updatedTime = input.readLong()) {
     }
 
-    companion object {
-        fun toJson(deepLinkInfo: DeepLinkInfo): String {
-            try {
-                val jsonObject = JSONObject()
-                jsonObject.put(JSON_KEYS.KEY_DEEP_LINK, deepLinkInfo.deepLink)
-                jsonObject.put(JSON_KEYS.KEY_ACTIVITY_LABEL, deepLinkInfo.activityLabel)
-                jsonObject.put(JSON_KEYS.KEY_PACKAGE_NAME, deepLinkInfo.packageName)
-                jsonObject.put(JSON_KEYS.KEY_UPDATED_TIME, deepLinkInfo.updatedTime)
-                return jsonObject.toString()
-            } catch (jsonException: JSONException) {
-                return deepLinkInfo.id
-            }
+    override fun describeContents(): Int {
+        return 0
+    }
 
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeValue(deepLink)
+        dest.writeString(activityLabel)
+        dest.writeString(packageName)
+        dest.writeString(name)
+        dest.writeLong(updatedTime)
+    }
+
+    val CREATOR: Parcelable.Creator<DeepLinkInfo> = object : Parcelable.Creator<DeepLinkInfo> {
+        override fun createFromParcel(`in`: Parcel): DeepLinkInfo {
+            return DeepLinkInfo(`in`)
         }
 
-        fun fromJson(deepLinkJson: String): DeepLinkInfo? {
-            Log.d("deeplink", "json string = " + deepLinkJson)
-            try {
-                val jsonObject = JSONObject(deepLinkJson)
-                val deepLink = jsonObject.getString(JSON_KEYS.KEY_DEEP_LINK)
-                val activityLable = jsonObject.getString(JSON_KEYS.KEY_ACTIVITY_LABEL)
-                val packageName = jsonObject.getString(JSON_KEYS.KEY_PACKAGE_NAME)
-                val updatedTime = jsonObject.getLong(JSON_KEYS.KEY_UPDATED_TIME)
-                return DeepLinkInfo(Uri.parse(deepLink), activityLable, packageName, updatedTime)
-            } catch (jsonException: JSONException) {
-                Log.d("deeplink", "returning null for deep link info, exception = " + jsonException)
-                return null
-            }
+        override fun newArray(size: Int): Array<DeepLinkInfo?> {
+            return arrayOfNulls(size)
         }
     }
 }

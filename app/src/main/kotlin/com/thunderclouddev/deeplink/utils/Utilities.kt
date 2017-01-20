@@ -7,9 +7,6 @@ import android.content.pm.ResolveInfo
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.support.v7.app.AlertDialog
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.Constants
 import com.thunderclouddev.deeplink.R
@@ -28,13 +25,13 @@ object Utilities {
             if (resolveAndFire(uri, context)) {
                 return true
             } else {
-                val deepLinkInfo = DeepLinkInfo(uri, "", "", -1)
+                val deepLinkInfo = DeepLinkInfo(uri, "", "", null, -1)
                 val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND)
                 BaseApplication.bus.postSticky(deepLinkFireEvent)
                 return false
             }
         } else {
-            val deepLinkInfo = DeepLinkInfo(Uri.EMPTY, "", "", -1)
+            val deepLinkInfo = DeepLinkInfo(Uri.EMPTY, "", "", null, -1)
             val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI)
             BaseApplication.bus.postSticky(deepLinkFireEvent)
             return false
@@ -105,7 +102,7 @@ object Utilities {
     private fun createDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo, context: Context): DeepLinkInfo {
         val packageName = resolveInfo.activityInfo.packageName
         val activityLabel = resolveInfo.loadLabel(context.packageManager).toString()
-        return DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis())
+        return DeepLinkInfo(deepLink, activityLabel, packageName, null, System.currentTimeMillis())
     }
 
     private fun getResolveInfo(context: Context, intent: Intent): ResolveInfo? {

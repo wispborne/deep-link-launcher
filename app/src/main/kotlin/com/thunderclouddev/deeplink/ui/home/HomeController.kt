@@ -37,7 +37,6 @@ import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
 import hotchemi.android.rate.AppRate
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.AnkoComponent
 
 
 class HomeController : BaseController() {
@@ -383,7 +382,7 @@ class HomeController : BaseController() {
                     }
                     R.id.menu_list_item_qr -> {
                         router.pushController(
-                                RouterTransaction.with(ViewQrCodeController.createController(deepLinkInfo.deepLink.toString())))
+                                RouterTransaction.with(ViewQrCodeController.createController(deepLinkInfo)))
                         true
                     }
                     R.id.menu_list_item_delete -> {

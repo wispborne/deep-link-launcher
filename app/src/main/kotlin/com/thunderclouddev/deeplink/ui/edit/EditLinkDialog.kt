@@ -27,14 +27,14 @@ class EditLinkDialog : DialogFragment() {
         private val BUNDLE_DEEP_LINK = "BUNDLE_DEEP_LINK"
 
         fun newInstance(deeplink: DeepLinkInfo): EditLinkDialog {
-            val args = Bundle().apply { putString(BUNDLE_DEEP_LINK, DeepLinkInfo.toJson(deeplink)) }
+            val args = Bundle().apply { putParcelable(BUNDLE_DEEP_LINK, deeplink) }
             return EditLinkDialog().apply { arguments = args }
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DataBindingUtil.inflate<EditActivityBinding>(activity!!.layoutInflater, R.layout.edit_activity, null, false)
-        val deepLinkInfo = DeepLinkInfo.fromJson(arguments.getString(BUNDLE_DEEP_LINK))
+        val deepLinkInfo = arguments.getParcelable<DeepLinkInfo>(BUNDLE_DEEP_LINK)
 
         if (deepLinkInfo == null) {
             Timber.e { "No deep link provided to Edit dialog" }
@@ -88,14 +88,14 @@ class EditLinkDialog : DialogFragment() {
                     if (deepLink != null) {
                         BaseApplication.deepLinkHistory.removeLink(deepLinkInfo.id)
                         BaseApplication.deepLinkHistory.addLink(DeepLinkInfo(deepLink, viewModel.label.get(),
-                                deepLinkInfo.packageName, Date().time))
+                                deepLinkInfo.packageName, updatedTime = Date().time))
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setNeutralButton(R.string.saveAsNew, { dialog, which ->
                     val deepLink = Uri.parse(viewModel.getFullDeepLink())
                     BaseApplication.deepLinkHistory.addLink(DeepLinkInfo(deepLink, viewModel.label.get(),
-                            deepLinkInfo.packageName, Date().time))
+                            deepLinkInfo.packageName, updatedTime = Date().time))
                 })
     }
 
