@@ -74,7 +74,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
                 deepLink.toString()
             }
 
-            binding.deepLinkItemTitle.text = deepLinkInfo.name ?: deepLinkInfo.packageName
+            binding.deepLinkItemTitle.text = deepLinkInfo.label ?: deepLinkInfo.packageName
             binding.deepLinkItemSubTitle.text = deepLinkString
             binding.deepLinkItemContextMenu.showing = item.showingContextMenu
 

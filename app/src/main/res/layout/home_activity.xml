@@ -1,4 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
@@ -120,5 +121,15 @@
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:visibility="gone"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/home_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/spacingMedium"
+            android:scaleType="center"
+            android:src="@drawable/ic_add"
+            app:fabSize="normal"/>
     </FrameLayout>
 </layout>

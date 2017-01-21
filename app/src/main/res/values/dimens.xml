@@ -19,4 +19,5 @@
     <dimen name="appIconSize">48dp</dimen>
     <dimen name="activity_horizontal_medium_margin">8dp</dimen>
     <dimen name="icon_size">24dp</dimen>
+    <dimen name="edit_deepLink_schemeWidth">96dp</dimen>
 </resources>

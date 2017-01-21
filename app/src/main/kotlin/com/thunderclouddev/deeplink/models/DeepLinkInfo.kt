@@ -6,9 +6,8 @@ import android.os.Parcelable
 
 
 data class DeepLinkInfo(val deepLink: Uri,
-                        val activityLabel: String,
+                        val label: String,
                         val packageName: String,
-                        val name: String? = null,
                         val updatedTime: Long) : Comparable<DeepLinkInfo>, Parcelable {
     //Deep link without params itself is the unique identifier for the model
     val id: String
@@ -38,9 +37,8 @@ data class DeepLinkInfo(val deepLink: Uri,
     // Generated [Parcelable] implementation below
     constructor(input: Parcel) : this(
             deepLink = input.readValue(Uri::class.java.classLoader) as Uri,
-            activityLabel = input.readString(),
+            label = input.readString(),
             packageName = input.readString(),
-            name = input.readString(),
             updatedTime = input.readLong()) {
     }
 
@@ -50,9 +48,8 @@ data class DeepLinkInfo(val deepLink: Uri,
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(deepLink)
-        dest.writeString(activityLabel)
+        dest.writeString(label)
         dest.writeString(packageName)
-        dest.writeString(name)
         dest.writeLong(updatedTime)
     }
 

@@ -47,7 +47,6 @@
     <string name="editDialog_preview_label">Preview</string>
     <string name="editDialog_path_label">Path</string>
     <string name="editDialog_queryString_label">Query string parameters</string>
-    <string name="editDialog_title_label">Name</string>
     <string name="menu_scan_title">Scan</string>
     <string name="scanner_continuous">Continuous Capture</string>
 
@@ -60,4 +59,7 @@
     <string name="qrcode_title">QR Code</string>
     <string name="saveAsNew">Save as new</string>
     <string name="contentDesc_edit">Edit button</string>
+    <string name="editDialog_scheme_and_authority_label"><![CDATA[Scheme & Authority]]></string>
+    <string name="editDialog_schemeHint">scheme</string>
+    <string name="editDialog_authorityHint">authority</string>
 </resources>

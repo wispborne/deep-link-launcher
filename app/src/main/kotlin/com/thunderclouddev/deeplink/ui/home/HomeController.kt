@@ -68,6 +68,9 @@ class HomeController : BaseController() {
         configureInputs()
         binding.deepLinkBtnGo.setOnClickListener { extractAndFireLink() }
         binding.deepLinkPaste.setOnClickListener { pasteFromClipboard() }
+        binding.homeFab.setOnClickListener {
+            EditLinkDialog.newInstance().show(activity!!.fragmentManager, "EditDialogTag")
+        }
 
         if (Utilities.isAppTutorialSeen(activity!!)) {
             AppRate.showRateDialogIfMeetsConditions(activity!!)
@@ -164,9 +167,9 @@ class HomeController : BaseController() {
         val input = EditText(activity!!)
         input.inputType = InputType.TYPE_CLASS_TEXT
 
-        if (info.activityLabel.isNotEmpty()) {
-            input.setText(info.activityLabel)
-            input.setSelection(info.activityLabel.length)
+        if (info.label.isNotEmpty()) {
+            input.setText(info.label)
+            input.setSelection(info.label.length)
         }
 
         builder.setView(input)

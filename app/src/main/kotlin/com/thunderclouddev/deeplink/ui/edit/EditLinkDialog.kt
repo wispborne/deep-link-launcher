@@ -13,8 +13,8 @@ import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.databinding.EditActivityBinding
 import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
-import com.thunderclouddev.deeplink.logging.Timber
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
+import org.jetbrains.anko.enabled
 import java.util.*
 
 /**
@@ -22,12 +22,15 @@ import java.util.*
  */
 class EditLinkDialog : DialogFragment() {
     private lateinit var binding: EditActivityBinding
+    private lateinit var dialogType: DialogType
+
+    private enum class DialogType { ADD, EDIT }
 
     companion object {
         private val BUNDLE_DEEP_LINK = "BUNDLE_DEEP_LINK"
 
-        fun newInstance(deeplink: DeepLinkInfo): EditLinkDialog {
-            val args = Bundle().apply { putParcelable(BUNDLE_DEEP_LINK, deeplink) }
+        fun newInstance(deepLinkToEdit: DeepLinkInfo? = null): EditLinkDialog {
+            val args = Bundle().apply { if (deepLinkToEdit != null) putParcelable(BUNDLE_DEEP_LINK, deepLinkToEdit) }
             return EditLinkDialog().apply { arguments = args }
         }
     }
@@ -35,13 +38,10 @@ class EditLinkDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DataBindingUtil.inflate<EditActivityBinding>(activity!!.layoutInflater, R.layout.edit_activity, null, false)
         val deepLinkInfo = arguments.getParcelable<DeepLinkInfo>(BUNDLE_DEEP_LINK)
+                ?: DeepLinkInfo(Uri.EMPTY, String.empty, String.empty, Date().time)
+        dialogType = if (arguments.containsKey(BUNDLE_DEEP_LINK)) DialogType.EDIT else DialogType.ADD
 
-        if (deepLinkInfo == null) {
-            Timber.e { "No deep link provided to Edit dialog" }
-            dismiss()
-        }
-
-        val viewModel = ViewModel(deepLinkInfo!!)
+        val viewModel = ViewModel(deepLinkInfo)
         binding.info = viewModel
 
         // Extra blank param pair so user may add new param
@@ -53,6 +53,16 @@ class EditLinkDialog : DialogFragment() {
                 }
 
         val dialog = buildAlertDialog(viewModel, deepLinkInfo).create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).enabled = viewModel.getFullDeepLink().isUri()
+        }
+
+        viewModel.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(obs: Observable?, property: Int) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).enabled = viewModel.getFullDeepLink().isUri()
+            }
+
+        })
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return dialog
     }
@@ -80,7 +90,7 @@ class EditLinkDialog : DialogFragment() {
     }
 
     private fun buildAlertDialog(viewModel: ViewModel, deepLinkInfo: DeepLinkInfo): AlertDialog.Builder {
-        return AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(activity)
                 .setView(binding.root)
                 .setPositiveButton(R.string.save, { dialog, which ->
                     val deepLink = Uri.parse(viewModel.getFullDeepLink())
@@ -92,17 +102,20 @@ class EditLinkDialog : DialogFragment() {
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
-                .setNeutralButton(R.string.saveAsNew, { dialog, which ->
-                    val deepLink = Uri.parse(viewModel.getFullDeepLink())
-                    BaseApplication.deepLinkHistory.addLink(DeepLinkInfo(deepLink, viewModel.label.get(),
-                            deepLinkInfo.packageName, updatedTime = Date().time))
-                })
+
+        if (dialogType == DialogType.EDIT) {
+            builder.setNeutralButton(R.string.saveAsNew, { dialog, which ->
+                val deepLink = Uri.parse(viewModel.getFullDeepLink())
+                BaseApplication.deepLinkHistory.addLink(DeepLinkInfo(deepLink, viewModel.label.get(),
+                        deepLinkInfo.packageName, updatedTime = Date().time))
+            })
+        }
+
+        return builder
     }
 
     class ViewModel(deepLinkInfo: DeepLinkInfo) : BaseObservable() {
         private val uri = deepLinkInfo.deepLink
-        private val scheme = uri.scheme
-        private val authority = uri.authority
 
         private val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -111,12 +124,14 @@ class EditLinkDialog : DialogFragment() {
         }
 
         @Bindable var path = ObservableField((uri.path ?: String.empty).removePrefix("/"))
-        @Bindable var label = ObservableField(deepLinkInfo.activityLabel)
+        @Bindable var scheme = ObservableField(uri.scheme)
+        @Bindable var authority = ObservableField(uri.authority)
+        @Bindable var label = ObservableField(deepLinkInfo.label)
         @Bindable var queryParams = mutableListOf<QueryParamModel>()
 
         @Bindable fun getFullDeepLink(): String = Uri.decode(Uri.Builder()
-                .scheme(scheme)
-                .authority(authority)
+                .scheme(scheme.get())
+                .authority(authority.get())
                 .path(path.get())
                 .query(queryParams
                         .map { it.toString() }
