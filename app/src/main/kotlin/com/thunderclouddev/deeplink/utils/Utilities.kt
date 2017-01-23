@@ -64,7 +64,7 @@ object Utilities {
 
         return if (resolveInfo != null) {
             context.startActivity(intent)
-            val deepLinkInfo = createDeepLinkInfo(deepLinkUri, resolveInfo, context)
+            val deepLinkInfo = createDeepLinkInfo(deepLinkUri, resolveInfo)
             val deepLinkFireEvent = DeepLinkFireEvent(ResultType.SUCCESS, deepLinkInfo)
             BaseApplication.bus.postSticky(deepLinkFireEvent)
             true
@@ -94,15 +94,14 @@ object Utilities {
     fun createDeepLinkInfo(deepLink: Uri, context: Context): DeepLinkInfo? {
         val resolveInfo = getResolveInfo(context, createDeepLinkIntent(deepLink))
         return if (resolveInfo != null)
-            createDeepLinkInfo(deepLink, resolveInfo, context)
+            createDeepLinkInfo(deepLink, resolveInfo)
         else
             null
     }
 
-    private fun createDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo, context: Context): DeepLinkInfo {
+    private fun createDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo): DeepLinkInfo {
         val packageName = resolveInfo.activityInfo.packageName
-        val activityLabel = resolveInfo.loadLabel(context.packageManager).toString()
-        return DeepLinkInfo(deepLink, activityLabel, packageName, System.currentTimeMillis())
+        return DeepLinkInfo(deepLink, null, packageName, System.currentTimeMillis())
     }
 
     private fun getResolveInfo(context: Context, intent: Intent): ResolveInfo? {

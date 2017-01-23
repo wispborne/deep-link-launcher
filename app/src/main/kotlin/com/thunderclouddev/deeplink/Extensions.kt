@@ -30,9 +30,7 @@ val Any?.simpleClassName: String
 val String.Companion.empty: String
     get() = ""
 
-val String.getOrNullIfBlank: String?
-    get() = if (this.isNullOrBlank()) null else this
-
+fun String?.getOrNullIfBlank() = if (this.isNullOrBlank()) null else this
 
 fun CharSequence?.isNotNullOrBlank() = !this.isNullOrBlank()
 

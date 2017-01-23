@@ -6,7 +6,7 @@ import android.os.Parcelable
 
 
 data class DeepLinkInfo(val deepLink: Uri,
-                        val label: String,
+                        val label: String?,
                         val packageName: String,
                         val updatedTime: Long) : Comparable<DeepLinkInfo>, Parcelable {
     //Deep link without params itself is the unique identifier for the model

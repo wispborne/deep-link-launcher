@@ -167,9 +167,9 @@ class HomeController : BaseController() {
         val input = EditText(activity!!)
         input.inputType = InputType.TYPE_CLASS_TEXT
 
-        if (info.label.isNotEmpty()) {
+        if (info.label.isNotNullOrBlank()) {
             input.setText(info.label)
-            input.setSelection(info.label.length)
+            input.setSelection(info.label?.length ?: 0)
         }
 
         builder.setView(input)

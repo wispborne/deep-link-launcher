@@ -152,6 +152,8 @@ class EditLinkDialog : DialogFragment() {
 
             notifyPropertyChanged(BR.fullDeepLink)
 
+            scheme.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
+            authority.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
             path.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
             label.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
         }

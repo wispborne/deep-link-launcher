@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.DeeplinkItemBinding
+import com.thunderclouddev.deeplink.getOrNullIfBlank
 import com.thunderclouddev.deeplink.showing
 import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
@@ -74,7 +75,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
                 deepLink.toString()
             }
 
-            binding.deepLinkItemTitle.text = deepLinkInfo.label ?: deepLinkInfo.packageName
+            binding.deepLinkItemTitle.text = deepLinkInfo.label.getOrNullIfBlank() ?: deepLinkInfo.packageName
             binding.deepLinkItemSubTitle.text = deepLinkString
             binding.deepLinkItemContextMenu.showing = item.showingContextMenu
 

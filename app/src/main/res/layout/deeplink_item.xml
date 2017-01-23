@@ -17,7 +17,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/spacingTiny"
-            android:paddingEnd="@dimen/spacingSmall"
+            android:paddingEnd="0dp"
             android:paddingStart="@dimen/spacingSmall"
             android:paddingTop="@dimen/spacingTiny">
 
@@ -59,8 +59,8 @@
                 android:id="@+id/deepLinkItem_overflow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/spacingSmall_half"
-                android:layout_marginStart="@dimen/spacingSmall_half"
+                android:paddingEnd="@dimen/spacingSmall"
+                android:paddingStart="@dimen/spacingTiny"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/contentDesc_deepLink_overflow"
                 android:scaleType="center"
