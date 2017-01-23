@@ -128,6 +128,7 @@ class EditLinkDialog : DialogFragment() {
         @Bindable var authority = ObservableField(uri.authority)
         @Bindable var label = ObservableField(deepLinkInfo.label)
         @Bindable var queryParams = mutableListOf<QueryParamModel>()
+        @Bindable var fragment = ObservableField(uri.fragment)
 
         @Bindable fun getFullDeepLink(): String = Uri.decode(Uri.Builder()
                 .scheme(scheme.get())
@@ -137,6 +138,7 @@ class EditLinkDialog : DialogFragment() {
                         .map { it.toString() }
                         .filter(String::isNotBlank)
                         .joinToString(separator = "&"))
+                .fragment(fragment.get())
                 .toString())
 
         init {
@@ -156,6 +158,7 @@ class EditLinkDialog : DialogFragment() {
             authority.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
             path.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
             label.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
+            fragment.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
         }
 
         fun addQueryParam(key: ObservableField<String>, value: ObservableField<String>): QueryParamModel {

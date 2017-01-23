@@ -62,4 +62,6 @@
     <string name="editDialog_scheme_and_authority_label"><![CDATA[Scheme & Authority]]></string>
     <string name="editDialog_schemeHint">scheme</string>
     <string name="editDialog_authorityHint">authority</string>
+    <string name="editDialog_fragment_label">Fragment</string>
+    <string name="editDialog_fragmentHint">fragment</string>
 </resources>

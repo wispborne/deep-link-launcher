@@ -36,7 +36,7 @@ class DeepLinkColorizer(val colors: Colors) {
 
             if (uri.path.isNotNullOrBlank()) {
                 val indexOfPath = deepLink.indexOf(uri.path)
-                spannable.setSpan(ForegroundColorSpan(colors.pathColor), indexOfPath + 1, indexOfPath + uri.path.length, 0)
+                spannable.setSpan(ForegroundColorSpan(colors.pathColor), indexOfPath + 1, indexOfPath + uri.encodedPath.length, 0)
             }
 
             if (uri.query.isNotNullOrBlank()) {
@@ -47,7 +47,7 @@ class DeepLinkColorizer(val colors: Colors) {
                     val queryParamValue = uri.getQueryParameter(queryName)
                     val color = if (alternatePathColorsSwitch) colors.queryColor1 else colors.queryColor2
                     val indexOfQueryParam = deepLink.indexOf(queryName, lastIndexSearched)
-                    val lengthOfQueryParam = queryName.length + queryParamValue.length + 1
+                    val lengthOfQueryParam = Uri.encode(queryName).length + Uri.encode(queryParamValue).length + 1
                     spannable.setSpan(ForegroundColorSpan(color), indexOfQueryParam, indexOfQueryParam + lengthOfQueryParam, 0)
                     alternatePathColorsSwitch = !alternatePathColorsSwitch
                     lastIndexSearched = indexOfQueryParam + lengthOfQueryParam
