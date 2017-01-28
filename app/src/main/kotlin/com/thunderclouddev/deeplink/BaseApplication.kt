@@ -1,20 +1,36 @@
 package com.thunderclouddev.deeplink
 
 import android.app.Application
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.thunderclouddev.deeplink.database.SharedPrefsDeepLinkDatabase
+import com.thunderclouddev.deeplink.database.requery.RequeryDatabase
 import com.thunderclouddev.deeplink.features.DeepLinkHistory
 import hotchemi.android.rate.AppRate
 import org.greenrobot.eventbus.EventBus
+
 
 open class BaseApplication : Application() {
     companion object {
         lateinit var deepLinkHistory: DeepLinkHistory
 
+        // Should probably implement dagger at some point.
         val bus = EventBus()
     }
 
+    object Json {
+        fun toJson(obj: Any?): String = jsonMapper.writeValueAsString(obj)
+        fun <T> fromJson(jsonString: String?, clazz: Class<T>): T? {
+            try {
+                return jsonMapper.readValue(jsonString, clazz)
+            } catch (exception: Exception) {
+                return null
+            }
+        }
+
+        private val jsonMapper = ObjectMapper().registerModule(KotlinModule())
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -33,5 +49,6 @@ open class BaseApplication : Application() {
         }
     }
 
-    protected open fun createDatabase() = SharedPrefsDeepLinkDatabase(this)
+    protected open fun createDatabase() = RequeryDatabase(this)
+//    protected open fun createDatabase() = SharedPrefsDeepLinkDatabase(this)
 }

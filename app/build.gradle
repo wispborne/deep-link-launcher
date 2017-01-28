@@ -9,13 +9,19 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 //apply plugin: 'kotlin-android-extensions'
 
+kapt {
+    generateStubs = true
+}
+
 repositories {
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
 }
 
 android {
@@ -69,6 +75,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         resConfig "en"
+        multiDexEnabled true
     }
     buildTypes {
         debug {
@@ -98,6 +105,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     dataBinding.enabled = true
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/LICENSE'
+    }
 }
 
 dependencies {
@@ -115,18 +126,27 @@ dependencies {
     compile 'com.getkeepsafe.taptargetview:taptargetview:1.5.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'org.jetbrains.anko:anko-sdk21:0.8.2'
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
 
     // Copied into project as SortedListAdapter
 //    compile 'com.github.wrdlbrnft:sorted-list-adapter:0.2.0.1'
 
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1'
 
+//    compile "io.reactivex.rxjava2:rxjava:2.0.5"
+//    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
     compile 'com.bluelinelabs:conductor:2.0.4'
     // If you want the components that go along with
     // Android's support libraries (currently just a PagerAdapter):
     //    compile 'com.bluelinelabs:conductor-support:2.0.4'
 
-    kapt 'com.android.databinding:compiler:2.2.0'
+    kapt "com.android.databinding:compiler:$gradle_version"
+
+    compile 'io.requery:requery:1.1.1'
+    compile 'io.requery:requery-android:1.1.1' // for android
+    compile 'io.requery:requery-kotlin:1.1.1'
+    kapt 'io.requery:requery-processor:1.1.1'
 
     releasePlayStoreCompile 'com.google.firebase:firebase-database:9.0.2'
     releasePlayStoreCompile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
@@ -138,5 +158,3 @@ dependencies {
 
     compile project(':qrcodelib')
 }
-
-kapt.generateStubs = true

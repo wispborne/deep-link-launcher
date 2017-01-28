@@ -1,7 +1,7 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE", "unused")
 
 // Inline anyway to allow tag reflection to work
-package com.thunderclouddev.deeplink.logging
+package com.thunderclouddev.deeplink.logging.timberkt
 
 import com.thunderclouddev.deeplink.logging.timber.Timber
 

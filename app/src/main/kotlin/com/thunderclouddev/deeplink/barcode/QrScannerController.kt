@@ -34,7 +34,7 @@ class QrScannerController : BaseController() {
                     val uri = Uri.parse(result.text)
 
                     if (Utilities.createDeepLinkIntent(uri).hasHandlingActivity(activity!!.packageManager)) {
-                        val deepLinkInfo = Utilities.createDeepLinkInfo(uri, activity!!)
+                        val deepLinkInfo = Utilities.createDeepLinkRequest(uri, activity!!.packageManager)
 
                         if (deepLinkInfo != null) {
                             model.lastScannedUri = deepLinkInfo.deepLink.toString()

@@ -37,10 +37,10 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     private val colorizer = DeepLinkColorizer(context)
 
     override fun areItemsTheSame(item1: DeepLinkViewModel, item2: DeepLinkViewModel)
-            = item1.deepLinkInfo.id.equals(item2.deepLinkInfo.id, ignoreCase = true)
+            = item1.deepLinkInfo.id == item2.deepLinkInfo.id
 
     override fun areItemContentsTheSame(oldItem: DeepLinkViewModel, newItem: DeepLinkViewModel)
-            = oldItem.deepLinkInfo.id.equals(newItem.deepLinkInfo.id, ignoreCase = true)
+            = oldItem.deepLinkInfo.id == newItem.deepLinkInfo.id
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup,
                                     viewType: Int): ViewHolder {
@@ -75,13 +75,13 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
                 deepLink.toString()
             }
 
-            binding.deepLinkItemTitle.text = deepLinkInfo.label.getOrNullIfBlank() ?: deepLinkInfo.packageName
+            binding.deepLinkItemTitle.text = deepLinkInfo.label.getOrNullIfBlank() ?: deepLinkInfo.deepLinkHandlers[0]
             binding.deepLinkItemSubTitle.text = deepLinkString
             binding.deepLinkItemContextMenu.showing = item.showingContextMenu
 
             // Set icon
             try {
-                val icon = binding.root.context.packageManager.getApplicationIcon(deepLinkInfo.packageName)
+                val icon = binding.root.context.packageManager.getApplicationIcon(deepLinkInfo.deepLinkHandlers[0])
                 binding.deepLinkItemIcon.setImageDrawable(icon)
             } catch (exception: PackageManager.NameNotFoundException) {
                 binding.deepLinkItemIcon.setImageDrawable(defaultAppIcon)

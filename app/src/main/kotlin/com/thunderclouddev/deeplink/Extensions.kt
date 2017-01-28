@@ -2,6 +2,7 @@ package com.thunderclouddev.deeplink
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.view.View
 
@@ -22,6 +23,9 @@ fun Throwable.hasCause(type: Class<*>): Boolean {
 
 fun Intent?.hasHandlingActivity(packageManager: PackageManager) =
         if (this == null) false else packageManager.queryIntentActivities(this, 0).isNotEmpty()
+
+fun Intent?.handlingActivities(packageManager: PackageManager) =
+        if (this == null) emptyList<ResolveInfo>() else packageManager.queryIntentActivities(this, 0)
 
 val Any?.simpleClassName: String
     get() = this?.javaClass?.simpleName ?: String.empty

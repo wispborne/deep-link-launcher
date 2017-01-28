@@ -12,7 +12,8 @@ data class DeepLinkViewModel(val deepLinkInfo: DeepLinkInfo) : SortedListAdapter
 
     class DefaultComparator : Comparator<DeepLinkViewModel> {
         override fun compare(left: DeepLinkViewModel, right: DeepLinkViewModel): Int {
-            val packageComparison = left.deepLinkInfo.packageName.compareTo(right.deepLinkInfo.packageName, true)
+            val packageComparison = left.deepLinkInfo.deepLinkHandlers[0]
+                    .compareTo(right.deepLinkInfo.deepLinkHandlers[0], true)
 
             return if (packageComparison != 0)
                 packageComparison

@@ -3,36 +3,31 @@ package com.thunderclouddev.deeplink.utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.support.v7.app.AlertDialog
-import com.thunderclouddev.deeplink.BaseApplication
-import com.thunderclouddev.deeplink.Constants
-import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
+import com.thunderclouddev.deeplink.*
+import com.thunderclouddev.deeplink.events.DeepLinkLaunchFailedEvent
+import com.thunderclouddev.deeplink.events.DeepLinkLaunchedEvent
 import com.thunderclouddev.deeplink.features.FileSystem
-import com.thunderclouddev.deeplink.isUri
-import com.thunderclouddev.deeplink.logging.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.Timber
+import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
-import com.thunderclouddev.deeplink.models.ResultType
 
 object Utilities {
-    fun checkAndFireDeepLink(deepLinkUri: String, context: Context): Boolean {
-        if (deepLinkUri.isUri()) {
-            val uri = Uri.parse(deepLinkUri)
+    fun checkAndFireDeepLink(deepLink: String, context: Context): Boolean {
+        if (deepLink.isUri()) {
+            val uri = Uri.parse(deepLink)
 
             if (resolveAndFire(uri, context)) {
                 return true
             } else {
-                val deepLinkInfo = DeepLinkInfo(uri, "", "", -1)
-                val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND)
+                val deepLinkFireEvent = DeepLinkLaunchFailedEvent(uri.toString(), DeepLinkLaunchFailedEvent.FAILURE_REASON.NO_ACTIVITY_FOUND)
                 BaseApplication.bus.postSticky(deepLinkFireEvent)
                 return false
             }
         } else {
-            val deepLinkInfo = DeepLinkInfo(Uri.EMPTY, "", "", -1)
-            val deepLinkFireEvent = DeepLinkFireEvent(ResultType.FAILURE, deepLinkInfo, DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI)
+            val deepLinkFireEvent = DeepLinkLaunchFailedEvent(deepLink, DeepLinkLaunchFailedEvent.FAILURE_REASON.IMPROPER_URI)
             BaseApplication.bus.postSticky(deepLinkFireEvent)
             return false
         }
@@ -45,7 +40,7 @@ object Utilities {
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName)
 
         try {
-            val icon = context.packageManager.getApplicationIcon(deepLink.packageName)
+            val icon = context.packageManager.getApplicationIcon(deepLink.deepLinkHandlers.firstOrNull())
             intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, (icon as BitmapDrawable).bitmap)
             intent.action = "com.android.launcher.action.INSTALL_SHORTCUT"
             context.sendBroadcast(intent)
@@ -60,12 +55,11 @@ object Utilities {
     fun resolveAndFire(deepLinkUri: Uri, context: Context): Boolean {
         val intent = createDeepLinkIntent(deepLinkUri)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val resolveInfo = getResolveInfo(context, intent)
 
-        return if (resolveInfo != null) {
+        return if (intent.hasHandlingActivity(context.packageManager)) {
             context.startActivity(intent)
-            val deepLinkInfo = createDeepLinkInfo(deepLinkUri, resolveInfo)
-            val deepLinkFireEvent = DeepLinkFireEvent(ResultType.SUCCESS, deepLinkInfo)
+            val deepLinkInfo = createDeepLinkRequest(deepLinkUri, context.packageManager)
+            val deepLinkFireEvent = DeepLinkLaunchedEvent(deepLinkInfo)
             BaseApplication.bus.postSticky(deepLinkFireEvent)
             true
         } else {
@@ -91,21 +85,10 @@ object Utilities {
                 .show()
     }
 
-    fun createDeepLinkInfo(deepLink: Uri, context: Context): DeepLinkInfo? {
-        val resolveInfo = getResolveInfo(context, createDeepLinkIntent(deepLink))
-        return if (resolveInfo != null)
-            createDeepLinkInfo(deepLink, resolveInfo)
-        else
-            null
-    }
-
-    private fun createDeepLinkInfo(deepLink: Uri, resolveInfo: ResolveInfo): DeepLinkInfo {
-        val packageName = resolveInfo.activityInfo.packageName
-        return DeepLinkInfo(deepLink, null, packageName, System.currentTimeMillis())
-    }
-
-    private fun getResolveInfo(context: Context, intent: Intent): ResolveInfo? {
-        return context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    fun createDeepLinkRequest(deepLink: Uri, packageManager: PackageManager): CreateDeepLinkRequest {
+        return CreateDeepLinkRequest(deepLink, null, System.currentTimeMillis(),
+                createDeepLinkIntent(deepLink).handlingActivities(packageManager)
+                        .map { it.resolvePackageName ?: String.empty })
     }
 
     fun isAppTutorialSeen(context: Context): Boolean {

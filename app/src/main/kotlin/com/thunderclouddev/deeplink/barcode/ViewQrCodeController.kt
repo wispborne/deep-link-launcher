@@ -7,10 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.zxing.WriterException
+import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.QrCodeViewBinding
 import com.thunderclouddev.deeplink.empty
-import com.thunderclouddev.deeplink.logging.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.Timber
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
@@ -23,7 +24,7 @@ class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
         private val BUNDLE_DEEP_LINK = "BUNDLE_DEEP_LINK"
 
         fun createController(deepLinkInfo: DeepLinkInfo) =
-                ViewQrCodeController(Bundle().apply { putParcelable(BUNDLE_DEEP_LINK, deepLinkInfo) })
+                ViewQrCodeController(Bundle().apply { putString(BUNDLE_DEEP_LINK, BaseApplication.Json.toJson(deepLinkInfo)) })
 
     }
 
@@ -36,7 +37,7 @@ class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
 
         val binding = DataBindingUtil.inflate<QrCodeViewBinding>(inflater, R.layout.qr_code_view, container, false)
 
-        stringToEncode = args?.getParcelable<DeepLinkInfo>(BUNDLE_DEEP_LINK)
+        stringToEncode = BaseApplication.Json.fromJson(args?.getString(BUNDLE_DEEP_LINK) ?: String.empty, DeepLinkInfo::class.java)
 
         stringToEncode?.let {
             binding.encodedString = colorizer.colorize(it.deepLink.toString())

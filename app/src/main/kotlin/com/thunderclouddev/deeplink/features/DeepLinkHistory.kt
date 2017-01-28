@@ -1,25 +1,28 @@
 package com.thunderclouddev.deeplink.features
 
+import android.net.Uri
 import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
-import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
+import com.thunderclouddev.deeplink.events.DeepLinkLaunchedEvent
 import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
-import com.thunderclouddev.deeplink.models.DeepLinkInfo
-import com.thunderclouddev.deeplink.models.ResultType
-import org.greenrobot.eventbus.EventBus
+import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import org.greenrobot.eventbus.Subscribe
 
-class DeepLinkHistory(val database: DeepLinkDatabase) : IDeepLinkHistory {
+class DeepLinkHistory(private val database: DeepLinkDatabase) : IDeepLinkHistory {
     init {
         BaseApplication.bus.register(this)
     }
 
-    override fun addLink(deepLinkInfo: DeepLinkInfo) {
+    override fun addLink(deepLinkInfo: CreateDeepLinkRequest) {
         database.putLink(deepLinkInfo)
     }
 
-    override fun removeLink(deepLinkId: String) {
+    override fun removeLink(deepLinkId: Long) {
         database.removeLink(deepLinkId)
+    }
+
+    override fun containsLink(deepLink: Uri): Boolean {
+        return database.containsLink(deepLink)
     }
 
     override fun clearAll() {
@@ -35,9 +38,7 @@ class DeepLinkHistory(val database: DeepLinkDatabase) : IDeepLinkHistory {
     }
 
     @Subscribe(sticky = true, priority = 1)
-    fun onEvent(deepLinkFireEvent: DeepLinkFireEvent) {
-        if (deepLinkFireEvent.resultType == ResultType.SUCCESS) {
-            addLink(deepLinkFireEvent.info)
-        }
+    fun onEvent(deepLinkFireEvent: DeepLinkLaunchedEvent) {
+        addLink(deepLinkFireEvent.createDeepLinkRequest)
     }
 }

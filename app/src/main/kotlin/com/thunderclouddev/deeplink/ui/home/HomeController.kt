@@ -24,9 +24,8 @@ import com.thunderclouddev.deeplink.barcode.QrScannerController
 import com.thunderclouddev.deeplink.barcode.ViewQrCodeController
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.databinding.HomeActivityBinding
-import com.thunderclouddev.deeplink.events.DeepLinkFireEvent
+import com.thunderclouddev.deeplink.events.DeepLinkLaunchFailedEvent
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
-import com.thunderclouddev.deeplink.models.ResultType
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.ui.BaseRecyclerViewAdapter
 import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
@@ -132,23 +131,17 @@ class HomeController : BaseController() {
             }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onEvent(deepLinkFireEvent: DeepLinkFireEvent) {
-        val deepLinkString = deepLinkFireEvent.info.deepLink.toString()
-
-        if (deepLinkFireEvent.resultType == ResultType.SUCCESS) {
-            setAndSelectInput(deepLinkString)
-            updateFilter(deepLinkString)
-        } else {
-            if (DeepLinkFireEvent.FAILURE_REASON.NO_ACTIVITY_FOUND == deepLinkFireEvent.failureReason) {
-                Utilities.raiseError(
-                        activity!!.getString(R.string.error_no_activity_resolved) + ": " + deepLinkString,
-                        activity!!)
-            } else if (DeepLinkFireEvent.FAILURE_REASON.IMPROPER_URI == deepLinkFireEvent.failureReason) {
-                Utilities.raiseError(
-                        activity!!.getString(R.string.error_improper_uri) + ": " + deepLinkString, activity!!)
-            }
+    fun onEvent(event: DeepLinkLaunchFailedEvent) {
+        if (DeepLinkLaunchFailedEvent.FAILURE_REASON.NO_ACTIVITY_FOUND == event.reason) {
+            Utilities.raiseError(
+                    activity!!.getString(R.string.error_no_activity_resolved) + ": " + event.attemptedDeepLink,
+                    activity!!)
+        } else if (DeepLinkLaunchFailedEvent.FAILURE_REASON.IMPROPER_URI == event.reason) {
+            Utilities.raiseError(
+                    activity!!.getString(R.string.error_improper_uri) + ": " + event.attemptedDeepLink, activity!!)
         }
-        BaseApplication.bus.removeStickyEvent(deepLinkFireEvent)
+
+        BaseApplication.bus.removeStickyEvent(event)
     }
 
     private fun extractAndFireLink() {

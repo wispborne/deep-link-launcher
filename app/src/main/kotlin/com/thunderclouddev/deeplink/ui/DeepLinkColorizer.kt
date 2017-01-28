@@ -8,7 +8,7 @@ import android.text.style.ForegroundColorSpan
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.allIndicesOf
 import com.thunderclouddev.deeplink.isNotNullOrBlank
-import com.thunderclouddev.deeplink.logging.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.Timber
 import com.thunderclouddev.deeplink.ui.utils.ColorUtils
 
 /**

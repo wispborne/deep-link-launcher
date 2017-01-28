@@ -19,6 +19,7 @@ import static java.util.Collections.unmodifiableList;
 /**
  * Logging for lazy people.
  */
+@SuppressWarnings("unused")
 public final class Timber {
     /**
      * Log a verbose message with optional format args.
@@ -264,7 +265,7 @@ public final class Timber {
     private static final Tree[] TREE_ARRAY_EMPTY = new Tree[0];
     // Both fields guarded by 'FOREST'.
     private static final List<Tree> FOREST = new ArrayList<>();
-    static volatile Tree[] forestAsArray = TREE_ARRAY_EMPTY;
+    private static volatile Tree[] forestAsArray = TREE_ARRAY_EMPTY;
 
     /**
      * A {@link Tree} that delegates to all planted trees in the {@linkplain #FOREST forest}.
@@ -654,7 +655,7 @@ public final class Timber {
         /**
          * Formats a log message with optional arguments.
          */
-        protected String formatMessage(String message, Object[] args) {
+        String formatMessage(String message, Object[] args) {
             return String.format(message, args);
         }
 
@@ -694,7 +695,7 @@ public final class Timber {
          * <p>
          * Note: This will not be called if a {@linkplain #tag(String) manual tag} was specified.
          */
-        protected String createStackElementTag(StackTraceElement element) {
+        String createStackElementTag(StackTraceElement element) {
             String tag = element.getClassName();
             Matcher m = ANONYMOUS_CLASS.matcher(tag);
             if (m.find()) {
