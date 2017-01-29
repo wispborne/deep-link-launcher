@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/deepLinkItem_icon"
-                android:layout_width="@dimen/appIconSize"
-                android:layout_height="@dimen/appIconSize"
+                android:layout_width="@dimen/listItem_appIconSize"
+                android:layout_height="@dimen/listItem_appIconSize"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/contentDesc_deepLink_appIcon"
                 android:padding="@dimen/spacingTiny"

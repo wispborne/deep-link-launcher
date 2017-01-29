@@ -16,8 +16,9 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/about_appIconSize"
+            android:layout_height="@dimen/about_appIconSize"
+            android:layout_marginTop="@dimen/spacingMedium"
             android:contentDescription="@string/about_appIcon"
             android:src="@mipmap/ic_launcher"/>
 
