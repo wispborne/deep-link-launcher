@@ -73,4 +73,6 @@
     <string name="about_appIcon">App icon</string>
     <string name="menu_list_item_copy">Copy</string>
     <string name="copiedToClipboard">Copied to clipboard</string>
+    <string name="menu_list_item_share">Share</string>
+    <string name="list_item_share_chooserTitle">Send to...</string>
 </resources>

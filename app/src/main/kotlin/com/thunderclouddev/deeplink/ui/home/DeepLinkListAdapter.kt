@@ -33,7 +33,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
 
     private val queryMatchHighlightColor: Int = ResourcesCompat.getColor(context.resources, R.color.accent, context.theme)
     private val defaultAppIcon: Drawable = ResourcesCompat.getDrawable(context.resources,
-            R.drawable.ic_warning_red_24_px, context.theme)!!
+            android.R.drawable.sym_def_app_icon, context.theme)!!
     private val colorizer = DeepLinkColorizer(context)
 
     override fun areItemsTheSame(item1: DeepLinkViewModel, item2: DeepLinkViewModel)

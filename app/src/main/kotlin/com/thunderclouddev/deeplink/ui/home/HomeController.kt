@@ -34,7 +34,6 @@ import com.thunderclouddev.deeplink.ui.utils.tint
 import com.thunderclouddev.deeplink.utils.TextChangedListener
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
-import hotchemi.android.rate.AppRate
 
 
 class HomeController : BaseController() {
@@ -67,8 +66,6 @@ class HomeController : BaseController() {
             EditLinkDialog.newInstance().show(activity!!.fragmentManager, "EditDialogTag")
         }
 
-        AppRate.showRateDialogIfMeetsConditions(activity!!)
-
         return binding.root
     }
 
@@ -81,12 +78,6 @@ class HomeController : BaseController() {
         return when (item.itemId) {
             R.id.menu_share -> {
                 Utilities.shareApp(activity!!)
-                true
-            }
-            R.id.menu_rate -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.GOOGLE_PLAY_URI)))
-                // Do not show app rate dialog anymore
-                AppRate.with(activity!!).setAgreeShowDialog(false)
                 true
             }
             R.id.menu_scan -> {
@@ -312,26 +303,20 @@ class HomeController : BaseController() {
             override fun onMenuItemClick(menuItem: MenuItem, deepLinkViewModel: DeepLinkViewModel): Boolean {
                 val deepLinkInfo = deepLinkViewModel.deepLinkInfo
 
-                return when (menuItem.itemId) {
-                    R.id.menu_list_item_edit -> {
-                        EditLinkDialog.newInstance(deepLinkInfo)
-                                .show(activity!!.fragmentManager, "EditDialogTag")
-                        true
-                    }
-                    R.id.menu_list_item_qr -> {
-                        router.pushController(
-                                RouterTransaction.with(ViewQrCodeController.createController(deepLinkInfo)))
-                        true
-                    }
+                when (menuItem.itemId) {
+                    R.id.menu_list_item_edit -> EditLinkDialog.newInstance(deepLinkInfo)
+                            .show(activity!!.fragmentManager, "EditDialogTag")
+
+                    R.id.menu_list_item_qr -> router.pushController(
+                            RouterTransaction.with(ViewQrCodeController.createController(deepLinkInfo)))
+
                     R.id.menu_list_item_delete -> {
                         BaseApplication.deepLinkHistory.removeLink(deepLinkInfo.id)
                         adapter!!.edit().remove(deepLinkViewModel).commit()
-                        true
                     }
-                    R.id.menu_list_item_createShortcut -> {
-                        showConfirmShortcutDialog(deepLinkInfo)
-                        true
-                    }
+
+                    R.id.menu_list_item_createShortcut -> showConfirmShortcutDialog(deepLinkInfo)
+
                     R.id.menulist_item_copyToClipboard -> {
                         try {
                             val clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -340,10 +325,17 @@ class HomeController : BaseController() {
                         } catch (ignored: Exception) {
                             TimberKt.e(ignored, { "Failed to copy text ${deepLinkInfo.deepLink} to clipboard." })
                         }
-                        true
                     }
-                    else -> false
+
+                    R.id.menu_list_item_share -> {
+                        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+                            this.putExtra(Intent.EXTRA_TEXT, deepLinkInfo.deepLink.toString())
+                            this.type = "text/plain"
+                        }, activity!!.getString(R.string.list_item_share_chooserTitle)))
+                    }
                 }
+
+                return true
             }
         }
     }
