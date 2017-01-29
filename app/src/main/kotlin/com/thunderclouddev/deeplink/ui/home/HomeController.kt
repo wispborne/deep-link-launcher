@@ -23,7 +23,7 @@ import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.barcode.QrScannerController
 import com.thunderclouddev.deeplink.barcode.ViewQrCodeController
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
-import com.thunderclouddev.deeplink.databinding.HomeActivityBinding
+import com.thunderclouddev.deeplink.databinding.HomeViewBinding
 import com.thunderclouddev.deeplink.events.DeepLinkLaunchFailedEvent
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.ui.BaseController
@@ -48,7 +48,7 @@ class HomeController : BaseController() {
     private val menuItemListener = createMenuItemListener()
     private val listItemListener = createListItemListener()
 
-    private lateinit var binding: HomeActivityBinding
+    private lateinit var binding: HomeViewBinding
 
     init {
         setHasOptionsMenu(true)
@@ -57,8 +57,8 @@ class HomeController : BaseController() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.home_activity, container, false)
-//        val view = inflater.inflate(R.layout.home_activity, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.home_view, container, false)
+//        val view = inflater.inflate(R.layout.home_view, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
 
         // Alphabetical sorting for now

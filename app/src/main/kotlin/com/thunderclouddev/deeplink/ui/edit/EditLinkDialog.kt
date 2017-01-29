@@ -11,8 +11,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.databinding.EditActivityBinding
 import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
+import com.thunderclouddev.deeplink.databinding.EditViewBinding
 import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.utils.Utilities
@@ -26,7 +26,7 @@ import java.util.*
  * @author David Whitman on 29 Jan, 2017.
  */
 class EditLinkDialog : DialogFragment() {
-    private lateinit var binding: EditActivityBinding
+    private lateinit var binding: EditViewBinding
     private lateinit var dialogType: DialogType
 
     private enum class DialogType { ADD, EDIT }
@@ -41,7 +41,7 @@ class EditLinkDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DataBindingUtil.inflate<EditActivityBinding>(activity!!.layoutInflater, R.layout.edit_activity, null, false)
+        binding = DataBindingUtil.inflate<EditViewBinding>(activity!!.layoutInflater, R.layout.edit_view, null, false)
         val deepLinkInfo: DeepLinkInfo? = BaseApplication.Json.fromJson(arguments.getString(BUNDLE_DEEP_LINK), DeepLinkInfo::class.java)
         val createDeepLinkRequest = deepLinkInfo?.let(::CreateDeepLinkRequest)
                 ?: CreateDeepLinkRequest(Uri.EMPTY, String.empty, Date().time, emptyList())

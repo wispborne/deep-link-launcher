@@ -16,7 +16,7 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.tbruyelle.rxpermissions.RxPermissions
 import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.databinding.ScannerActivityBinding
+import com.thunderclouddev.deeplink.databinding.ScannerViewBinding
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.utils.Utilities
 
@@ -59,7 +59,7 @@ class QrScannerController : BaseController() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
 
-        val binding = DataBindingUtil.inflate<ScannerActivityBinding>(inflater, R.layout.scanner_activity, container, false)
+        val binding = DataBindingUtil.inflate<ScannerViewBinding>(inflater, R.layout.scanner_view, container, false)
 
         binding.model = model
         barcodeView = binding.scannerBarcodeView
