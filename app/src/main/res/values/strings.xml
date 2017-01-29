@@ -54,13 +54,16 @@
     <string name="editDialog_fragment_label">Fragment</string>
     <string name="editDialog_fragmentHint">fragment</string>
     <string name="about_creator">Created by David Whitman</string>
-    <string name="about_versionCode">Build: %s</string>
-    <string name="about_versionName">Version: %s</string>
+    <string name="about_versionName">v%s</string>
+    <string name="about_versionCode">build %s</string>
     <string name="about_dltUrl" translatable="false">https://github.com/ManojMadanmohan/dlt</string>
     <string name="about_dlt">Built upon Deep Link Tester by Manoj Madanmohan</string>
     <string name="about_appIcon">App icon</string>
     <string name="menu_list_item_copy">Copy</string>
     <string name="copiedToClipboard">Copied to clipboard</string>
     <string name="menu_list_item_share">Share</string>
-    <string name="list_item_share_chooserTitle">Send to...</string>
+    <string name="list_item_share_chooserTitle">Send to…</string>
+    <string name="about_creator_github" translatable="false">https://github.com/davidwhitman/deep-link-launcher</string>
+    <string name="about_creator_website" translatable="false">http://davidwhitman.me</string>
+    <string name="about_foss">This app is open source and written in Kotlin</string>
 </resources>

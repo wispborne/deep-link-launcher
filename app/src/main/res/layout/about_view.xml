@@ -31,6 +31,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:text="@string/about_creator_website"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacingSmall"
             android:text="@string/about_dlt"/>
 
@@ -52,5 +58,17 @@
             android:layout_height="wrap_content"
             android:text="@{@string/about_versionCode(model.versionCode)}"
             tools:text="Version code"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacingSmall"
+            android:text="@string/about_foss"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:text="@string/about_creator_github"/>
     </LinearLayout>
 </layout>
