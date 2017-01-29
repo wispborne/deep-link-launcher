@@ -58,9 +58,13 @@ object Utilities {
 
         return if (intent.hasHandlingActivity(context.packageManager)) {
             context.startActivity(intent)
-            val deepLinkInfo = createDeepLinkRequest(deepLinkUri, context.packageManager)
-            val deepLinkFireEvent = DeepLinkLaunchedEvent(deepLinkInfo)
-            BaseApplication.bus.postSticky(deepLinkFireEvent)
+
+            if (!BaseApplication.deepLinkHistory.containsLink(deepLinkUri)) {
+                val deepLinkInfo = createDeepLinkRequest(deepLinkUri, context.packageManager)
+                val deepLinkFireEvent = DeepLinkLaunchedEvent(deepLinkInfo)
+                BaseApplication.bus.postSticky(deepLinkFireEvent)
+            }
+
             true
         } else {
             false
