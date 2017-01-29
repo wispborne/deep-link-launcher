@@ -1,18 +1,23 @@
 package com.thunderclouddev.deeplink.database.requery
 
 import android.net.Uri
-import io.requery.Entity
-import io.requery.Generated
-import io.requery.Key
-import io.requery.Persistable
+import io.requery.*
+import io.requery.android.UriConverter
 
 @Entity
 interface RequeryDeepLinkInfo : Persistable {
     @get:Key
     @get:Generated
     var id: Long
+
+    @get:Index
+    @get:Convert(UriConverter::class)
     var deepLink: Uri
+
     var label: String?
+
     var updatedTime: Long
+
+    @get:Convert(StringListConverter::class)
     var deepLinkHandlers: List<String>
 }

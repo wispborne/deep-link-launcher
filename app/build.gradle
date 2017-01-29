@@ -75,7 +75,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         resConfig "en"
-        multiDexEnabled true
     }
     buildTypes {
         debug {
@@ -120,13 +119,14 @@ dependencies {
     compile "com.android.support:cardview-v7:$supportLibVersion"
     compile "com.android.support:design:$supportLibVersion"
 
-    compile 'com.pnikosis:materialish-progress:1.7'
     compile 'com.github.hotchemi:android-rate:1.0.1'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.getkeepsafe.taptargetview:taptargetview:1.5.1'
+//    compile 'com.getkeepsafe.taptargetview:taptargetview:1.5.1'
+
+    compile 'com.google.code.gson:gson:2.8.0'
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'org.jetbrains.anko:anko-sdk21:0.8.2'
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
 
     // Copied into project as SortedListAdapter
 //    compile 'com.github.wrdlbrnft:sorted-list-adapter:0.2.0.1'

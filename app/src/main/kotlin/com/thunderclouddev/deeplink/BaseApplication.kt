@@ -1,12 +1,13 @@
 package com.thunderclouddev.deeplink
 
 import android.app.Application
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
+import android.net.Uri
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.gson.GsonBuilder
 import com.thunderclouddev.deeplink.database.requery.RequeryDatabase
 import com.thunderclouddev.deeplink.features.DeepLinkHistory
+import com.thunderclouddev.deeplink.utils.UriGsonAdapter
 import hotchemi.android.rate.AppRate
 import org.greenrobot.eventbus.EventBus
 
@@ -20,16 +21,17 @@ open class BaseApplication : Application() {
     }
 
     object Json {
-        fun toJson(obj: Any?): String = jsonMapper.writeValueAsString(obj)
+        private val jsonSerializer = GsonBuilder()
+                .registerTypeAdapter(Uri::class.java, UriGsonAdapter()).create()
+
+        fun toJson(obj: Any?): String = jsonSerializer.toJson(obj)
         fun <T> fromJson(jsonString: String?, clazz: Class<T>): T? {
             try {
-                return jsonMapper.readValue(jsonString, clazz)
+                return jsonSerializer.fromJson(jsonString, clazz)
             } catch (exception: Exception) {
                 return null
             }
         }
-
-        private val jsonMapper = ObjectMapper().registerModule(KotlinModule())
     }
 
     override fun onCreate() {

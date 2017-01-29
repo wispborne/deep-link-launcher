@@ -87,8 +87,9 @@ object Utilities {
 
     fun createDeepLinkRequest(deepLink: Uri, packageManager: PackageManager): CreateDeepLinkRequest {
         return CreateDeepLinkRequest(deepLink, null, System.currentTimeMillis(),
-                createDeepLinkIntent(deepLink).handlingActivities(packageManager)
-                        .map { it.resolvePackageName ?: String.empty })
+                createDeepLinkIntent(deepLink)
+                        .handlingActivities(packageManager)
+                        .map { it.activityInfo.packageName ?: String.empty })
     }
 
     fun isAppTutorialSeen(context: Context): Boolean {

@@ -24,7 +24,7 @@ fun Throwable.hasCause(type: Class<*>): Boolean {
 fun Intent?.hasHandlingActivity(packageManager: PackageManager) =
         if (this == null) false else packageManager.queryIntentActivities(this, 0).isNotEmpty()
 
-fun Intent?.handlingActivities(packageManager: PackageManager) =
+fun Intent?.handlingActivities(packageManager: PackageManager): List<ResolveInfo> =
         if (this == null) emptyList<ResolveInfo>() else packageManager.queryIntentActivities(this, 0)
 
 val Any?.simpleClassName: String

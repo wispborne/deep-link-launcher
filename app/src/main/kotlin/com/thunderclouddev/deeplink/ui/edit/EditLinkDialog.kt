@@ -3,7 +3,6 @@ package com.thunderclouddev.deeplink.ui.edit
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.DialogFragment
-import android.content.Intent
 import android.databinding.*
 import android.databinding.Observable
 import android.net.Uri
@@ -16,11 +15,15 @@ import com.thunderclouddev.deeplink.databinding.EditActivityBinding
 import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
 import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
+import com.thunderclouddev.deeplink.utils.Utilities
 import org.jetbrains.anko.enabled
 import java.util.*
 
 /**
- * Created by David Whitman on 01 Dec, 2016.
+ * Displays a dialog that lets the user either edit an existing deep link or create a new one.
+ * Input is validated before being updated in the database.
+ *
+ * @author David Whitman on 29 Jan, 2017.
  */
 class EditLinkDialog : DialogFragment() {
     private lateinit var binding: EditActivityBinding
@@ -126,9 +129,9 @@ class EditLinkDialog : DialogFragment() {
         return builder
     }
 
-    private fun findHandlersForUri(deepLinkUri: Uri?) = Intent(Intent.ACTION_VIEW, deepLinkUri)
+    private fun findHandlersForUri(deepLinkUri: Uri) = Utilities.createDeepLinkIntent(deepLinkUri)
             .handlingActivities(activity.packageManager)
-            .map { it.resolvePackageName ?: String.empty }
+            .map { it.activityInfo.packageName ?: String.empty }
 
     class ViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable() {
         private val uri = deepLinkInfo.deepLink

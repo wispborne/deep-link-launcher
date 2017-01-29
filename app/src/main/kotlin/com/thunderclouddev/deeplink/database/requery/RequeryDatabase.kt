@@ -4,17 +4,21 @@ import android.content.Context
 import android.net.Uri
 import com.thunderclouddev.deeplink.BuildConfig
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
+import com.thunderclouddev.deeplink.logging.timberkt.Timber
 import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
 import io.requery.kotlin.invoke
+import io.requery.query.Result
 import io.requery.sql.KotlinEntityDataStore
 import io.requery.sql.TableCreationMode
 import java.util.*
 
 /**
- * Created by David Whitman on 28 Jan, 2017.
+ * Implementation of [DeepLinkDatabase] using Requery.
+ *
+ * @author David Whitman on 28 Jan, 2017.
  */
 class RequeryDatabase(context: Context) : DeepLinkDatabase {
     private val listeners = mutableMapOf<Int, DeepLinkDatabase.Listener>()
@@ -33,30 +37,44 @@ class RequeryDatabase(context: Context) : DeepLinkDatabase {
     }
 
     override fun putLink(request: CreateDeepLinkRequest): Long {
-        val model = request.let { request ->
-            RequeryDeepLinkInfoEntity().apply {
+        val existingItem: RequeryDeepLinkInfoEntity? = data.select(RequeryDeepLinkInfoEntity::class)
+                .where(RequeryDeepLinkInfoEntity.DEEP_LINK.eq(request.deepLink))
+                .limit(1)
+                .get()
+                .firstOrNull()
+
+        val id = if (existingItem != null) {
+            data.update(existingItem.apply {
                 this.deepLink = request.deepLink
+                this.deepLinkHandlers = request.deepLinkHandlers
                 this.label = request.label
                 this.updatedTime = request.updatedTime
-                this.deepLinkHandlers = request.deepLinkHandlers
-            }
+            }).id
+        } else {
+            val model = request.toModel()
+            data.insert(model).id
         }
 
-        return data.insert(model).id
+        notifyListeners()
+        return id
     }
 
     override fun getLink(deepLinkId: Long): DeepLinkInfo? {
-        return data.findByKey(RequeryDeepLinkInfoEntity::class, deepLinkId)
-                ?.let { deepLinkInfoFromEntity(it) }
+        return data.findByKey(RequeryDeepLinkInfoEntity::class, deepLinkId)?.toDeepLinkInfo()
     }
 
     override fun removeLink(deepLinkId: Long) {
-        // TODO surely there's a better way to do this...
-        data.delete(data.findByKey(RequeryDeepLinkInfoEntity::class, deepLinkId) as RequeryDeepLinkInfoEntity)
+        val result = data.delete(RequeryDeepLinkInfoEntity::class)
+                .where(RequeryDeepLinkInfoEntity.ID.eq(deepLinkId))
+                .invoke()
+                .value()
+        Timber.v { "Deleted item $result" }
+        notifyListeners()
     }
 
     override fun clearAllHistory() {
         data.delete().invoke()
+        notifyListeners()
     }
 
     override fun addListener(listener: DeepLinkDatabase.Listener): Int {
@@ -79,13 +97,24 @@ class RequeryDatabase(context: Context) : DeepLinkDatabase {
     }
 
     private fun notifyListeners() {
-        val dataSnapshot = data.select(RequeryDeepLinkInfoEntity::class).get().map { deepLinkInfoFromEntity(it) }
-        listeners.values.forEach { it.onDataChanged(dataSnapshot) }
+        val dataSnapshot: Result<RequeryDeepLinkInfoEntity>? = data.select(RequeryDeepLinkInfoEntity::class).get()
+        val mapped = dataSnapshot?.map { it.toDeepLinkInfo() } ?: emptyList()
+        listeners.values.forEach { it.onDataChanged(mapped) }
     }
 
-    private fun notifyListener(id: Int) = listeners[id]?.onDataChanged(data.select(RequeryDeepLinkInfoEntity::class).get().map {
-        deepLinkInfoFromEntity(it)
-    })
+    private fun notifyListener(id: Int): Unit? {
+        val dataSnapshot: Result<RequeryDeepLinkInfoEntity>? = data.select(RequeryDeepLinkInfoEntity::class).get()
+        val mapped = dataSnapshot?.map { it.toDeepLinkInfo() }
 
-    private fun deepLinkInfoFromEntity(it: RequeryDeepLinkInfoEntity) = DeepLinkInfo(it.id, it.deepLink, it.label, it.updatedTime, it.deepLinkHandlers)
+        return listeners[id]?.onDataChanged(mapped ?: emptyList())
+    }
+
+    private fun RequeryDeepLinkInfoEntity.toDeepLinkInfo() = DeepLinkInfo(this.id, this.deepLink, this.label, this.updatedTime, this.deepLinkHandlers)
+
+    private fun CreateDeepLinkRequest.toModel() = RequeryDeepLinkInfoEntity().apply {
+        deepLink = this@toModel.deepLink
+        label = this@toModel.label
+        updatedTime = this@toModel.updatedTime
+        deepLinkHandlers = this@toModel.deepLinkHandlers
+    }
 }
