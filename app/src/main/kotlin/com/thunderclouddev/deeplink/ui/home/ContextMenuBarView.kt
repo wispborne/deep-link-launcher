@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.R
+import com.thunderclouddev.deeplink.ui.attribute
 import com.thunderclouddev.deeplink.ui.utils.tint
 import org.jetbrains.anko.*
 
@@ -35,6 +36,7 @@ class ContextMenuBarView(private val menu: Menu) : AnkoComponent<LinearLayout> {
 
                         id = menuItem.itemId
                         image = menuItem.icon.tint(ResourcesCompat.getColor(ui.resources, R.color.white, ui.ctx.theme))
+                        backgroundResource = context.attribute(android.R.attr.selectableItemBackgroundBorderless).resourceId
                         onClick { onMenuItemClickListener?.onMenuItemClick(menuItem) }
                     }
 
