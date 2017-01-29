@@ -28,6 +28,7 @@
     <string name="menu_web_title">Fire from web</string>
     <string name="menu_rate_title">Rate</string>
     <string name="menu_share_title">Share</string>
+    <string name="menu_about_title">About</string>
     <string name="menu_list_item_edit">Edit</string>
     <string name="menu_list_item_qr">View QR code</string>
     <string name="menu_list_item_delete">Delete</string>
@@ -64,4 +65,10 @@
     <string name="editDialog_authorityHint">authority</string>
     <string name="editDialog_fragment_label">Fragment</string>
     <string name="editDialog_fragmentHint">fragment</string>
+    <string name="about_creator">Created by David Whitman</string>
+    <string name="about_versionCode">Build: %s</string>
+    <string name="about_versionName">Version: %s</string>
+    <string name="about_dltUrl" translatable="false">https://github.com/ManojMadanmohan/dlt</string>
+    <string name="about_dlt">Built upon Deep Link Tester by Manoj Madanmohan</string>
+    <string name="about_appIcon">App icon</string>
 </resources>

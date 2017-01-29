@@ -106,6 +106,10 @@ class HomeController : BaseController() {
                 router.pushController(RouterTransaction.with(QrScannerController()))
                 true
             }
+            R.id.menu_about -> {
+                router.pushController(RouterTransaction.with(AboutController()))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
