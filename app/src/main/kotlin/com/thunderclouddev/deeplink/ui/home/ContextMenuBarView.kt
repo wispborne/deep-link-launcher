@@ -37,6 +37,8 @@ class ContextMenuBarView(private val menu: Menu) : AnkoComponent<LinearLayout> {
                         id = menuItem.itemId
                         image = menuItem.icon.tint(ResourcesCompat.getColor(ui.resources, R.color.white, ui.ctx.theme))
                         backgroundResource = context.attribute(android.R.attr.selectableItemBackgroundBorderless).resourceId
+                        contentDescription = menuItem.title
+
                         onClick { onMenuItemClickListener?.onMenuItemClick(menuItem) }
                     }
 

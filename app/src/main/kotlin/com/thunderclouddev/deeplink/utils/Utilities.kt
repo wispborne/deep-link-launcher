@@ -73,12 +73,4 @@ object Utilities {
                         .handlingActivities(packageManager)
                         .map { it.activityInfo.packageName ?: String.empty })
     }
-
-    fun shareApp(context: Context) {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_text))
-        sendIntent.type = "text/plain"
-        context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.share_chooser_title)))
-    }
 }

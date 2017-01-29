@@ -45,6 +45,8 @@ class HomeController : BaseController() {
 
     private lateinit var binding: HomeViewBinding
 
+    private var databaseListenerId: Int = 0
+
     init {
         setHasOptionsMenu(true)
     }
@@ -53,7 +55,6 @@ class HomeController : BaseController() {
         super.onCreateView(inflater, container)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.home_view, container, false)
-//        val view = inflater.inflate(R.layout.home_view, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
 
         // Alphabetical sorting for now
@@ -76,10 +77,6 @@ class HomeController : BaseController() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_share -> {
-                Utilities.shareApp(activity!!)
-                true
-            }
             R.id.menu_scan -> {
                 router.pushController(RouterTransaction.with(QrScannerController()))
                 true
@@ -266,8 +263,6 @@ class HomeController : BaseController() {
             }
         }
     }
-
-    private var databaseListenerId: Int = 0
 
     private fun attachDatabaseListener() {
         binding.progressWheel.visibility = View.VISIBLE
