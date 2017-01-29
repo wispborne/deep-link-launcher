@@ -11,7 +11,7 @@ import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.QrCodeViewBinding
 import com.thunderclouddev.deeplink.empty
-import com.thunderclouddev.deeplink.logging.timberkt.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
@@ -50,7 +50,7 @@ class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
                     binding.qrCodeQrCode.setImageDrawable(BitmapDrawable(resources, qrCodeBitmap))
                 }
             } catch (writerException: WriterException) {
-                Timber.w(writerException, { writerException.message ?: String.empty })
+                TimberKt.w(writerException, { writerException.message ?: String.empty })
             }
         }
 

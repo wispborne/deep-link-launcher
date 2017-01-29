@@ -3,7 +3,7 @@ package com.thunderclouddev.deeplink.database
 import android.net.Uri
 import android.util.Log
 import com.thunderclouddev.deeplink.empty
-import com.thunderclouddev.deeplink.logging.timberkt.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import org.json.JSONException
 import org.json.JSONObject
@@ -31,7 +31,7 @@ class DeepLinkInfoJsonSerializer() {
             jsonObject.put(KEY_LINK_HANDLERS, deepLinkInfo.deepLinkHandlers)
             return deepLinkInfo.id
         } catch (jsonException: JSONException) {
-            Timber.e(jsonException, { "Failed to write deep link with item=$deepLinkInfo" })
+            TimberKt.e(jsonException, { "Failed to write deep link with item=$deepLinkInfo" })
             return deepLinkInfo.id
         }
     }
@@ -60,7 +60,7 @@ class DeepLinkInfoJsonSerializer() {
 
             return DeepLinkInfo(id, Uri.parse(deepLink), activityLabel, updatedTime, handlers)
         } catch (exception: Exception) {
-            Timber.e(exception, { "Failed to parse deep link entirely with json: $deepLinkJson" })
+            TimberKt.e(exception, { "Failed to parse deep link entirely with json: $deepLinkJson" })
             return null
         }
     }
@@ -72,7 +72,7 @@ class DeepLinkInfoJsonSerializer() {
             when (exception) {
                 is JSONException,
                 is ClassCastException -> {
-                    Timber.d(exception, {
+                    TimberKt.d(exception, {
                         "Failed to parse deep link property with key=$key " +
                                 "and value=${if (jsonObject.has(key)) jsonObject[key] else String.empty} " +
                                 "and jsonObject=$jsonObject "

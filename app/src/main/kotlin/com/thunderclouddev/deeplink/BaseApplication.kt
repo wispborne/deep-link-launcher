@@ -9,15 +9,12 @@ import com.thunderclouddev.deeplink.database.requery.RequeryDatabase
 import com.thunderclouddev.deeplink.features.DeepLinkHistory
 import com.thunderclouddev.deeplink.utils.UriGsonAdapter
 import hotchemi.android.rate.AppRate
-import org.greenrobot.eventbus.EventBus
 
 
 open class BaseApplication : Application() {
     companion object {
-        lateinit var deepLinkHistory: DeepLinkHistory
-
         // Should probably implement dagger at some point.
-        val bus = EventBus()
+        lateinit var deepLinkHistory: DeepLinkHistory
     }
 
     object Json {

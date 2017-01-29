@@ -71,4 +71,6 @@
     <string name="about_dltUrl" translatable="false">https://github.com/ManojMadanmohan/dlt</string>
     <string name="about_dlt">Built upon Deep Link Tester by Manoj Madanmohan</string>
     <string name="about_appIcon">App icon</string>
+    <string name="menu_list_item_copy">Copy</string>
+    <string name="copiedToClipboard">Copied to clipboard</string>
 </resources>

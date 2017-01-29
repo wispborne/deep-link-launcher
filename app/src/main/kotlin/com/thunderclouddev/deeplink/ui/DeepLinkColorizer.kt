@@ -8,7 +8,7 @@ import android.text.style.ForegroundColorSpan
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.allIndicesOf
 import com.thunderclouddev.deeplink.isNotNullOrBlank
-import com.thunderclouddev.deeplink.logging.timberkt.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.ui.utils.ColorUtils
 
 /**
@@ -61,7 +61,7 @@ class DeepLinkColorizer(val colors: Colors) {
 
             return spannable
         } catch (ex: Exception) {
-            Timber.w(ex, { "Error coloring $deepLink" })
+            TimberKt.w(ex, { "Error coloring $deepLink" })
             return SpannableString(deepLink)
         }
     }

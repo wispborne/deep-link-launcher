@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.thunderclouddev.deeplink.BuildConfig
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
-import com.thunderclouddev.deeplink.logging.timberkt.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import io.requery.Persistable
@@ -68,7 +68,7 @@ class RequeryDatabase(context: Context) : DeepLinkDatabase {
                 .where(RequeryDeepLinkInfoEntity.ID.eq(deepLinkId))
                 .invoke()
                 .value()
-        Timber.v { "Deleted item $result" }
+        TimberKt.v { "Deleted item $result" }
         notifyListeners()
     }
 

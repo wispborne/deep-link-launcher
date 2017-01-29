@@ -169,7 +169,7 @@ public final class Timber {
     }
 
     /**
-     * A view into Timber's planted trees as a tree itself. This can be used for injecting a logger
+     * A view into TimberKt's planted trees as a tree itself. This can be used for injecting a logger
      * instance rather than using static methods or to facilitate testing.
      */
     public static Tree asTree() {
@@ -196,7 +196,7 @@ public final class Timber {
             throw new NullPointerException("tree == null");
         }
         if (tree == TREE_OF_SOULS) {
-            throw new IllegalArgumentException("Cannot plant Timber into itself.");
+            throw new IllegalArgumentException("Cannot plant TimberKt into itself.");
         }
         synchronized (FOREST) {
             FOREST.add(tree);
@@ -216,7 +216,7 @@ public final class Timber {
                 throw new NullPointerException("trees contains null");
             }
             if (tree == TREE_OF_SOULS) {
-                throw new IllegalArgumentException("Cannot plant Timber into itself.");
+                throw new IllegalArgumentException("Cannot plant TimberKt into itself.");
             }
         }
         synchronized (FOREST) {
@@ -471,7 +471,7 @@ public final class Timber {
     }
 
     /**
-     * A facade for handling logging calls. Install instances via {@link #plant Timber.plant()}.
+     * A facade for handling logging calls. Install instances via {@link #plant TimberKt.plant()}.
      */
     public static abstract class Tree {
         final ThreadLocal<String> explicitTag = new ThreadLocal<>();

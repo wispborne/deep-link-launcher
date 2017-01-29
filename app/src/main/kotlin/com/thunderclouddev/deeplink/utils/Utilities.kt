@@ -7,32 +7,11 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.support.v7.app.AlertDialog
 import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.events.DeepLinkLaunchFailedEvent
-import com.thunderclouddev.deeplink.events.DeepLinkLaunchedEvent
-import com.thunderclouddev.deeplink.features.FileSystem
-import com.thunderclouddev.deeplink.logging.timberkt.Timber
+import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 
 object Utilities {
-    fun checkAndFireDeepLink(deepLink: String, context: Context): Boolean {
-        if (deepLink.isUri()) {
-            val uri = Uri.parse(deepLink)
-
-            if (resolveAndFire(uri, context)) {
-                return true
-            } else {
-                val deepLinkFireEvent = DeepLinkLaunchFailedEvent(uri.toString(), DeepLinkLaunchFailedEvent.FAILURE_REASON.NO_ACTIVITY_FOUND)
-                BaseApplication.bus.postSticky(deepLinkFireEvent)
-                return false
-            }
-        } else {
-            val deepLinkFireEvent = DeepLinkLaunchFailedEvent(deepLink, DeepLinkLaunchFailedEvent.FAILURE_REASON.IMPROPER_URI)
-            BaseApplication.bus.postSticky(deepLinkFireEvent)
-            return false
-        }
-    }
-
     fun addShortcut(deepLink: DeepLinkInfo, context: Context, shortcutName: String): Boolean {
         val shortcutIntent = createDeepLinkIntent(deepLink.deepLink)
         val intent = Intent()
@@ -46,7 +25,7 @@ object Utilities {
             context.sendBroadcast(intent)
             return true
         } catch (exception: Exception) {
-            Timber.e(exception, { exception.message!! })
+            TimberKt.e(exception, { exception.message!! })
             return false
         }
 
@@ -54,21 +33,20 @@ object Utilities {
 
     fun resolveAndFire(deepLinkUri: Uri, context: Context): Boolean {
         val intent = createDeepLinkIntent(deepLinkUri)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-        return if (intent.hasHandlingActivity(context.packageManager)) {
+        return if (intent.hasAnyHandlingActivity(context.packageManager)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
 
-            if (!BaseApplication.deepLinkHistory.containsLink(deepLinkUri)) {
-                val deepLinkInfo = createDeepLinkRequest(deepLinkUri, context.packageManager)
-                val deepLinkFireEvent = DeepLinkLaunchedEvent(deepLinkInfo)
-                BaseApplication.bus.postSticky(deepLinkFireEvent)
+            val deepLinkHistory = BaseApplication.deepLinkHistory
+
+            if (!deepLinkHistory.containsLink(deepLinkUri)) {
+                val deepLinkRequest = createDeepLinkRequest(deepLinkUri, context.packageManager)
+                deepLinkHistory.addLink(deepLinkRequest)
             }
 
             true
-        } else {
-            false
-        }
+        } else false
     }
 
     fun createDeepLinkIntent(deepLinkUri: Uri): Intent {
@@ -80,7 +58,7 @@ object Utilities {
 
     fun raiseError(errorText: String, context: Context) {
         showAlert(context.getString(R.string.error_title), errorText, context)
-        Timber.e(Exception(errorText), { errorText })
+        TimberKt.e(Exception(errorText), { errorText })
     }
 
     fun showAlert(title: String, message: String, context: Context) {
@@ -94,19 +72,6 @@ object Utilities {
                 createDeepLinkIntent(deepLink)
                         .handlingActivities(packageManager)
                         .map { it.activityInfo.packageName ?: String.empty })
-    }
-
-    fun isAppTutorialSeen(context: Context): Boolean {
-        val tutSeenBool = getOneTimeStore(context).read(Constants.APP_TUTORIAL_SEEN)
-        return tutSeenBool != null && tutSeenBool == "true"
-    }
-
-    fun getOneTimeStore(context: Context): FileSystem {
-        return FileSystem(context, Constants.GLOBAL_PREF_KEY)
-    }
-
-    fun setAppTutorialSeen(seen: Boolean, context: Context) {
-        getOneTimeStore(context).write(Constants.APP_TUTORIAL_SEEN, if (seen) "true" else "false")
     }
 
     fun shareApp(context: Context) {

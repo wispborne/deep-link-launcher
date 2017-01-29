@@ -13,6 +13,10 @@
         android:icon="@drawable/ic_add_shortcut"
         android:title="@string/menu_list_item_createShortcut"/>
     <item
+        android:id="@+id/menulist_item_copyToClipboard"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/menu_list_item_copy" />
+    <item
         android:id="@+id/menu_list_item_delete"
         android:icon="@drawable/ic_delete"
         android:title="@string/menu_list_item_delete"/>

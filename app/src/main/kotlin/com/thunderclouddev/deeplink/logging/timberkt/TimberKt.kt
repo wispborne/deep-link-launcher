@@ -6,10 +6,10 @@ package com.thunderclouddev.deeplink.logging.timberkt
 import com.thunderclouddev.deeplink.logging.timber.Timber
 
 //
-// Static methods on the Timber object
+// Static methods on the TimberKt object
 //
 
-object Timber {
+object TimberKt {
     /** Log a verbose message that will be evaluated lazily when the message is printed */
     @JvmStatic
     inline fun v(noinline message: () -> String) = Timber.v("%s", LazyString(message))
@@ -59,9 +59,9 @@ object Timber {
     inline fun wtf(t: Throwable, noinline message: () -> String) = Timber.wtf(t, "%s", LazyString(message))
 
     // These functions forward just to the real timber. They aren't necessary, but they allow method
-    // chaining like the normal Timber interface.
+    // chaining like the normal TimberKt interface.
 
-    /** A view into Timber's planted trees as a tree itself. */
+    /** A view into TimberKt's planted trees as a tree itself. */
     @JvmStatic
     fun asTree(): Timber.Tree = Timber.asTree()
 
@@ -73,7 +73,7 @@ object Timber {
     @JvmStatic
     fun tag(tag: String): Timber.Tree = Timber.tag(tag)
 
-    /** A view into Timber's planted trees as a tree itself. */
+    /** A view into TimberKt's planted trees as a tree itself. */
     @JvmStatic
     fun uproot(tree: Timber.Tree) = Timber.uproot(tree)
 

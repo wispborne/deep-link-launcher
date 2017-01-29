@@ -21,7 +21,7 @@ fun Throwable.hasCause(type: Class<*>): Boolean {
     return false
 }
 
-fun Intent?.hasHandlingActivity(packageManager: PackageManager) =
+fun Intent?.hasAnyHandlingActivity(packageManager: PackageManager) =
         if (this == null) false else packageManager.queryIntentActivities(this, 0).isNotEmpty()
 
 fun Intent?.handlingActivities(packageManager: PackageManager): List<ResolveInfo> =
