@@ -113,6 +113,7 @@ android {
 
 dependencies {
     def supportLibVersion = "25.1.0"
+    def requeryVersion = "1.1.2"
     provided 'org.jetbrains:annotations:13.0'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -132,10 +133,10 @@ dependencies {
     compile 'com.bluelinelabs:conductor:2.0.4'
 
     // Requery Database
-    compile 'io.requery:requery:1.1.1'
-    compile 'io.requery:requery-android:1.1.1'
-    compile 'io.requery:requery-kotlin:1.1.1'
-    kapt 'io.requery:requery-processor:1.1.1'
+    compile "io.requery:requery:$requeryVersion"
+    compile "io.requery:requery-android:$requeryVersion"
+    compile "io.requery:requery-kotlin:$requeryVersion"
+    kapt "io.requery:requery-processor:$requeryVersion"
 
     releasePlayStoreCompile 'com.google.firebase:firebase-database:9.0.2'
     releasePlayStoreCompile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {

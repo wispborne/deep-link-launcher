@@ -27,7 +27,7 @@ class StringListConverter : Converter<MutableList<String>, String> {
             = value?.split(SEPARATOR)?.toMutableList() ?: mutableListOf()
 
     override fun convertToPersisted(list: MutableList<String>?): String {
-        return list?.reduce { left, right -> left + SEPARATOR + right } ?: String.empty
+        return list?.fold(String.empty) { left, right -> left + SEPARATOR + right } ?: String.empty
 
 //        if (list == null) {
 //            return ""
