@@ -7,11 +7,11 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.support.v7.app.AlertDialog
 import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.empty
-import com.thunderclouddev.deeplink.handlingActivities
+import com.thunderclouddev.deeplink.utils.empty
+import com.thunderclouddev.deeplink.utils.handlingActivities
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
-import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
-import com.thunderclouddev.deeplink.models.DeepLinkInfo
+import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
+import com.thunderclouddev.deeplink.data.DeepLinkInfo
 
 object Utilities {
     fun addShortcut(deepLink: DeepLinkInfo, context: Context, shortcutName: String): Boolean {

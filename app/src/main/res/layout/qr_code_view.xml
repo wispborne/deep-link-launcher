@@ -9,7 +9,7 @@
 
         <variable
             name="deepLink"
-            type="com.thunderclouddev.deeplink.models.DeepLinkInfo"/>
+            type="com.thunderclouddev.deeplink.data.DeepLinkInfo"/>
     </data>
 
     <LinearLayout

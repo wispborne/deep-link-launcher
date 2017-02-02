@@ -11,13 +11,13 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.*
+import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
+import com.thunderclouddev.deeplink.data.DeepLinkHistory
+import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
 import com.thunderclouddev.deeplink.databinding.EditViewBinding
-import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
-import com.thunderclouddev.deeplink.interfaces.JsonSerializer
-import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
-import com.thunderclouddev.deeplink.models.DeepLinkInfo
-import com.thunderclouddev.deeplink.utils.Utilities
+import com.thunderclouddev.deeplink.ui.JsonSerializer
+import com.thunderclouddev.deeplink.utils.*
 import org.jetbrains.anko.enabled
 import java.util.*
 import javax.inject.Inject
@@ -30,7 +30,7 @@ import javax.inject.Inject
  */
 class EditLinkDialog : DialogFragment() {
     @Inject lateinit var jsonSerializer: JsonSerializer
-    @Inject lateinit var deepLinkHistory: IDeepLinkHistory
+    @Inject lateinit var deepLinkHistory: DeepLinkHistory
 
     private lateinit var binding: EditViewBinding
     private lateinit var dialogType: DialogType

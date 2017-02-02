@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.ui.attribute
-import com.thunderclouddev.deeplink.ui.utils.tint
+import com.thunderclouddev.deeplink.utils.tint
 import org.jetbrains.anko.*
 
 /**

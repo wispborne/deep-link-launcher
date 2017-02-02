@@ -14,34 +14,34 @@ import android.net.Uri
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import com.bluelinelabs.conductor.RouterTransaction
 import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.barcode.QrScannerController
-import com.thunderclouddev.deeplink.barcode.ViewQrCodeController
-import com.thunderclouddev.deeplink.database.DeepLinkDatabase
+import com.thunderclouddev.deeplink.ui.scanner.QrScannerController
+import com.thunderclouddev.deeplink.ui.qrcode.ViewQrCodeController
+import com.thunderclouddev.deeplink.data.DeepLinkDatabase
+import com.thunderclouddev.deeplink.data.DeepLinkHistory
+import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import com.thunderclouddev.deeplink.databinding.HomeViewBinding
-import com.thunderclouddev.deeplink.features.DeepLinkLauncher
-import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
-import com.thunderclouddev.deeplink.interfaces.JsonSerializer
+import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
-import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.ui.BaseRecyclerViewAdapter
+import com.thunderclouddev.deeplink.ui.JsonSerializer
+import com.thunderclouddev.deeplink.ui.about.AboutController
 import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
-import com.thunderclouddev.deeplink.ui.utils.tint
-import com.thunderclouddev.deeplink.utils.TextChangedListener
-import com.thunderclouddev.deeplink.utils.Utilities
-import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
+import com.thunderclouddev.deeplink.utils.*
 import javax.inject.Inject
 
 
 class HomeController : BaseController() {
-    @Inject lateinit var deepLinkHistory: IDeepLinkHistory
+    @Inject lateinit var deepLinkHistory: DeepLinkHistory
     @Inject lateinit var deepLinkLauncher: DeepLinkLauncher
     @Inject lateinit var jsonSerializer: JsonSerializer
 
@@ -181,7 +181,7 @@ class HomeController : BaseController() {
 
         binding.deepLinkBtnClearInput.setOnClickListener { binding.deepLinkEditTextInput.text.clear() }
 
-        binding.deepLinkEditTextInput.addTextChangedListener(object : TextChangedListener() {
+        binding.deepLinkEditTextInput.addTextChangedListener(object : TextWatcher {
             var oldText: String = String.empty
 
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
@@ -237,6 +237,8 @@ class HomeController : BaseController() {
 
                 binding.deepLinkBtnClearInput.visibility = if (charSequence.isEmpty()) View.INVISIBLE else View.VISIBLE
             }
+
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         // Set disabled by default

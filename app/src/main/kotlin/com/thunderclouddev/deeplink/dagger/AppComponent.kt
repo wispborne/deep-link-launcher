@@ -1,7 +1,7 @@
 package com.thunderclouddev.deeplink.dagger
 
-import com.thunderclouddev.deeplink.barcode.QrScannerController
-import com.thunderclouddev.deeplink.barcode.ViewQrCodeController
+import com.thunderclouddev.deeplink.ui.scanner.QrScannerController
+import com.thunderclouddev.deeplink.ui.qrcode.ViewQrCodeController
 import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
 import com.thunderclouddev.deeplink.ui.home.HomeController
 import dagger.Component

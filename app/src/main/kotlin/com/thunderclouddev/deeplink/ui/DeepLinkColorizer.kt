@@ -6,10 +6,10 @@ import android.support.v4.content.res.ResourcesCompat
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.allIndicesOf
-import com.thunderclouddev.deeplink.isNotNullOrBlank
+import com.thunderclouddev.deeplink.utils.allIndicesOf
+import com.thunderclouddev.deeplink.utils.isNotNullOrBlank
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
-import com.thunderclouddev.deeplink.ui.utils.ColorUtils
+import com.thunderclouddev.deeplink.utils.ColorUtils
 
 /**
  * Colorizes a deep link, returning it as a [SpannableString].

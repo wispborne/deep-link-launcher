@@ -5,7 +5,7 @@ import android.support.v7.util.SortedList
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.thunderclouddev.deeplink.utils.SafeSortedList
+import com.thunderclouddev.deeplink.ui.SafeSortedList
 import java.util.*
 
 /**

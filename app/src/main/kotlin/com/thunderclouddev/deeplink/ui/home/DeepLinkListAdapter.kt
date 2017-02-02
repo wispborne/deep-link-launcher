@@ -13,11 +13,11 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.DeeplinkItemBinding
-import com.thunderclouddev.deeplink.getOrNullIfBlank
-import com.thunderclouddev.deeplink.showing
+import com.thunderclouddev.deeplink.utils.getOrNullIfBlank
+import com.thunderclouddev.deeplink.utils.showing
 import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
-import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
+import com.thunderclouddev.deeplink.ui.home.DeepLinkViewModel
 import org.jetbrains.anko.AnkoContext
 import java.util.*
 

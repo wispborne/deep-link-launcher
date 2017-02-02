@@ -4,9 +4,9 @@ import com.crashlytics.android.Crashlytics
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.database.FirebaseDatabase
-import com.thunderclouddev.deeplink.database.FirebaseDeepLinkDatabase
-import com.thunderclouddev.deeplink.features.LinkQueueHandler
-import com.thunderclouddev.deeplink.features.ProfileFeature
+import com.thunderclouddev.deeplink.data.FirebaseDeepLinkDatabase
+import com.thunderclouddev.deeplink.data.LinkQueueHandler
+import com.thunderclouddev.deeplink.data.ProfileFeature
 import com.thunderclouddev.deeplink.logging.timber.CrashlyticsTree
 import com.thunderclouddev.deeplink.logging.timber.Timber
 import io.fabric.sdk.android.Fabric

@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.thunderclouddev.deeplink.AboutController.ViewModel"/>
+            type="com.thunderclouddev.deeplink.ui.about.AboutController.ViewModel"/>
     </data>
 
     <LinearLayout

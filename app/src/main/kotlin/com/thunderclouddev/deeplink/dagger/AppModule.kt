@@ -1,13 +1,12 @@
 package com.thunderclouddev.deeplink.dagger
 
 import android.app.Application
-import com.thunderclouddev.deeplink.database.DeepLinkDatabase
-import com.thunderclouddev.deeplink.database.requery.RequeryDatabase
-import com.thunderclouddev.deeplink.features.DeepLinkHistory
-import com.thunderclouddev.deeplink.features.DeepLinkLauncher
-import com.thunderclouddev.deeplink.interfaces.GsonSerializer
-import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
-import com.thunderclouddev.deeplink.interfaces.JsonSerializer
+import com.thunderclouddev.deeplink.data.DeepLinkDatabase
+import com.thunderclouddev.deeplink.data.requery.RequeryDatabase
+import com.thunderclouddev.deeplink.data.DeepLinkHistory
+import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
+import com.thunderclouddev.deeplink.ui.GsonSerializer
+import com.thunderclouddev.deeplink.ui.JsonSerializer
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,7 +19,7 @@ class AppModule(private val context: Application) {
 
     @Provides
     @Singleton
-    fun provideDeepLinkHistory(database: DeepLinkDatabase): IDeepLinkHistory = DeepLinkHistory(database)
+    fun provideDeepLinkHistory(database: DeepLinkDatabase): DeepLinkHistory = DeepLinkHistory(database)
 
     @Provides
     @Singleton
@@ -28,7 +27,7 @@ class AppModule(private val context: Application) {
 
     @Provides
     @Singleton
-    fun provideDeepLinkLauncher(deepLinkHistory: IDeepLinkHistory) = DeepLinkLauncher(deepLinkHistory)
+    fun provideDeepLinkLauncher(deepLinkHistory: DeepLinkHistory): DeepLinkLauncher = DeepLinkLauncher(deepLinkHistory)
 
     @Provides
     @Singleton
