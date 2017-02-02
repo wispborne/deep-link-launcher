@@ -113,7 +113,7 @@ android {
 }
 
 dependencies {
-    def supportLibVersion = "25.1.0"
+    def supportLibVersion = "25.1.1"
     def requeryVersion = "1.1.2"
     provided 'org.jetbrains:annotations:13.0'
 
@@ -135,8 +135,6 @@ dependencies {
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1'
 
     compile 'com.bluelinelabs:conductor:2.0.4'
-
-    compile 'com.github.garretyoder:Colorful:1.1'
 
     // Requery Database
     compile "io.requery:requery:$requeryVersion"

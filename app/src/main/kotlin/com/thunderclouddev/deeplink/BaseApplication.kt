@@ -20,14 +20,6 @@ open class BaseApplication : Application() {
                 .build()
 
 //        databaseComponent = createDatabaseComponent()
-
-
-//        Colorful.defaults()
-//                .primaryColor(Colorful.ThemeColor.valueOf())
-//                .accentColor(Colorful.ThemeColor.BLUE)
-//                .translucent(false)
-//                .dark(true);
-//        Colorful.init(this);
     }
 
 //    protected open fun createDatabaseComponent() = DaggerDatabaseComponent.builder()
