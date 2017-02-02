@@ -25,6 +25,9 @@ import com.thunderclouddev.deeplink.barcode.QrScannerController
 import com.thunderclouddev.deeplink.barcode.ViewQrCodeController
 import com.thunderclouddev.deeplink.database.DeepLinkDatabase
 import com.thunderclouddev.deeplink.databinding.HomeViewBinding
+import com.thunderclouddev.deeplink.features.DeepLinkLauncher
+import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
+import com.thunderclouddev.deeplink.interfaces.JsonSerializer
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.ui.BaseController
@@ -34,9 +37,14 @@ import com.thunderclouddev.deeplink.ui.utils.tint
 import com.thunderclouddev.deeplink.utils.TextChangedListener
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.viewModels.DeepLinkViewModel
+import javax.inject.Inject
 
 
 class HomeController : BaseController() {
+    @Inject lateinit var deepLinkHistory: IDeepLinkHistory
+    @Inject lateinit var deepLinkLauncher: DeepLinkLauncher
+    @Inject lateinit var jsonSerializer: JsonSerializer
+
     private var adapter: DeepLinkListAdapter? = null
     // TODO Don't store this in the activity, rotation will killlll it
     private var deepLinkViewModels: List<DeepLinkViewModel> = emptyList()
@@ -53,6 +61,7 @@ class HomeController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
+        BaseApplication.component.inject(this)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.home_view, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
@@ -64,7 +73,7 @@ class HomeController : BaseController() {
         binding.deepLinkBtnGo.setOnClickListener { launchDeepLink() }
         binding.deepLinkPaste.setOnClickListener { pasteFromClipboard() }
         binding.homeFab.setOnClickListener {
-            EditLinkDialog.newInstance().show(activity!!.fragmentManager, "EditDialogTag")
+            EditLinkDialog.Creator().newInstance().show(activity!!.fragmentManager, "EditDialogTag")
         }
 
         return binding.root
@@ -113,7 +122,7 @@ class HomeController : BaseController() {
         if (deepLinkUri.isUri()) {
             val uri = Uri.parse(deepLinkUri)
 
-            if (!Utilities.resolveAndFire(uri, activity!!)) {
+            if (!deepLinkLauncher.resolveAndFire(uri, activity!!)) {
                 Utilities.raiseError("${activity!!.getString(R.string.error_no_activity_resolved)}: $uri", activity!!)
             }
         } else {
@@ -266,11 +275,11 @@ class HomeController : BaseController() {
 
     private fun attachDatabaseListener() {
         binding.progressWheel.visibility = View.VISIBLE
-        databaseListenerId = BaseApplication.deepLinkHistory.addListener(databaseListener)
+        databaseListenerId = deepLinkHistory.addListener(databaseListener)
     }
 
     private fun removeDatabaseListener() {
-        BaseApplication.deepLinkHistory.removeListener(databaseListenerId)
+        deepLinkHistory.removeListener(databaseListenerId)
     }
 
     private val databaseListener: DeepLinkDatabase.Listener
@@ -299,14 +308,14 @@ class HomeController : BaseController() {
                 val deepLinkInfo = deepLinkViewModel.deepLinkInfo
 
                 when (menuItem.itemId) {
-                    R.id.menu_list_item_edit -> EditLinkDialog.newInstance(deepLinkInfo)
+                    R.id.menu_list_item_edit -> EditLinkDialog.Creator().newInstance(deepLinkInfo)
                             .show(activity!!.fragmentManager, "EditDialogTag")
 
                     R.id.menu_list_item_qr -> router.pushController(
-                            RouterTransaction.with(ViewQrCodeController.createController(deepLinkInfo)))
+                            RouterTransaction.with(ViewQrCodeController(jsonSerializer, deepLinkInfo)))
 
                     R.id.menu_list_item_delete -> {
-                        BaseApplication.deepLinkHistory.removeLink(deepLinkInfo.id)
+                        deepLinkHistory.removeLink(deepLinkInfo.id)
                         adapter!!.edit().remove(deepLinkViewModel).commit()
                     }
 
@@ -338,7 +347,7 @@ class HomeController : BaseController() {
     private fun createListItemListener(): BaseRecyclerViewAdapter.OnClickListener<DeepLinkViewModel> {
         return object : BaseRecyclerViewAdapter.OnClickListener<DeepLinkViewModel> {
             override fun onItemClick(item: DeepLinkViewModel) {
-                Utilities.resolveAndFire(item.deepLinkInfo.deepLink, activity!!)
+                deepLinkLauncher.resolveAndFire(item.deepLinkInfo.deepLink, activity!!)
             }
         }
     }

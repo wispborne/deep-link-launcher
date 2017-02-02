@@ -11,21 +11,25 @@ import com.thunderclouddev.deeplink.BaseApplication
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.QrCodeViewBinding
 import com.thunderclouddev.deeplink.empty
+import com.thunderclouddev.deeplink.interfaces.JsonSerializer
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
+import javax.inject.Inject
 
 /**
  * Created by David Whitman on 11 Jan, 2017.
  */
 class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
+    @Inject lateinit var jsonSerializer: JsonSerializer
+
     companion object {
         private val BUNDLE_DEEP_LINK = "BUNDLE_DEEP_LINK"
+    }
 
-        fun createController(deepLinkInfo: DeepLinkInfo) =
-                ViewQrCodeController(Bundle().apply { putString(BUNDLE_DEEP_LINK, BaseApplication.Json.toJson(deepLinkInfo)) })
-
+    constructor(jsonSerializer: JsonSerializer, deepLinkInfo: DeepLinkInfo)
+            : this(Bundle().apply { putString(BUNDLE_DEEP_LINK, jsonSerializer.toJson(deepLinkInfo)) }) {
     }
 
     private var stringToEncode: DeepLinkInfo? = null
@@ -33,11 +37,12 @@ class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
+        BaseApplication.component.inject(this)
         colorizer = DeepLinkColorizer(activity!!)
 
         val binding = DataBindingUtil.inflate<QrCodeViewBinding>(inflater, R.layout.qr_code_view, container, false)
 
-        stringToEncode = BaseApplication.Json.fromJson(args?.getString(BUNDLE_DEEP_LINK) ?: String.empty, DeepLinkInfo::class.java)
+        stringToEncode = jsonSerializer.fromJson(args?.getString(BUNDLE_DEEP_LINK) ?: String.empty, DeepLinkInfo::class.java)
 
         stringToEncode?.let {
             binding.encodedString = colorizer.colorize(it.deepLink.toString())

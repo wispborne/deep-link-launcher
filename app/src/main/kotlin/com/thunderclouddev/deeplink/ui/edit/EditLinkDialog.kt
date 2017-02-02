@@ -13,11 +13,14 @@ import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
 import com.thunderclouddev.deeplink.databinding.EditViewBinding
+import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
+import com.thunderclouddev.deeplink.interfaces.JsonSerializer
 import com.thunderclouddev.deeplink.models.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.models.DeepLinkInfo
 import com.thunderclouddev.deeplink.utils.Utilities
 import org.jetbrains.anko.enabled
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Displays a dialog that lets the user either edit an existing deep link or create a new one.
@@ -26,6 +29,9 @@ import java.util.*
  * @author David Whitman on 29 Jan, 2017.
  */
 class EditLinkDialog : DialogFragment() {
+    @Inject lateinit var jsonSerializer: JsonSerializer
+    @Inject lateinit var deepLinkHistory: IDeepLinkHistory
+
     private lateinit var binding: EditViewBinding
     private lateinit var dialogType: DialogType
 
@@ -33,16 +39,26 @@ class EditLinkDialog : DialogFragment() {
 
     companion object {
         private val BUNDLE_DEEP_LINK = "BUNDLE_DEEP_LINK"
+    }
+
+    class Creator {
+        @Inject lateinit var jsonSerializer: JsonSerializer
 
         fun newInstance(deepLinkToEdit: DeepLinkInfo? = null): EditLinkDialog {
-            val args = Bundle().apply { if (deepLinkToEdit != null) putString(BUNDLE_DEEP_LINK, BaseApplication.Json.toJson(deepLinkToEdit)) }
+            // TODO using dagger here is balls
+            BaseApplication.component.inject(this)
+            val args = Bundle().apply { if (deepLinkToEdit != null) putString(BUNDLE_DEEP_LINK, jsonSerializer.toJson(deepLinkToEdit)) }
             return EditLinkDialog().apply { arguments = args }
         }
     }
 
+    init {
+        BaseApplication.component.inject(this)
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DataBindingUtil.inflate<EditViewBinding>(activity!!.layoutInflater, R.layout.edit_view, null, false)
-        val deepLinkInfo: DeepLinkInfo? = BaseApplication.Json.fromJson(arguments.getString(BUNDLE_DEEP_LINK), DeepLinkInfo::class.java)
+        val deepLinkInfo: DeepLinkInfo? = jsonSerializer.fromJson(arguments.getString(BUNDLE_DEEP_LINK), DeepLinkInfo::class.java)
         val createDeepLinkRequest = deepLinkInfo?.let(::CreateDeepLinkRequest)
                 ?: CreateDeepLinkRequest(Uri.EMPTY, String.empty, Date().time, emptyList())
         dialogType = if (arguments.containsKey(BUNDLE_DEEP_LINK)) DialogType.EDIT else DialogType.ADD
@@ -103,10 +119,10 @@ class EditLinkDialog : DialogFragment() {
 
                     if (deepLinkUri != null) {
                         if (existingId != null) {
-                            BaseApplication.deepLinkHistory.removeLink(existingId)
+                            deepLinkHistory.removeLink(existingId)
                         }
 
-                        BaseApplication.deepLinkHistory.addLink(CreateDeepLinkRequest(
+                        deepLinkHistory.addLink(CreateDeepLinkRequest(
                                 deepLink = deepLinkUri, label = viewModel.label.get(),
                                 updatedTime = Date().time,
                                 deepLinkHandlers = findHandlersForUri(deepLinkUri)))
@@ -119,7 +135,7 @@ class EditLinkDialog : DialogFragment() {
                 val deepLinkUri = Uri.parse(viewModel.getFullDeepLink())
 
                 if (deepLinkUri != null) {
-                    BaseApplication.deepLinkHistory.addLink(CreateDeepLinkRequest(
+                    deepLinkHistory.addLink(CreateDeepLinkRequest(
                             deepLink = deepLinkUri, label = viewModel.label.get(),
                             updatedTime = Date().time, deepLinkHandlers = findHandlersForUri(deepLinkUri)))
                 }

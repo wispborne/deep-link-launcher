@@ -17,14 +17,20 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.tbruyelle.rxpermissions.RxPermissions
 import com.thunderclouddev.deeplink.*
 import com.thunderclouddev.deeplink.databinding.ScannerViewBinding
+import com.thunderclouddev.deeplink.features.DeepLinkLauncher
+import com.thunderclouddev.deeplink.interfaces.IDeepLinkHistory
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.utils.Utilities
+import javax.inject.Inject
 
 
 /**
  * Created by David Whitman on 07 Jan, 2017.
  */
 class QrScannerController : BaseController() {
+    @Inject lateinit var deepLinkHistory: IDeepLinkHistory
+    lateinit var deepLinkLauncher: DeepLinkLauncher
+
     private val scanCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             Toast.makeText(activity, result?.text, Toast.LENGTH_SHORT).show()
@@ -35,14 +41,11 @@ class QrScannerController : BaseController() {
 
                     if (Utilities.createDeepLinkIntent(uri).hasAnyHandlingActivity(activity!!.packageManager)) {
                         val deepLinkInfo = Utilities.createDeepLinkRequest(uri, activity!!.packageManager)
-
-                        if (deepLinkInfo != null) {
-                            model.lastScannedUri = deepLinkInfo.deepLink.toString()
-                            BaseApplication.deepLinkHistory.addLink(deepLinkInfo)
-                        }
+                        model.lastScannedUri = deepLinkInfo.deepLink.toString()
+                        deepLinkHistory.addLink(deepLinkInfo)
                     }
                 } else {
-                    Utilities.resolveAndFire(Uri.parse(result.text), activity!!)
+                    deepLinkLauncher.resolveAndFire(Uri.parse(result.text), activity!!)
                     router.handleBack()
                 }
             }
@@ -58,6 +61,7 @@ class QrScannerController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
+        BaseApplication.component.inject(this)
 
         val binding = DataBindingUtil.inflate<ScannerViewBinding>(inflater, R.layout.scanner_view, container, false)
 

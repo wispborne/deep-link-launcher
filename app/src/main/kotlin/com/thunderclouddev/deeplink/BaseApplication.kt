@@ -1,39 +1,36 @@
 package com.thunderclouddev.deeplink
 
 import android.app.Application
-import android.net.Uri
-import com.google.gson.GsonBuilder
-import com.thunderclouddev.deeplink.database.requery.RequeryDatabase
-import com.thunderclouddev.deeplink.features.DeepLinkHistory
-import com.thunderclouddev.deeplink.utils.UriGsonAdapter
+import com.thunderclouddev.deeplink.dagger.AppComponent
+import com.thunderclouddev.deeplink.dagger.AppModule
+import com.thunderclouddev.deeplink.dagger.DaggerAppComponent
 
 
 open class BaseApplication : Application() {
     companion object {
-        // Should probably implement dagger at some point.
-        lateinit var deepLinkHistory: DeepLinkHistory
-    }
-
-    object Json {
-        private val jsonSerializer = GsonBuilder()
-                .registerTypeAdapter(Uri::class.java, UriGsonAdapter()).create()
-
-        fun toJson(obj: Any?): String = jsonSerializer.toJson(obj)
-        fun <T> fromJson(jsonString: String?, clazz: Class<T>): T? {
-            try {
-                return jsonSerializer.fromJson(jsonString, clazz)
-            } catch (exception: Exception) {
-                return null
-            }
-        }
+        lateinit var component: AppComponent
+//        private lateinit var databaseComponent: DatabaseComponent
     }
 
     override fun onCreate() {
         super.onCreate()
 
-        deepLinkHistory = DeepLinkHistory(createDatabase())
+        component = DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
+
+//        databaseComponent = createDatabaseComponent()
+
+
+//        Colorful.defaults()
+//                .primaryColor(Colorful.ThemeColor.valueOf())
+//                .accentColor(Colorful.ThemeColor.BLUE)
+//                .translucent(false)
+//                .dark(true);
+//        Colorful.init(this);
     }
 
-    protected open fun createDatabase() = RequeryDatabase(this)
-//    protected open fun createDatabase() = SharedPrefsDeepLinkDatabase(this)
+//    protected open fun createDatabaseComponent() = DaggerDatabaseComponent.builder()
+//            .debugDatabaseModule(DebugDatabaseModule(this))
+//            .build()
 }
