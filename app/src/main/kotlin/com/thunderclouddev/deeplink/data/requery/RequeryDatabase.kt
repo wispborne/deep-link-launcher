@@ -3,11 +3,10 @@ package com.thunderclouddev.deeplink.data.requery
 import android.content.Context
 import android.net.Uri
 import com.thunderclouddev.deeplink.BuildConfig
-import com.thunderclouddev.deeplink.data.DeepLinkDatabase
-import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
+import com.thunderclouddev.deeplink.data.DeepLinkDatabase
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
-import com.thunderclouddev.deeplink.data.requery.RequeryDeepLinkInfoEntity
+import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import io.requery.Persistable
 import io.requery.android.sqlite.DatabaseSource
 import io.requery.kotlin.invoke

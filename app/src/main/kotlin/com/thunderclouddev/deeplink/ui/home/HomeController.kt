@@ -61,7 +61,7 @@ class HomeController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
-        BaseApplication.component.inject(this)
+        BaseApp.component.inject(this)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.home_view, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
@@ -314,7 +314,7 @@ class HomeController : BaseController() {
                             .show(activity!!.fragmentManager, "EditDialogTag")
 
                     R.id.menu_list_item_qr -> router.pushController(
-                            RouterTransaction.with(ViewQrCodeController(jsonSerializer, deepLinkInfo)))
+                            RouterTransaction.with(ViewQrCodeController(deepLinkInfo)))
 
                     R.id.menu_list_item_delete -> {
                         deepLinkHistory.removeLink(deepLinkInfo.id)

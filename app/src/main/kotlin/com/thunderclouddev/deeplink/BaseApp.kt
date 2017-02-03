@@ -6,7 +6,7 @@ import com.thunderclouddev.deeplink.dagger.AppModule
 import com.thunderclouddev.deeplink.dagger.DaggerAppComponent
 
 
-open class BaseApplication : Application() {
+open class BaseApp : Application() {
     companion object {
         lateinit var component: AppComponent
 //        private lateinit var databaseComponent: DatabaseComponent

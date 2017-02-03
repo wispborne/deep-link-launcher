@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:binding="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="encodedString"
-            type="android.text.SpannableString"/>
+            name="viewModel"
+            type="com.thunderclouddev.deeplink.ui.qrcode.ViewQrCodeViewModel"/>
 
-        <variable
-            name="deepLink"
-            type="com.thunderclouddev.deeplink.data.DeepLinkInfo"/>
     </data>
 
     <LinearLayout
@@ -20,17 +19,17 @@
         android:padding="@dimen/spacingMedium">
 
         <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="@dimen/spacingMedium"-->
-            <!--android:gravity="center_horizontal"-->
-            <!--android:text="@{deepLink.deepLinkHandlers.get(0).packageName}"/>-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="@dimen/spacingMedium"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="@{deepLink.deepLinkHandlers.get(0).packageName}"/>-->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@{encodedString}"/>
+            binding:coloredUri="@{viewModel.deepLinkString}"/>
 
         <ImageView
             android:id="@+id/qrCode_qrCode"
@@ -38,6 +37,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/contentDesc_qrCode"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_sadface"/>
+            binding:src="@{viewModel.qrCodeBitmap}"
+            tools:src="@drawable/ic_sadface"/>
     </LinearLayout>
 </layout>

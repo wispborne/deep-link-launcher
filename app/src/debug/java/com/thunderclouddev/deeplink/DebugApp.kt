@@ -8,7 +8,7 @@ import com.thunderclouddev.deeplink.logging.timber.Timber
 /**
  * Created by David Whitman on 21 Nov, 2016.
  */
-class DebugApplication : BaseApplication() {
+class DebugApp : BaseApp() {
     override fun onCreate() {
         super.onCreate()
 

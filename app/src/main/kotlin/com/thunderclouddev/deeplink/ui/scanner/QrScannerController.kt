@@ -64,7 +64,7 @@ class QrScannerController : BaseController() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
-        BaseApplication.component.inject(this)
+        BaseApp.component.inject(this)
 
         val binding = DataBindingUtil.inflate<ScannerViewBinding>(inflater, R.layout.scanner_view, container, false)
 

@@ -46,14 +46,14 @@ class EditLinkDialog : DialogFragment() {
 
         fun newInstance(deepLinkToEdit: DeepLinkInfo? = null): EditLinkDialog {
             // TODO using dagger here is balls
-            BaseApplication.component.inject(this)
+            BaseApp.component.inject(this)
             val args = Bundle().apply { if (deepLinkToEdit != null) putString(BUNDLE_DEEP_LINK, jsonSerializer.toJson(deepLinkToEdit)) }
             return EditLinkDialog().apply { arguments = args }
         }
     }
 
     init {
-        BaseApplication.component.inject(this)
+        BaseApp.component.inject(this)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
