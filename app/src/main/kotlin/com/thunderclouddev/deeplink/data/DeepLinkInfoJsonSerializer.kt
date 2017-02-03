@@ -1,10 +1,8 @@
 package com.thunderclouddev.deeplink.data
 
-import android.net.Uri
 import android.util.Log
-import com.thunderclouddev.deeplink.utils.empty
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
-import com.thunderclouddev.deeplink.data.DeepLinkInfo
+import com.thunderclouddev.deeplink.utils.empty
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -58,7 +56,7 @@ class DeepLinkInfoJsonSerializer() {
                 handlers.add(packageName)
             }
 
-            return DeepLinkInfo(id, Uri.parse(deepLink), activityLabel, updatedTime, handlers)
+            return DeepLinkInfo(id, deepLink, activityLabel, updatedTime, handlers)
         } catch (exception: Exception) {
             TimberKt.e(exception, { "Failed to parse deep link entirely with json: $deepLinkJson" })
             return null

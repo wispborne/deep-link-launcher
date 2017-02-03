@@ -17,10 +17,10 @@ class ViewQrCodeViewModel(private val deepLinkInfo: DeepLinkInfo?) : ViewModel {
 
     override fun onCreate() {
         deepLinkInfo?.let {
-            deepLinkString.set(it.deepLink.toString())
+            deepLinkString.set(it.deepLink)
 
             try {
-                val qrCodeBitmap = QrCodeEncoder().encodeAsBitmap(it.deepLink.toString())
+                val qrCodeBitmap = QrCodeEncoder().encodeAsBitmap(it.deepLink)
 
                 if (qrCodeBitmap != null) {
                     this.qrCodeBitmap.set(qrCodeBitmap)

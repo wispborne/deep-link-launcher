@@ -45,7 +45,7 @@ class SharedPrefsDeepLinkDatabase(context: Context) : DeepLinkDatabase {
         fileSystem.clearAll()
     }
 
-    override fun containsLink(deepLink: Uri) = fileSystem.all()
+    override fun containsLink(deepLink: String) = fileSystem.all()
             .filterValues {
                 deepLink == deepLinkInfoSerializer.fromJson(it)?.deepLink
             }

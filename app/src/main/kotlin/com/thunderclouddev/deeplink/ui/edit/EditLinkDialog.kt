@@ -10,7 +10,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
-import com.thunderclouddev.deeplink.*
+import com.thunderclouddev.deeplink.BR
+import com.thunderclouddev.deeplink.BaseApp
+import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.data.DeepLinkHistory
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
@@ -150,7 +152,7 @@ class EditLinkDialog : DialogFragment() {
             .map { it.activityInfo.packageName ?: String.empty }
 
     class ViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable() {
-        private val uri = deepLinkInfo.deepLink
+        private val uri = deepLinkInfo.deepLink.asUri()
 
         private val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {

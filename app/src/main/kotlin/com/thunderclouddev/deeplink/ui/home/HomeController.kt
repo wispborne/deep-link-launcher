@@ -22,20 +22,21 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import com.bluelinelabs.conductor.RouterTransaction
-import com.thunderclouddev.deeplink.*
-import com.thunderclouddev.deeplink.ui.scanner.QrScannerController
-import com.thunderclouddev.deeplink.ui.qrcode.ViewQrCodeController
+import com.thunderclouddev.deeplink.BaseApp
+import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.data.DeepLinkDatabase
 import com.thunderclouddev.deeplink.data.DeepLinkHistory
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import com.thunderclouddev.deeplink.databinding.HomeViewBinding
-import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.ui.BaseRecyclerViewAdapter
+import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
 import com.thunderclouddev.deeplink.ui.JsonSerializer
 import com.thunderclouddev.deeplink.ui.about.AboutController
 import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
+import com.thunderclouddev.deeplink.ui.qrcode.ViewQrCodeController
+import com.thunderclouddev.deeplink.ui.scanner.QrScannerController
 import com.thunderclouddev.deeplink.utils.*
 import javax.inject.Inject
 
@@ -122,7 +123,7 @@ class HomeController : BaseController() {
         if (deepLinkUri.isUri()) {
             val uri = Uri.parse(deepLinkUri)
 
-            if (!deepLinkLauncher.resolveAndFire(uri, activity!!)) {
+            if (!deepLinkLauncher.resolveAndFire(uri.toString(), activity!!)) {
                 Utilities.raiseError("${activity!!.getString(R.string.error_no_activity_resolved)}: $uri", activity!!)
             }
         } else {
@@ -249,7 +250,7 @@ class HomeController : BaseController() {
         adapter!!.stringToHighlight = newDeepLinkString
         adapter!!.edit()
                 .replaceAll(deepLinkViewModels
-                        .filter { it.deepLinkInfo.deepLink.toString().contains(newDeepLinkString, ignoreCase = true) })
+                        .filter { it.deepLinkInfo.deepLink.contains(newDeepLinkString, ignoreCase = true) })
                 .commit()
         binding.deepLinkList.scrollToPosition(0)
     }
@@ -335,7 +336,7 @@ class HomeController : BaseController() {
 
                     R.id.menu_list_item_share -> {
                         startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-                            this.putExtra(Intent.EXTRA_TEXT, deepLinkInfo.deepLink.toString())
+                            this.putExtra(Intent.EXTRA_TEXT, deepLinkInfo.deepLink)
                             this.type = "text/plain"
                         }, activity!!.getString(R.string.list_item_share_chooserTitle)))
                     }

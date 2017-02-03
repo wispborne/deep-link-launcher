@@ -1,12 +1,10 @@
 package com.thunderclouddev.deeplink.data
 
-import android.net.Uri
-
 /**
  * Created by David Whitman on 23 Jan, 2017.
  */
 data class CreateDeepLinkRequest(
-        val deepLink: Uri,
+        val deepLink: String,
         val label: String?,
         val updatedTime: Long,
         val deepLinkHandlers: List<String>) {

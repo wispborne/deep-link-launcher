@@ -65,3 +65,5 @@ fun String?.isUri() = this != null
         && Uri.parse(this).scheme.isNotNullOrBlank()
         && !this.contains("\n")
         && !this.contains(" ")
+
+fun String?.asUri() = Uri.parse(this)

@@ -1,9 +1,7 @@
 package com.thunderclouddev.deeplink.data
 
-import android.net.Uri
-
 data class DeepLinkInfo(val id: Long,
-                        val deepLink: Uri,
+                        val deepLink: String,
                         val label: String?,
                         val updatedTime: Long,
                         val deepLinkHandlers: List<String>) : Comparable<DeepLinkInfo> {

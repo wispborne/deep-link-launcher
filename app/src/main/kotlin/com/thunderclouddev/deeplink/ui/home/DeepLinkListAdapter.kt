@@ -13,11 +13,10 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.DeeplinkItemBinding
-import com.thunderclouddev.deeplink.utils.getOrNullIfBlank
-import com.thunderclouddev.deeplink.utils.showing
 import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
-import com.thunderclouddev.deeplink.ui.home.DeepLinkViewModel
+import com.thunderclouddev.deeplink.utils.getOrNullIfBlank
+import com.thunderclouddev.deeplink.utils.showing
 import org.jetbrains.anko.AnkoContext
 import java.util.*
 
@@ -67,12 +66,12 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
         override fun performBind(item: DeepLinkViewModel) {
             val deepLinkInfo = item.deepLinkInfo
             val deepLink = deepLinkInfo.deepLink
-            val startPos = deepLink.toString().indexOf(stringToHighlight, ignoreCase = true)
+            val startPos = deepLink.indexOf(stringToHighlight, ignoreCase = true)
             val deepLinkString = if (startPos >= 0) {
-                val spannable = colorizer.colorize(deepLink.toString())
+                val spannable = colorizer.colorize(deepLink)
                 highlightFilteredStringPart(spannable, startPos, stringToHighlight.length)
             } else {
-                deepLink.toString()
+                deepLink
             }
 
             binding.deepLinkItemTitle.text = deepLinkInfo.label.getOrNullIfBlank() ?: deepLinkInfo.deepLinkHandlers[0]

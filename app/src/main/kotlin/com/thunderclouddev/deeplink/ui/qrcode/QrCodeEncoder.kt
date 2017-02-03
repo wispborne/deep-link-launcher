@@ -8,31 +8,33 @@ import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 
 /**
- * Created by David Whitman on 05 Jan, 2017.
+ * From [https://github.com/zxing/zxing/blob/master/android/src/com/google/zxing/client/android/encode/QRCodeEncoder.java]
  */
 class QrCodeEncoder {
     @Throws(WriterException::class)
-    fun encodeAsBitmap(str: String, width: Int = 500): Bitmap? {
+    fun encodeAsBitmap(str: String, desiredWidth: Int = 500): Bitmap? {
         val result: BitMatrix
         try {
             result = MultiFormatWriter().encode(str,
-                BarcodeFormat.QR_CODE, width, width, null)
+                    BarcodeFormat.QR_CODE, desiredWidth, desiredWidth, null)
         } catch (iae: IllegalArgumentException) {
             // Unsupported format
             return null
         }
 
-        val w = result.width
-        val h = result.height
-        val pixels = IntArray(w * h)
-        for (y in 0..h - 1) {
-            val offset = y * w
-            for (x in 0..w - 1) {
+        val width = result.width
+        val height = result.height
+        val pixels = IntArray(width * height)
+
+        for (y in 0..height - 1) {
+            val offset = y * width
+            for (x in 0..width - 1) {
                 pixels[offset + x] = if (result.get(x, y)) Color.BLACK else Color.WHITE
             }
         }
-        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        bitmap.setPixels(pixels, 0, width, 0, 0, w, h)
-        return bitmap
+
+        return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).apply {
+            setPixels(pixels, 0, desiredWidth, 0, 0, width, height)
+        }
     }
 }
