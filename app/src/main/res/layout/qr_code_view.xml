@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/contentDesc_qrCode"
             android:scaleType="fitCenter"
-            binding:src="@{viewModel.qrCodeBitmap}"
+            binding:qrCodeUri="@{viewModel.deepLinkString}"
             tools:src="@drawable/ic_sadface"/>
     </LinearLayout>
 </layout>

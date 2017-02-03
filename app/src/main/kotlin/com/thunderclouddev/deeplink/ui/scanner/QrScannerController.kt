@@ -15,11 +15,12 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.tbruyelle.rxpermissions.RxPermissions
-import com.thunderclouddev.deeplink.*
+import com.thunderclouddev.deeplink.BaseApp
+import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.data.DeepLinkHistory
 import com.thunderclouddev.deeplink.databinding.ScannerViewBinding
-import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
 import com.thunderclouddev.deeplink.ui.BaseController
+import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.utils.empty
 import com.thunderclouddev.deeplink.utils.hasAnyHandlingActivity
@@ -44,11 +45,11 @@ class QrScannerController : BaseController() {
 
                     if (Utilities.createDeepLinkIntent(uri).hasAnyHandlingActivity(activity!!.packageManager)) {
                         val deepLinkInfo = Utilities.createDeepLinkRequest(uri, activity!!.packageManager)
-                        model.lastScannedUri = deepLinkInfo.deepLink.toString()
+                        model.lastScannedUri = deepLinkInfo.deepLink
                         deepLinkHistory.addLink(deepLinkInfo)
                     }
                 } else {
-                    deepLinkLauncher.resolveAndFire(Uri.parse(result.text), activity!!)
+                    deepLinkLauncher.resolveAndFire(result.text, activity!!)
                     router.handleBack()
                 }
             }

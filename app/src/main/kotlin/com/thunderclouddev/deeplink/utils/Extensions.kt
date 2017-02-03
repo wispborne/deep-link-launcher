@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.view.View
+import java.net.URI
 
 
 fun Throwable.hasCause(type: Class<*>): Boolean {
@@ -61,9 +62,16 @@ var View.showing: Boolean
         this.visibility = value.visibleOrGone
     }
 
-fun String?.isUri() = this != null
-        && Uri.parse(this).scheme.isNotNullOrBlank()
-        && !this.contains("\n")
-        && !this.contains(" ")
+fun String?.isUri(): Boolean {
+    if (this != null) {
+        try {
+            URI.create(this)
+            return true
+        } catch (ignored: IllegalArgumentException) {
+        }
+    }
 
-fun String?.asUri() = Uri.parse(this)
+    return false
+}
+
+fun String?.asUri(): Uri? = Uri.parse(this)

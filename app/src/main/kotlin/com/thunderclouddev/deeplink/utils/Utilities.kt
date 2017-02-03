@@ -7,15 +7,17 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.support.v7.app.AlertDialog
 import com.thunderclouddev.deeplink.R
-import com.thunderclouddev.deeplink.utils.empty
-import com.thunderclouddev.deeplink.utils.handlingActivities
-import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
+import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
 
 object Utilities {
     fun addShortcut(deepLink: DeepLinkInfo, context: Context, shortcutName: String): Boolean {
-        val shortcutIntent = createDeepLinkIntent(deepLink.deepLink)
+        if (!deepLink.deepLink.isUri()) {
+            return false
+        }
+
+        val shortcutIntent = createDeepLinkIntent(Uri.parse(deepLink.deepLink))
         val intent = Intent()
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName)
@@ -41,7 +43,7 @@ object Utilities {
     }
 
     fun createDeepLinkRequest(deepLink: Uri, packageManager: PackageManager): CreateDeepLinkRequest {
-        return CreateDeepLinkRequest(deepLink, null, System.currentTimeMillis(),
+        return CreateDeepLinkRequest(String.empty, null, System.currentTimeMillis(),
                 createDeepLinkIntent(deepLink)
                         .handlingActivities(packageManager)
                         .map { it.activityInfo.packageName ?: String.empty })

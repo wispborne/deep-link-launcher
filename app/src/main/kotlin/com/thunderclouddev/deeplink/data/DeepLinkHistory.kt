@@ -13,7 +13,7 @@ class DeepLinkHistory(private val database: DeepLinkDatabase) {
         database.removeLink(deepLinkId)
     }
 
-    fun containsLink(deepLink: Uri): Boolean {
+    fun containsLink(deepLink: String): Boolean {
         return database.containsLink(deepLink)
     }
 

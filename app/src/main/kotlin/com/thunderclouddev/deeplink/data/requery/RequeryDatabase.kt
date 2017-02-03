@@ -1,7 +1,6 @@
 package com.thunderclouddev.deeplink.data.requery
 
 import android.content.Context
-import android.net.Uri
 import com.thunderclouddev.deeplink.BuildConfig
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.data.DeepLinkDatabase
@@ -25,7 +24,7 @@ class RequeryDatabase(context: Context) : DeepLinkDatabase {
 
     private val data: KotlinEntityDataStore<Persistable> by lazy {
         // override onUpgrade to handle migrating to a new version
-        val source = DatabaseSource(context, Models.DEFAULT, 1)
+        val source = DatabaseSource(context, Models.DEFAULT, 2)
 
         if (BuildConfig.DEBUG) {
             // use this in development mode to drop and recreate the tables on every upgrade
@@ -84,7 +83,7 @@ class RequeryDatabase(context: Context) : DeepLinkDatabase {
         return id
     }
 
-    override fun containsLink(deepLink: Uri): Boolean {
+    override fun containsLink(deepLink: String): Boolean {
         return data.select(RequeryDeepLinkInfoEntity::class)
                 .where(RequeryDeepLinkInfoEntity.DEEP_LINK.eq(deepLink))
                 .limit(1)

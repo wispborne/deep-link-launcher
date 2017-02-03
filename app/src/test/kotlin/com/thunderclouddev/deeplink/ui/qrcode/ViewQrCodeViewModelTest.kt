@@ -1,6 +1,5 @@
 package com.thunderclouddev.deeplink.ui.qrcode
 
-import android.net.Uri
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import org.junit.Assert
 import org.junit.Before
@@ -11,21 +10,20 @@ import org.junit.Test
  */
 
 class ViewQrCodeViewModelTest {
-    lateinit var deepLink: DeepLinkInfo
+    lateinit var deepLinkInfo: DeepLinkInfo
 
     @Before
     fun setUp() {
-        deepLink = DeepLinkInfo(0, Uri.parse("http://test"), "labelstr", 10000L, listOf())
+        deepLinkInfo = DeepLinkInfo(0, "http://test", "labelstr", 10000L, listOf())
     }
 
     @Test
-    fun test_onCreate_createsBitmap() {
-        val viewModel = ViewQrCodeViewModel(deepLink)
-        Assert.assertNull(viewModel.qrCodeBitmap.get())
+    fun test_onCreate_setsNewDeepLinkString() {
+        val viewModel = ViewQrCodeViewModel(deepLinkInfo)
+        Assert.assertNull(viewModel.deepLinkString.get())
 
         viewModel.onCreate()
 
-        Assert.assertNotNull(viewModel.qrCodeBitmap.get())
+        Assert.assertNotNull(viewModel.deepLinkString.get())
     }
-
 }

@@ -24,7 +24,7 @@ class DeepLinkLauncher(private val deepLinkHistory: DeepLinkHistory) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
 
-            if (!deepLinkHistory.containsLink(deepLinkUri)) {
+            if (!deepLinkHistory.containsLink(deepLinkUri.toString())) {
                 val deepLinkRequest = Utilities.createDeepLinkRequest(deepLinkUri, context.packageManager)
                 deepLinkHistory.addLink(deepLinkRequest)
             }

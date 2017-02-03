@@ -62,7 +62,7 @@ class EditLinkDialog : DialogFragment() {
         binding = DataBindingUtil.inflate<EditViewBinding>(activity!!.layoutInflater, R.layout.edit_view, null, false)
         val deepLinkInfo: DeepLinkInfo? = jsonSerializer.fromJson(arguments.getString(BUNDLE_DEEP_LINK), DeepLinkInfo::class.java)
         val createDeepLinkRequest = deepLinkInfo?.let(::CreateDeepLinkRequest)
-                ?: CreateDeepLinkRequest(Uri.EMPTY, String.empty, Date().time, emptyList())
+                ?: CreateDeepLinkRequest(String.empty, String.empty, Date().time, emptyList())
         dialogType = if (arguments.containsKey(BUNDLE_DEEP_LINK)) DialogType.EDIT else DialogType.ADD
 
         val viewModel = ViewModel(createDeepLinkRequest)
@@ -125,7 +125,7 @@ class EditLinkDialog : DialogFragment() {
                         }
 
                         deepLinkHistory.addLink(CreateDeepLinkRequest(
-                                deepLink = deepLinkUri, label = viewModel.label.get(),
+                                deepLink = deepLinkUri.toString(), label = viewModel.label.get(),
                                 updatedTime = Date().time,
                                 deepLinkHandlers = findHandlersForUri(deepLinkUri)))
                     }
@@ -138,7 +138,7 @@ class EditLinkDialog : DialogFragment() {
 
                 if (deepLinkUri != null) {
                     deepLinkHistory.addLink(CreateDeepLinkRequest(
-                            deepLink = deepLinkUri, label = viewModel.label.get(),
+                            deepLink = deepLinkUri.toString(), label = viewModel.label.get(),
                             updatedTime = Date().time, deepLinkHandlers = findHandlersForUri(deepLinkUri)))
                 }
             })
@@ -152,7 +152,7 @@ class EditLinkDialog : DialogFragment() {
             .map { it.activityInfo.packageName ?: String.empty }
 
     class ViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable() {
-        private val uri = deepLinkInfo.deepLink.asUri()
+        private val uri = deepLinkInfo.deepLink.asUri()!!
 
         private val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
