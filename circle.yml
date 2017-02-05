@@ -6,7 +6,12 @@ dependencies:
 
 test:
   override:
+    # Build debug apk
     - ./gradlew assembleDebug
-    - ./gradlew testDebugUnitTest
-
+    # Copy apk file to CircleCI artifacts dir
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+
+    # Run unit tests
+    - ./gradlew testDebugUnitTest
+    # Copy the test results to the test results dir
+    - cp -r app/build/test-results/testDebugUnitTest/* $CIRCLE_TEST_REPORTS
