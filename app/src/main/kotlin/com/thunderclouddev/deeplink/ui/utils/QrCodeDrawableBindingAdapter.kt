@@ -7,7 +7,7 @@ import com.thunderclouddev.deeplink.ui.qrcode.QrCodeEncoder
 /**
  * @author David Whitman on 2/3/2017.
  */
-@BindingAdapter("binding:qrCodeUri")
+@BindingAdapter("qrCodeUri")
 fun setQrCode(imageView: ImageView, uri: String) {
     imageView.setImageBitmap(QrCodeEncoder().encodeAsBitmap(uri))
 }
