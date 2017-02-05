@@ -6,12 +6,16 @@ dependencies:
 
 test:
   override:
+    # Runner 1
     # Run unit tests
-    - ./gradlew testDebugUnitTest
     # Copy the test results to the test results dir
-    - cp -r app/build/test-results/testDebugUnitTest/* $CIRCLE_TEST_REPORTS
 
-    # Build debug apk. If a unit test has failed, we won't get to this step
-    - ./gradlew assembleDebug
+    # Runner 2
+    # Build debug apk.
     # Copy apk file to CircleCI artifacts dir
-    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+
+    - case $CIRCLE_NODE_INDEX in 0) ./gradlew testDebugUnitTest ;; 1) ./gradlew assembleDebug ;; esac:
+        parallel: true
+
+    - case $CIRCLE_NODE_INDEX in 0) cp -r app/build/test-results/testDebugUnitTest/* $CIRCLE_TEST_REPORTS ;; 1)cp -r app/build/outputs $CIRCLE_ARTIFACTS ;; esac:
+        parallel: true

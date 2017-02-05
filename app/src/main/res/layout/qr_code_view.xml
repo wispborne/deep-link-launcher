@@ -25,15 +25,16 @@
         <!--android:gravity="center_horizontal"-->
         <!--android:text="@{deepLink.deepLinkHandlers.get(0).packageName}"/>-->
 
+        <!--app:coloredUri="@{viewModel.deepLinkString}"-->
         <TextView
-            app:coloredUri="@{viewModel.deepLinkString}"
+            android:id="@+id/qrCode_uri"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"/>
 
+        <!--app:qrCodeUri="@{viewModel.deepLinkString}"-->
         <ImageView
             android:id="@+id/qrCode_qrCode"
-            app:qrCodeUri="@{viewModel.deepLinkString}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/contentDesc_qrCode"

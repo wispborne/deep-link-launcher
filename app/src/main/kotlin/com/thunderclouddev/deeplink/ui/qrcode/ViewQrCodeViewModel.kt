@@ -8,7 +8,7 @@ import com.thunderclouddev.deeplink.utils.isUri
 /**
  * @author David Whitman on 02 Feb, 2017.
  */
-class ViewQrCodeViewModel(private val deepLinkInfo: DeepLinkInfo?) : ViewModel() {
+class ViewQrCodeViewModel(private val deepLinkInfo: DeepLinkInfo?) : ViewModel {
     val deepLinkString = ObservableField<String>()
 
     override fun onCreate() {

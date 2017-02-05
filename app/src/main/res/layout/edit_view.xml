@@ -5,7 +5,7 @@
 
         <variable
             name="info"
-            type="com.thunderclouddev.deeplink.ui.edit.EditLinkDialog.ViewModel"/>
+            type="com.thunderclouddev.deeplink.ui.edit.EditLinkViewModel"/>
     </data>
 
     <RelativeLayout

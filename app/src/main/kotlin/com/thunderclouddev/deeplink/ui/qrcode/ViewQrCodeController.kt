@@ -11,6 +11,8 @@ import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import com.thunderclouddev.deeplink.databinding.QrCodeViewBinding
 import com.thunderclouddev.deeplink.ui.BaseController
+import com.thunderclouddev.deeplink.ui.utils.setColoredText
+import com.thunderclouddev.deeplink.ui.utils.setQrCode
 import com.thunderclouddev.deeplink.utils.empty
 
 
@@ -38,8 +40,11 @@ class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
         val binding = DataBindingUtil.inflate<QrCodeViewBinding>(inflater, R.layout.qr_code_view, container, false)
 
         binding.viewModel = viewModel
-
         viewModel.onCreate()
+
+        // Remove this when https://youtrack.jetbrains.com/issue/KT-16179 is fixed
+        setColoredText(binding.qrCodeUri, viewModel.deepLinkString.get())
+        setQrCode(binding.qrCodeQrCode, viewModel.deepLinkString.get())
         return binding.root
     }
 

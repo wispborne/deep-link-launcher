@@ -3,13 +3,13 @@ package com.thunderclouddev.deeplink.ui.edit
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.DialogFragment
-import android.databinding.*
+import android.databinding.DataBindingUtil
 import android.databinding.Observable
+import android.databinding.ObservableField
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
-import com.thunderclouddev.deeplink.BR
 import com.thunderclouddev.deeplink.BaseApp
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
@@ -19,7 +19,10 @@ import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
 import com.thunderclouddev.deeplink.databinding.EditViewBinding
 import com.thunderclouddev.deeplink.ui.JsonSerializer
 import com.thunderclouddev.deeplink.ui.Uri
-import com.thunderclouddev.deeplink.utils.*
+import com.thunderclouddev.deeplink.utils.Utilities
+import com.thunderclouddev.deeplink.utils.empty
+import com.thunderclouddev.deeplink.utils.handlingActivities
+import com.thunderclouddev.deeplink.utils.isUri
 import org.jetbrains.anko.enabled
 import java.util.*
 import javax.inject.Inject
@@ -65,7 +68,7 @@ class EditLinkDialog : DialogFragment() {
                 ?: CreateDeepLinkRequest(String.empty, String.empty, Date().time, emptyList())
         dialogType = if (arguments.containsKey(BUNDLE_DEEP_LINK)) DialogType.EDIT else DialogType.ADD
 
-        val viewModel = ViewModel(createDeepLinkRequest)
+        val viewModel = EditLinkViewModel(createDeepLinkRequest)
         binding.info = viewModel
 
         // Extra blank param pair so user may add new param
@@ -91,7 +94,7 @@ class EditLinkDialog : DialogFragment() {
         return dialog
     }
 
-    private fun createQueryParamRow(viewModel: ViewModel, param: ViewModel.QueryParamModel): Pair<LinearLayout, View> {
+    private fun createQueryParamRow(viewModel: EditLinkViewModel, param: EditLinkViewModel.QueryParamModel): Pair<LinearLayout, View> {
         val rowBinding = DataBindingUtil.inflate<EditQueryStringItemBinding>(
                 activity!!.layoutInflater, R.layout.edit_query_string_item, null, false)
         rowBinding.param = param
@@ -113,7 +116,7 @@ class EditLinkDialog : DialogFragment() {
         return Pair(editQueryLayout, view)
     }
 
-    private fun buildAlertDialog(viewModel: ViewModel, createDeepLinkRequest: CreateDeepLinkRequest, existingId: Long? = null): AlertDialog.Builder {
+    private fun buildAlertDialog(viewModel: EditLinkViewModel, createDeepLinkRequest: CreateDeepLinkRequest, existingId: Long? = null): AlertDialog.Builder {
         val builder = AlertDialog.Builder(activity)
                 .setView(binding.root)
                 .setPositiveButton(R.string.save, { dialog, which ->
@@ -150,75 +153,4 @@ class EditLinkDialog : DialogFragment() {
     private fun findHandlersForUri(deepLinkUri: Uri) = Utilities.createDeepLinkIntent(deepLinkUri)
             .handlingActivities(activity.packageManager)
             .map { it.activityInfo.packageName ?: String.empty }
-
-    class ViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable() {
-        private val uri = deepLinkInfo.deepLink.asUri()!!
-
-        private val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                notifyPropertyChanged(BR.fullDeepLink)
-            }
-        }
-
-        @Bindable var path = ObservableField((uri.path ?: String.empty).removePrefix("/"))
-        @Bindable var scheme = ObservableField(uri.scheme)
-        @Bindable var authority = ObservableField(uri.authority)
-        @Bindable var label = ObservableField(deepLinkInfo.label)
-        @Bindable var queryParams = mutableListOf<QueryParamModel>()
-        @Bindable var fragment = ObservableField(uri.fragment)
-
-        @Bindable fun getFullDeepLink(): String = Uri.decode(Uri.Builder()
-                .scheme(scheme.get())
-                .authority(authority.get())
-                .path(path.get())
-                .query(queryParams
-                        .map { it.toString() }
-                        .filter(String::isNotBlank)
-                        .joinToString(separator = "&"))
-                .fragment(fragment.get())
-                .toString())
-
-        init {
-            queryParams =
-                    (if (uri.query.isNotNullOrBlank())
-                        uri.queryParameterNames.map {
-                            QueryParamModel(
-                                    ObservableField(it),
-                                    ObservableField(uri.getQueryParameter(it)),
-                                    fullDeepLinkNotifierCallback)
-                        }
-                    else emptyList<QueryParamModel>()).toMutableList()
-
-            notifyPropertyChanged(BR.fullDeepLink)
-
-            scheme.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
-            authority.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
-            path.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
-            label.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
-            fragment.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
-        }
-
-        fun addQueryParam(key: ObservableField<String>, value: ObservableField<String>): QueryParamModel {
-            val queryParamModel = QueryParamModel(key, value, fullDeepLinkNotifierCallback)
-            queryParams.add(queryParamModel)
-            return queryParamModel
-        }
-
-        class QueryParamModel(@Bindable var key: ObservableField<String>,
-                              @Bindable var value: ObservableField<String>,
-                              listener: Observable.OnPropertyChangedCallback) : BaseObservable() {
-            init {
-                key.addOnPropertyChangedCallback(listener)
-                value.addOnPropertyChangedCallback(listener)
-            }
-
-            override fun toString(): String {
-                return if (key.get().isNullOrBlank()) {
-                    String.empty
-                } else {
-                    "${Uri.encode(key.get() ?: String.empty)}=${Uri.encode(value.get() ?: String.empty)}"
-                }
-            }
-        }
-    }
 }
