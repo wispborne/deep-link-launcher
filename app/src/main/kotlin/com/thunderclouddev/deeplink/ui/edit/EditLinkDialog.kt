@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.app.DialogFragment
 import android.databinding.*
 import android.databinding.Observable
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -19,6 +18,7 @@ import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import com.thunderclouddev.deeplink.databinding.EditQueryStringItemBinding
 import com.thunderclouddev.deeplink.databinding.EditViewBinding
 import com.thunderclouddev.deeplink.ui.JsonSerializer
+import com.thunderclouddev.deeplink.ui.Uri
 import com.thunderclouddev.deeplink.utils.*
 import org.jetbrains.anko.enabled
 import java.util.*

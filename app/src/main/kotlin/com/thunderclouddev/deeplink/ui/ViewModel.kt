@@ -5,10 +5,9 @@ package com.thunderclouddev.deeplink.ui
  *
  * Created by David Whitman on 02 Feb, 2017.
  */
-interface ViewModel {
-    fun onCreate()
-    fun onPause()
-    fun onResume()
-    fun onDestroy()
+abstract class ViewModel {
+    abstract fun onCreate()
+    fun onPause() {}
+    fun onResume() {}
+    fun onDestroy() {}
 }
-

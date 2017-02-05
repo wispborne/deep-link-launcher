@@ -2,7 +2,6 @@ package com.thunderclouddev.deeplink.ui
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import com.thunderclouddev.deeplink.data.DeepLinkHistory
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.utils.hasAnyHandlingActivity

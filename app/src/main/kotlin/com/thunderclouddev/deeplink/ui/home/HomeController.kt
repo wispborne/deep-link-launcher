@@ -10,7 +10,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
-import android.net.Uri
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -29,10 +28,7 @@ import com.thunderclouddev.deeplink.data.DeepLinkHistory
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import com.thunderclouddev.deeplink.databinding.HomeViewBinding
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
-import com.thunderclouddev.deeplink.ui.BaseController
-import com.thunderclouddev.deeplink.ui.BaseRecyclerViewAdapter
-import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
-import com.thunderclouddev.deeplink.ui.JsonSerializer
+import com.thunderclouddev.deeplink.ui.*
 import com.thunderclouddev.deeplink.ui.about.AboutController
 import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
 import com.thunderclouddev.deeplink.ui.qrcode.ViewQrCodeController
@@ -327,7 +323,7 @@ class HomeController : BaseController() {
                     R.id.menulist_item_copyToClipboard -> {
                         try {
                             val clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            clipboard.primaryClip = ClipData.newPlainText(deepLinkInfo.deepLink.toString(), deepLinkInfo.deepLink.toString())
+                            clipboard.primaryClip = ClipData.newPlainText(deepLinkInfo.deepLink, deepLinkInfo.deepLink)
                             Toast.makeText(activity!!, activity!!.getString(R.string.copiedToClipboard), Toast.LENGTH_SHORT).show()
                         } catch (ignored: Exception) {
                             TimberKt.e(ignored, { "Failed to copy text ${deepLinkInfo.deepLink} to clipboard." })

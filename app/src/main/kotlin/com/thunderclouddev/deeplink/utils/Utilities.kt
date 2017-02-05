@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.support.v7.app.AlertDialog
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.data.DeepLinkInfo
 import com.thunderclouddev.deeplink.logging.timberkt.TimberKt
+import com.thunderclouddev.deeplink.ui.Uri
 
 object Utilities {
     fun addShortcut(deepLink: DeepLinkInfo, context: Context, shortcutName: String): Boolean {
@@ -37,7 +37,7 @@ object Utilities {
 
     fun createDeepLinkIntent(deepLinkUri: Uri): Intent {
         val intent = Intent()
-        intent.data = deepLinkUri
+        intent.data = android.net.Uri.parse(deepLinkUri.toString())
         intent.action = Intent.ACTION_VIEW
         return intent
     }

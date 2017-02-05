@@ -16,7 +16,8 @@ import com.thunderclouddev.deeplink.utils.empty
 
 /**
  * Display a scannable QR code that represents the given [DeepLinkInfo]
- * Created by David Whitman on 11 Jan, 2017.
+ *
+ * @author David Whitman on 11 Jan, 2017.
  */
 class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
     private lateinit var viewModel: ViewQrCodeViewModel
@@ -26,12 +27,12 @@ class ViewQrCodeController(bundle: Bundle) : BaseController(bundle) {
     }
 
     constructor(deepLinkInfo: DeepLinkInfo)
-            : this(Bundle().apply { putString(BUNDLE_DEEP_LINK, BaseApp.component.jsonSerializer.toJson(deepLinkInfo)) })
+            : this(Bundle().apply { putString(BUNDLE_DEEP_LINK, BaseApp.component.json.toJson(deepLinkInfo)) })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
 
-        val deepLinkInfo = BaseApp.component.jsonSerializer.fromJson(args?.getString(ViewQrCodeController.BUNDLE_DEEP_LINK) ?: String.empty, DeepLinkInfo::class.java)
+        val deepLinkInfo = BaseApp.component.json.fromJson(args?.getString(BUNDLE_DEEP_LINK, String.empty), DeepLinkInfo::class.java)
         viewModel = ViewQrCodeViewModel(deepLinkInfo)
 
         val binding = DataBindingUtil.inflate<QrCodeViewBinding>(inflater, R.layout.qr_code_view, container, false)

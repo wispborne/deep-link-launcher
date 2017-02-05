@@ -5,7 +5,6 @@ import android.app.Activity
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.databinding.DataBindingUtil
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,7 @@ import com.thunderclouddev.deeplink.data.DeepLinkHistory
 import com.thunderclouddev.deeplink.databinding.ScannerViewBinding
 import com.thunderclouddev.deeplink.ui.BaseController
 import com.thunderclouddev.deeplink.ui.DeepLinkLauncher
+import com.thunderclouddev.deeplink.ui.Uri
 import com.thunderclouddev.deeplink.utils.Utilities
 import com.thunderclouddev.deeplink.utils.empty
 import com.thunderclouddev.deeplink.utils.hasAnyHandlingActivity
@@ -29,7 +29,9 @@ import javax.inject.Inject
 
 
 /**
- * Created by David Whitman on 07 Jan, 2017.
+ * Uses the camera to scan one or multiple QR codes.
+ *
+ * @author David Whitman on 07 Jan, 2017.
  */
 class QrScannerController : BaseController() {
     @Inject lateinit var deepLinkHistory: DeepLinkHistory

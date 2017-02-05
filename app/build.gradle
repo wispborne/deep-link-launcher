@@ -11,10 +11,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
-
-kapt {
-    generateStubs = true
-}
+apply plugin: 'kotlin-kapt'
 
 repositories {
     jcenter()

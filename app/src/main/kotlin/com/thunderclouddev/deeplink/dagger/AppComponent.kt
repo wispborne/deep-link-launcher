@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(AppModule::class))
 interface AppComponent {
-    var jsonSerializer: JsonSerializer
+    var json: JsonSerializer
 
     fun inject(homeController: HomeController)
     fun inject(homeController: QrScannerController)
