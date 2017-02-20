@@ -8,8 +8,8 @@ import android.databinding.Observable
 import android.databinding.ObservableField
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.LinearLayout
 import com.thunderclouddev.deeplink.BaseApp
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
@@ -31,6 +31,8 @@ import javax.inject.Inject
  * Displays a dialog that lets the user either edit an existing deep link or create a new one.
  * Input is validated before being updated in the database.
  *
+ * TODO: This is not very MVVM - need to move more logic to the view model
+ *
  * @author David Whitman on 29 Jan, 2017.
  */
 class EditLinkDialog : DialogFragment() {
@@ -50,9 +52,7 @@ class EditLinkDialog : DialogFragment() {
         @Inject lateinit var jsonSerializer: JsonSerializer
 
         fun newInstance(deepLinkToEdit: DeepLinkInfo? = null): EditLinkDialog {
-            // TODO using dagger here is balls
-            BaseApp.component.inject(this)
-            val args = Bundle().apply { if (deepLinkToEdit != null) putString(BUNDLE_DEEP_LINK, jsonSerializer.toJson(deepLinkToEdit)) }
+            val args = Bundle().apply { if (deepLinkToEdit != null) putString(BUNDLE_DEEP_LINK, BaseApp.component.json.toJson(deepLinkToEdit)) }
             return EditLinkDialog().apply { arguments = args }
         }
     }
@@ -75,11 +75,12 @@ class EditLinkDialog : DialogFragment() {
         viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())
         viewModel.queryParams
                 .forEach { param ->
-                    val (editQueryLayout, view) = createQueryParamRow(viewModel, param)
-                    editQueryLayout.addView(view)
+                    val view = createQueryParamRow(viewModel, param, binding.editQueryLayout)
+                    binding.editQueryLayout.addView(view)
                 }
 
-        val dialog = buildAlertDialog(viewModel, createDeepLinkRequest, deepLinkInfo?.id).create()
+        val dialog = buildAlertDialog(viewModel, deepLinkInfo?.id).create()
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).enabled = viewModel.getFullDeepLink().isUri()
         }
@@ -89,33 +90,31 @@ class EditLinkDialog : DialogFragment() {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).enabled = viewModel.getFullDeepLink().isUri()
             }
         })
-        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return dialog
     }
 
-    private fun createQueryParamRow(viewModel: EditLinkViewModel, param: EditLinkViewModel.QueryParamModel): Pair<LinearLayout, View> {
+    private fun createQueryParamRow(viewModel: EditLinkViewModel, param: EditLinkViewModel.QueryParamModel, layoutToAddTo: ViewGroup): View {
         val rowBinding = DataBindingUtil.inflate<EditQueryStringItemBinding>(
                 activity!!.layoutInflater, R.layout.edit_query_string_item, null, false)
         rowBinding.param = param
-        val editQueryLayout = binding.editQueryLayout
         val onFocusChangeListener = View.OnFocusChangeListener { view, focused ->
-            if (editQueryLayout.childCount > 0) {
-                val lastQueryLayout = editQueryLayout.getChildAt(editQueryLayout.childCount - 1)
+            if (layoutToAddTo.childCount > 0) {
+                val lastQueryLayout = layoutToAddTo.getChildAt(layoutToAddTo.childCount - 1)
 
                 // If the selected field is in the final row, add a query param and renew the querystring UI
                 if (lastQueryLayout.findViewById(R.id.edit_key) == view || lastQueryLayout.findViewById(R.id.edit_value) == view) {
                     val newQueryParam = viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())
-                    val (newEditQueryLayout, newView) = createQueryParamRow(viewModel, newQueryParam)
-                    editQueryLayout.addView(newView)
+                    val newView = createQueryParamRow(viewModel, newQueryParam, layoutToAddTo)
+                    layoutToAddTo.addView(newView)
                 }
             }
         }
         rowBinding.editKey.onFocusChangeListener = onFocusChangeListener
-        val view = rowBinding.root
-        return Pair(editQueryLayout, view)
+
+        return rowBinding.root
     }
 
-    private fun buildAlertDialog(viewModel: EditLinkViewModel, createDeepLinkRequest: CreateDeepLinkRequest, existingId: Long? = null): AlertDialog.Builder {
+    private fun buildAlertDialog(viewModel: EditLinkViewModel, existingId: Long? = null): AlertDialog.Builder {
         val builder = AlertDialog.Builder(activity)
                 .setView(binding.root)
                 .setPositiveButton(R.string.save, { dialog, which ->
