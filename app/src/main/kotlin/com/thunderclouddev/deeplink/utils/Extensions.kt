@@ -3,8 +3,8 @@ package com.thunderclouddev.deeplink.utils
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.net.Uri
 import android.view.View
+import com.thunderclouddev.deeplink.ui.Uri
 import java.net.URI
 
 
@@ -26,7 +26,7 @@ fun Intent?.hasAnyHandlingActivity(packageManager: PackageManager) =
         if (this == null) false else packageManager.queryIntentActivities(this, 0).isNotEmpty()
 
 fun Intent?.handlingActivities(packageManager: PackageManager): List<ResolveInfo> =
-        if (this == null) emptyList<ResolveInfo>() else packageManager.queryIntentActivities(this, 0)
+        if (this == null) emptyList<ResolveInfo>() else packageManager.queryIntentActivities(this, PackageManager.MATCH_DEFAULT_ONLY)
 
 val Any?.simpleClassName: String
     get() = this?.javaClass?.simpleName ?: String.empty

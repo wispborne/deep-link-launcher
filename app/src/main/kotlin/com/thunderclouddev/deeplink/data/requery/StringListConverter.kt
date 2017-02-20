@@ -11,7 +11,7 @@ import io.requery.Converter
  * @since 01.06.2016
  */
 class StringListConverter : Converter<MutableList<String>, String> {
-    private val SEPARATOR = "\u00007"
+    private val SEPARATOR = "\u007C"
 
     override fun getMappedType(): Class<MutableList<String>> {
         return (MutableList::class.java as Class<MutableList<String>>)
@@ -22,10 +22,10 @@ class StringListConverter : Converter<MutableList<String>, String> {
     override fun getPersistedSize() = null
 
     override fun convertToMapped(type: Class<out MutableList<String>>, value: String?)
-            = value?.split(SEPARATOR)?.toMutableList() ?: mutableListOf()
+            = value?.split(SEPARATOR)?.filter(String::isNotBlank)?.toMutableList() ?: mutableListOf()
 
     override fun convertToPersisted(list: MutableList<String>?): String {
-        return list?.fold(String.empty) { left, right -> left + SEPARATOR + right } ?: String.empty
+        return if (list != null && list.any()) list.reduce { left, right -> left + SEPARATOR + right } else String.empty
 
 //        if (list == null) {
 //            return ""

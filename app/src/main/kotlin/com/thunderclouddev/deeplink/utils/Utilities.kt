@@ -43,10 +43,13 @@ object Utilities {
     }
 
     fun createDeepLinkRequest(deepLink: Uri, packageManager: PackageManager): CreateDeepLinkRequest {
-        return CreateDeepLinkRequest(String.empty, null, System.currentTimeMillis(),
-                createDeepLinkIntent(deepLink)
-                        .handlingActivities(packageManager)
-                        .map { it.activityInfo.packageName ?: String.empty })
+        val deepLinkHandlers = createDeepLinkIntent(deepLink)
+                .handlingActivities(packageManager)
+                .sortedBy { it.isDefault }
+                .filter { it.activityInfo.packageName != null }
+
+        return CreateDeepLinkRequest(deepLink.toString(), deepLinkHandlers.firstOrNull()?.loadLabel(packageManager).toString(), System.currentTimeMillis(),
+                deepLinkHandlers.map { it.activityInfo.packageName })
     }
 
     fun raiseError(errorText: String, context: Context) {

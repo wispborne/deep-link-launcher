@@ -97,12 +97,13 @@ class HomeController : BaseController() {
 
     override fun onActivityStarted(activity: Activity) {
         super.onActivityStarted(activity)
-        attachDatabaseListener()
+        binding.progressWheel.visibility = View.VISIBLE
+        databaseListenerId = deepLinkHistory.addListener(databaseListener)
     }
 
     override fun onActivityStopped(activity: Activity) {
         super.onActivityStopped(activity)
-        removeDatabaseListener()
+        deepLinkHistory.removeListener(databaseListenerId)
     }
 
     override fun handleBack() =
@@ -270,15 +271,6 @@ class HomeController : BaseController() {
                 }
             }
         }
-    }
-
-    private fun attachDatabaseListener() {
-        binding.progressWheel.visibility = View.VISIBLE
-        databaseListenerId = deepLinkHistory.addListener(databaseListener)
-    }
-
-    private fun removeDatabaseListener() {
-        deepLinkHistory.removeListener(databaseListenerId)
     }
 
     private val databaseListener: DeepLinkDatabase.Listener
