@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -25,20 +25,18 @@
         <!--android:gravity="center_horizontal"-->
         <!--android:text="@{deepLink.deepLinkHandlers.get(0).packageName}"/>-->
 
-        <!--app:coloredUri="@{viewModel.deepLinkString}"-->
         <TextView
-            android:id="@+id/qrCode_uri"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            app:coloredUri="@{viewModel.deepLinkString}"/>
 
-        <!--app:qrCodeUri="@{viewModel.deepLinkString}"-->
         <ImageView
-            android:id="@+id/qrCode_qrCode"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/contentDesc_qrCode"
             android:scaleType="fitCenter"
+            app:qrCodeUri="@{viewModel.deepLinkString}"
             tools:src="@drawable/ic_sadface"/>
     </LinearLayout>
 </layout>

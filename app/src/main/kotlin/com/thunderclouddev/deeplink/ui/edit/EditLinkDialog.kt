@@ -88,7 +88,6 @@ class EditLinkDialog : DialogFragment() {
             override fun onPropertyChanged(obs: Observable?, property: Int) {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).enabled = viewModel.getFullDeepLink().isUri()
             }
-
         })
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return dialog

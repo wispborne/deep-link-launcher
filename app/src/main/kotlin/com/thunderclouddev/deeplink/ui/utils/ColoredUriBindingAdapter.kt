@@ -12,10 +12,7 @@ import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
  *
  * Created by David Whitman on 03 Feb, 2017.
  */
-//@BindingAdapter("coloredUri")
-//fun setText(textView: TextView, string: String) {
-//    textView.text = DeepLinkColorizer(textView.context).colorize(string)
-//}
-fun setColoredText(textView: TextView, string: String) {
+@BindingAdapter("coloredUri")
+fun setText(textView: TextView, string: String) {
     textView.text = DeepLinkColorizer(textView.context).colorize(string)
 }

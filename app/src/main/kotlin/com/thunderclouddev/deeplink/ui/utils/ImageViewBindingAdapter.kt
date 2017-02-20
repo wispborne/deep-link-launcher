@@ -9,7 +9,7 @@ import android.widget.ImageView
  *
  * Created by David Whitman on 02 Feb, 2017.
  */
-//@BindingAdapter("android:src")
-//fun setImageBitmap(imageView: ImageView, bitmap: Bitmap) {
-//    imageView.setImageBitmap(bitmap)
-//}
+@BindingAdapter("android:src")
+fun setImageBitmap(imageView: ImageView, bitmap: Bitmap) {
+    imageView.setImageBitmap(bitmap)
+}
