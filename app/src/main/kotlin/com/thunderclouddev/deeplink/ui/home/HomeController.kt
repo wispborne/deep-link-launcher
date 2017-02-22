@@ -3,7 +3,6 @@ package com.thunderclouddev.deeplink.ui.home
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -54,11 +53,11 @@ class HomeController : BaseController() {
 
     init {
         setHasOptionsMenu(true)
+        BaseApp.component.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         super.onCreateView(inflater, container)
-        BaseApp.component.inject(this)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.home_view, container, false)
         getActionBar().setTitle(R.string.title_activity_deep_link_history)
@@ -95,15 +94,15 @@ class HomeController : BaseController() {
         }
     }
 
-    override fun onActivityStarted(activity: Activity) {
-        super.onActivityStarted(activity)
+    override fun onAttach(view: View) {
+        super.onAttach(view)
         binding.progressWheel.visibility = View.VISIBLE
         databaseListenerId = deepLinkHistory.addListener(databaseListener)
     }
 
-    override fun onActivityStopped(activity: Activity) {
+    override fun onDetach(view: View) {
         deepLinkHistory.removeListener(databaseListenerId)
-        super.onActivityStopped(activity)
+        super.onDetach(view)
     }
 
     override fun handleBack() =

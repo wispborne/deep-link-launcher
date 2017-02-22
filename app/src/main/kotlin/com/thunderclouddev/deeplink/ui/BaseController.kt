@@ -1,6 +1,5 @@
 package com.thunderclouddev.deeplink.ui
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.view.LayoutInflater
@@ -14,8 +13,6 @@ import com.bluelinelabs.conductor.Controller
  * Created by David Whitman on 02 Dec, 2016.
  */
 abstract class BaseController(bundle: Bundle? = null) : Controller(bundle) {
-    private var isStopped = false
-
     // Note: This is just a quick demo of how an ActionBar *can* be accessed, not necessarily how it *should*
     // be accessed. In a production app, this would use Dagger instead.
     protected fun getActionBar(): ActionBar {
@@ -44,26 +41,6 @@ abstract class BaseController(bundle: Bundle? = null) : Controller(bundle) {
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onActivityStarted(activity: Activity) {
-        isStopped = false
-        super.onActivityStarted(activity)
-    }
-
-    override fun onActivityStopped(activity: Activity) {
-        isStopped = true
-        super.onActivityStopped(activity)
-    }
-
-    // Workaround for onActivityStopped not getting called when Controller is destroyed by way of Back press
-    override fun onDestroy() {
-        if (!isStopped && activity != null) {
-            isStopped = true
-            onActivityStopped(activity!!)
-        }
-
-        super.onDestroy()
     }
 
     protected fun setTitle() {
