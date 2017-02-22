@@ -12,7 +12,7 @@
     <string name="title_activity_deep_link_history">@string/main_app_name</string>
     <string name="error_title">Error</string>
 
-    <string name="deep_link_search_hint">Enter your deep link…</string>
+    <string name="deep_link_search_hint">Search, paste, or type here</string>
     <string name="menu_web_title">Fire from web</string>
     <string name="menu_rate_title">Rate</string>
     <string name="menu_share_title">Share</string>
