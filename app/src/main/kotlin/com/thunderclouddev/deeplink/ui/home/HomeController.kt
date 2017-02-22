@@ -102,8 +102,8 @@ class HomeController : BaseController() {
     }
 
     override fun onActivityStopped(activity: Activity) {
-        super.onActivityStopped(activity)
         deepLinkHistory.removeListener(databaseListenerId)
+        super.onActivityStopped(activity)
     }
 
     override fun handleBack() =
