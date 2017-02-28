@@ -33,8 +33,12 @@ class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable(),
             notifyPropertyChanged(BR.fullDeepLink)
 
             if (getFullDeepLink().isUri()) {
-                handlingApps.clear()
-                handlingApps.addAll(handlingAppsForUriFactory.build(getFullDeepLink().asUri()!!, defaultOnly = true))
+                val newApps = handlingAppsForUriFactory.build(getFullDeepLink().asUri()!!, defaultOnly = true)
+
+                // Remove apps no longer in list. Can't use removeAll because it's not part of ObservableArrayList, doesn't notify
+                handlingApps.minus(newApps).forEach { handlingApps.remove(it) }
+                // Then add new apps that aren't already in the list
+                handlingApps.addAll(newApps.minus(handlingApps))
             }
         }
     }

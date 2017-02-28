@@ -16,23 +16,24 @@ import org.jetbrains.anko.layoutInflater
 class HandlingAppsAdapter(private val context: Context, val items: ObservableArrayList<AppViewModel>) : BaseRecyclerViewAdapter<HandlingAppsAdapter.ViewHolder>() {
     init {
         items.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<AppViewModel>>() {
-            override fun onItemRangeInserted(p0: ObservableArrayList<AppViewModel>?, p1: Int, p2: Int) {
+            override fun onItemRangeInserted(sender: ObservableArrayList<AppViewModel>?, positionStart: Int, itemCount: Int) {
+                notifyItemRangeInserted(positionStart, itemCount)
+            }
+
+            override fun onChanged(sender: ObservableArrayList<AppViewModel>?) {
                 notifyDataSetChanged()
             }
 
-            override fun onChanged(p0: ObservableArrayList<AppViewModel>?) {
-                notifyDataSetChanged()
+            override fun onItemRangeRemoved(sender: ObservableArrayList<AppViewModel>?, positionStart: Int, itemCount: Int) {
+                notifyItemRangeRemoved(positionStart, itemCount)
             }
 
-            override fun onItemRangeRemoved(p0: ObservableArrayList<AppViewModel>?, p1: Int, p2: Int) {
-                notifyDataSetChanged()
+            override fun onItemRangeMoved(sender: ObservableArrayList<AppViewModel>?, fromPosition: Int, toPosition: Int, itemCount: Int) {
+                notifyItemMoved(fromPosition, itemCount)
             }
 
-            override fun onItemRangeMoved(p0: ObservableArrayList<AppViewModel>?, p1: Int, p2: Int, p3: Int) {
-                notifyDataSetChanged()
-            }
-
-            override fun onItemRangeChanged(p0: ObservableArrayList<AppViewModel>?, p1: Int, p2: Int) {
+            override fun onItemRangeChanged(sender: ObservableArrayList<AppViewModel>?, positionStart: Int, itemCount: Int) {
+                notifyItemRangeChanged(positionStart, itemCount)
             }
 
         })
