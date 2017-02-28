@@ -2,6 +2,8 @@ package com.thunderclouddev.deeplink.dagger
 
 import com.thunderclouddev.deeplink.ui.JsonSerializer
 import com.thunderclouddev.deeplink.ui.edit.EditLinkDialog
+import com.thunderclouddev.deeplink.ui.edit.EditLinkViewModel
+import com.thunderclouddev.deeplink.ui.edit.HandlingAppsForUriFactory
 import com.thunderclouddev.deeplink.ui.home.HomeController
 import com.thunderclouddev.deeplink.ui.scanner.QrScannerController
 import dagger.Component
@@ -19,4 +21,6 @@ interface AppComponent {
     fun inject(homeController: QrScannerController)
     fun inject(editLinkDialog: EditLinkDialog)
     fun inject(creator: EditLinkDialog.Creator)
+    fun inject(handlingAppsForUriFactory: HandlingAppsForUriFactory)
+    fun inject(editLinkViewModel: EditLinkViewModel)
 }

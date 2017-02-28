@@ -75,3 +75,7 @@ fun String?.isUri(): Boolean {
 }
 
 fun String?.asUri(): Uri? = Uri.parse(this)
+
+fun <T> Iterable<T>.firstOr(defaultItem: T): T {
+    return this.firstOrNull() ?: defaultItem
+}

@@ -1,0 +1,15 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.thunderclouddev.deeplink.ui.edit.AppViewModel"/>
+    </data>
+
+    <ImageView
+        android:layout_width="@dimen/spacingLarge"
+        android:layout_height="@dimen/spacingLarge"
+        android:contentDescription="@{model.appName}"
+        android:src="@{model.icon}"/>
+</layout>

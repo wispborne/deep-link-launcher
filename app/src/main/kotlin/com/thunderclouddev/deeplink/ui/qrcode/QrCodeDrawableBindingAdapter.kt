@@ -1,4 +1,4 @@
-package com.thunderclouddev.deeplink.ui.utils
+package com.thunderclouddev.deeplink.ui.qrcode
 
 import android.databinding.BindingAdapter
 import android.widget.ImageView

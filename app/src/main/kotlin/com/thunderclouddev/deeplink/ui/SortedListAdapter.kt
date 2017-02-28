@@ -1,19 +1,16 @@
 package com.thunderclouddev.deeplink.ui
 
-import android.databinding.ViewDataBinding
 import android.support.v7.util.SortedList
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.thunderclouddev.deeplink.ui.SafeSortedList
 import java.util.*
 
 /**
  * https://github.com/Wrdlbrnft/SortedListAdapter
  * v0.2.0.1
  */
-abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(itemClass: Class<T>, private val mComparator: Comparator<T>)
-    : BaseRecyclerViewAdapter<SortedListAdapter.ViewHolder<out T>>() {
+abstract class SortedListAdapter<T : BaseRecyclerViewAdapter.ViewModel>(itemClass: Class<T>, private val mComparator: Comparator<T>)
+    : BaseRecyclerViewAdapter<BaseRecyclerViewAdapter.ViewHolder<out T>>() {
     interface Editor<T : ViewModel> {
         fun add(item: T): Editor<T>
         fun add(items: List<T>): Editor<T>
@@ -208,19 +205,4 @@ abstract class SortedListAdapter<T : SortedListAdapter.ViewModel>(itemClass: Cla
             mActions.clear()
         }
     }
-
-    abstract class ViewHolder<T : ViewModel>(itemView: ViewDataBinding) : RecyclerView.ViewHolder(itemView.root) {
-
-        var currentItem: T? = null
-            private set
-
-        fun bind(item: T) {
-            currentItem = item
-            performBind(item)
-        }
-
-        protected abstract fun performBind(item: T)
-    }
-
-    interface ViewModel
 }

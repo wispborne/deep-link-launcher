@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="info"
+            name="viewModel"
             type="com.thunderclouddev.deeplink.ui.edit.EditLinkViewModel"/>
     </data>
 
@@ -16,7 +16,7 @@
             android:id="@+id/edit_scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/editDialog_preview_label">
+            android:layout_above="@+id/editDialog_preview_layout">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/label"
                     android:inputType="textPersonName"
-                    android:text="@={info.label}"/>
+                    android:text="@={viewModel.label}"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                         android:inputType="textUri"
                         android:maxWidth="@dimen/edit_deepLink_schemeWidth"
                         android:minWidth="@dimen/spacingHuge"
-                        android:text="@={info.scheme}"/>
+                        android:text="@={viewModel.scheme}"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                         android:layout_weight="1"
                         android:hint="@string/editDialog_authorityHint"
                         android:inputType="textUri"
-                        android:text="@={info.authority}"/>
+                        android:text="@={viewModel.authority}"/>
                 </LinearLayout>
 
                 <TextView
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/editDialog_pathHint"
                     android:inputType="textUri"
-                    android:text="@={info.path}"/>
+                    android:text="@={viewModel.path}"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -130,22 +130,36 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/editDialog_fragmentHint"
                         android:inputType="textUri"
-                        android:text="@={info.fragment}"/>
+                        android:text="@={viewModel.fragment}"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
-        <TextView
-            android:id="@+id/editDialog_preview_label"
+        <FrameLayout
+            android:id="@+id/editDialog_preview_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/editDialog_preview"
             android:layout_marginEnd="@dimen/spacingMedium"
             android:layout_marginStart="@dimen/spacingMedium"
             android:layout_marginTop="@dimen/spacingSmall"
-            android:labelFor="@+id/editDialog_preview"
-            android:text="@string/editDialog_preview_label"
-            android:textStyle="bold"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/editDialog_preview_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:labelFor="@+id/editDialog_preview"
+                android:text="@string/editDialog_preview_label"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/editDialog_handlingAppsRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/editDialog_preview"
@@ -154,6 +168,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="@dimen/spacingMedium"
             android:layout_marginStart="@dimen/spacingMedium"
-            android:text="@{info.fullDeepLink}"/>
+            android:text="@{viewModel.fullDeepLink}"/>
     </RelativeLayout>
 </layout>

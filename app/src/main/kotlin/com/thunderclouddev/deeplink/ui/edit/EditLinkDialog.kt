@@ -7,6 +7,8 @@ import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.databinding.ObservableField
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -69,7 +71,10 @@ class EditLinkDialog : DialogFragment() {
         dialogType = if (arguments.containsKey(BUNDLE_DEEP_LINK)) DialogType.EDIT else DialogType.ADD
 
         val viewModel = EditLinkViewModel(createDeepLinkRequest)
-        binding.info = viewModel
+        viewModel.onCreate()
+        binding.viewModel = viewModel
+        binding.editDialogHandlingAppsRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        binding.editDialogHandlingAppsRecyclerView.adapter = HandlingAppsAdapter(activity, viewModel.handlingApps)
 
         // Extra blank param pair so user may add new param
         viewModel.addQueryParam(ObservableField<String>(), ObservableField<String>())

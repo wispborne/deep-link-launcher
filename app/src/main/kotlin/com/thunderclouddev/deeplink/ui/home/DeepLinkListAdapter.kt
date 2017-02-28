@@ -13,8 +13,11 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import com.thunderclouddev.deeplink.R
 import com.thunderclouddev.deeplink.databinding.DeeplinkItemBinding
+import com.thunderclouddev.deeplink.ui.BaseRecyclerViewAdapter
 import com.thunderclouddev.deeplink.ui.DeepLinkColorizer
 import com.thunderclouddev.deeplink.ui.SortedListAdapter
+import com.thunderclouddev.deeplink.utils.empty
+import com.thunderclouddev.deeplink.utils.firstOr
 import com.thunderclouddev.deeplink.utils.getOrNullIfBlank
 import com.thunderclouddev.deeplink.utils.showing
 import org.jetbrains.anko.AnkoContext
@@ -61,7 +64,7 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
     }
 
     inner class ViewHolder(val binding: DeeplinkItemBinding) :
-            SortedListAdapter.ViewHolder<DeepLinkViewModel>(binding) {
+            BaseRecyclerViewAdapter.ViewHolder<DeepLinkViewModel>(binding) {
 
         override fun performBind(item: DeepLinkViewModel) {
             val deepLinkInfo = item.deepLinkInfo
@@ -74,14 +77,16 @@ class DeepLinkListAdapter(context: Context, comparator: Comparator<DeepLinkViewM
                 deepLink
             }
 
-            binding.deepLinkItemTitle.text = deepLinkInfo.label.getOrNullIfBlank() ?: deepLinkInfo.deepLinkHandlers[0]
+            binding.deepLinkItemTitle.text = deepLinkInfo.label.getOrNullIfBlank() ?: deepLinkInfo.deepLinkHandlers.firstOr(String.empty)
             binding.deepLinkItemSubTitle.text = deepLinkString
             binding.deepLinkItemContextMenu.showing = item.showingContextMenu
 
             // Set icon
             try {
-                val icon = binding.root.context.packageManager.getApplicationIcon(deepLinkInfo.deepLinkHandlers[0])
-                binding.deepLinkItemIcon.setImageDrawable(icon)
+                if (deepLinkInfo.deepLinkHandlers.isNotEmpty()) {
+                    val icon = binding.root.context.packageManager.getApplicationIcon(deepLinkInfo.deepLinkHandlers[0])
+                    binding.deepLinkItemIcon.setImageDrawable(icon)
+                }
             } catch (exception: PackageManager.NameNotFoundException) {
                 binding.deepLinkItemIcon.setImageDrawable(defaultAppIcon)
             }
