@@ -7,8 +7,7 @@ notifications:  #Optional
         - whitmadm@gmail.com #Add your email address
 
 env:
-  - ANDROID_TARGET=android-25
-  - BUILD_TOOLS=25.0.0
+  - ANDROID_TARGET=android-25 BUILD_TOOLS=25.0.0
 
 android:
     components:
