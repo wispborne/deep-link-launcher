@@ -34,6 +34,9 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
+before_script:
+  - cp -r "circle-ci/licenses/" "/usr/local/android-sdk-linux/"
+
 script:
   - ./gradlew testDebugUnitTest
   - ./gradlew assembleDebug
