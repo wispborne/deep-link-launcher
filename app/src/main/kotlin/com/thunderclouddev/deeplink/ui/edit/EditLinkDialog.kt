@@ -38,7 +38,8 @@ import javax.inject.Inject
  */
 class EditLinkDialog : DialogFragment() {
     @Inject lateinit var jsonSerializer: JsonSerializer
-    @Inject lateinit var deepLinkHistory: DeepLinkHistory
+    @Inject lateinit var deepLinkHistory: DeepLinkHistory // TODO move this to viewmodel
+    @Inject lateinit var viewModelFactory: EditLinkViewModel.Factory
 
     private lateinit var binding: EditViewBinding
     private lateinit var dialogType: DialogType
@@ -69,7 +70,7 @@ class EditLinkDialog : DialogFragment() {
                 ?: CreateDeepLinkRequest(String.empty, String.empty, Date().time, emptyList())
         dialogType = if (arguments.containsKey(BUNDLE_DEEP_LINK)) DialogType.EDIT else DialogType.ADD
 
-        val viewModel = EditLinkViewModel(createDeepLinkRequest)
+        val viewModel = viewModelFactory.build(createDeepLinkRequest)
         viewModel.onCreate()
         binding.viewModel = viewModel
         binding.editDialogHandlingAppsRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)

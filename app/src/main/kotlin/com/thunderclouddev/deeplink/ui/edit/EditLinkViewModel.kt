@@ -2,7 +2,6 @@ package com.thunderclouddev.deeplink.ui.edit
 
 import android.databinding.*
 import com.thunderclouddev.deeplink.BR
-import com.thunderclouddev.deeplink.BaseApp
 import com.thunderclouddev.deeplink.data.CreateDeepLinkRequest
 import com.thunderclouddev.deeplink.ui.Uri
 import com.thunderclouddev.deeplink.ui.ViewModel
@@ -15,18 +14,16 @@ import javax.inject.Inject
 /**
  * @author David Whitman on 2/5/2017.
  */
-class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable(), ViewModel {
+class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest, handlingAppsForUriFactory: HandlingAppsForUriFactory) : BaseObservable(), ViewModel {
     private val uri = deepLinkInfo.deepLink.asUri()!!
 
-    @Bindable var path = ObservableField((uri.path ?: String.empty).removePrefix("/"))
-    @Bindable var scheme = ObservableField(uri.scheme)
-    @Bindable var authority = ObservableField(uri.authority)
-    @Bindable var label = ObservableField(deepLinkInfo.label)
-    @Bindable var queryParams = mutableListOf<QueryParamModel>()
-    @Bindable var fragment = ObservableField(uri.fragment)
+    @Bindable val label = ObservableField(deepLinkInfo.label)
+    @Bindable val scheme = ObservableField(uri.scheme)
+    @Bindable val authority = ObservableField(uri.authority)
+    @Bindable val path = ObservableField((uri.path ?: String.empty).removePrefix("/"))
+    @Bindable val queryParams = createDefaultQueryParams()
+    @Bindable val fragment = ObservableField(uri.fragment)
     val handlingApps = ObservableArrayList<AppViewModel>()
-
-    @Inject lateinit var handlingAppsForUriFactory: HandlingAppsForUriFactory
 
     private val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -55,18 +52,6 @@ class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable(),
             .toString())
 
     override fun onCreate() {
-        BaseApp.component.inject(this)
-
-        queryParams =
-                (if (uri.query.isNotNullOrBlank())
-                    uri.queryParameterNames.map {
-                        QueryParamModel(
-                                ObservableField(it),
-                                ObservableField(uri.getQueryParameter(it)),
-                                fullDeepLinkNotifierCallback)
-                    }
-                else emptyList<QueryParamModel>()).toMutableList()
-
         notifyPropertyChanged(BR.fullDeepLink)
 
         scheme.addOnPropertyChangedCallback(fullDeepLinkNotifierCallback)
@@ -80,6 +65,21 @@ class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest) : BaseObservable(),
         val queryParamModel = QueryParamModel(key, value, fullDeepLinkNotifierCallback)
         queryParams.add(queryParamModel)
         return queryParamModel
+    }
+
+    private fun createDefaultQueryParams(): MutableList<QueryParamModel> {
+        return (if (uri.query.isNotNullOrBlank())
+            uri.queryParameterNames.map {
+                QueryParamModel(
+                        ObservableField(it),
+                        ObservableField(uri.getQueryParameter(it)),
+                        fullDeepLinkNotifierCallback)
+            }
+        else emptyList<QueryParamModel>()).toMutableList()
+    }
+
+    class Factory @Inject constructor(val handlingAppsForUriFactory: HandlingAppsForUriFactory) {
+        fun build(deepLinkInfo: CreateDeepLinkRequest) = EditLinkViewModel(deepLinkInfo, handlingAppsForUriFactory)
     }
 
     class QueryParamModel(@Bindable var key: ObservableField<String>,
