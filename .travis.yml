@@ -11,8 +11,6 @@ env:
 
 android:
     components:
-        - platform-tools
-        - tools
         - build-tools-$BUILD_TOOLS    #Build tool version
         - android-$ANDROID_TARGET            #target api version
 
@@ -20,6 +18,11 @@ android:
         # - extra-google-google_play_services
         # - extra-google-m2repository
         # - extra-android-m2repository
+
+licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
         
 before_cache:
     - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
