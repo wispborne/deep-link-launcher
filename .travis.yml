@@ -13,9 +13,9 @@ android:
     components:
         - build-tools-$BUILD_TOOLS    #Build tool version
         - android-$ANDROID_TARGET            #target api version
+        - extra-google-google_play_services
 
         # Additional components
-        # - extra-google-google_play_services
         # - extra-google-m2repository
         # - extra-android-m2repository
 
