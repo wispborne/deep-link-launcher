@@ -5,13 +5,15 @@ buildscript {
     }
     dependencies {
         classpath 'io.fabric.tools:gradle:1.22.0'
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'jacoco-android'
 
 repositories {
     jcenter()
@@ -81,19 +83,22 @@ android {
             shrinkResources false
             signingConfig signingConfigs.debug
             applicationIdSuffix '.debug'
+            testCoverageEnabled true
         }
         release {
             minifyEnabled true
             shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            testCoverageEnabled false
         }
-        releasePlayStore {
-            minifyEnabled true
-            shrinkResources true
-            signingConfig signingConfigs.releasePlayStore
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+//        releasePlayStore {
+//            minifyEnabled true
+//            shrinkResources true
+//            signingConfig signingConfigs.releasePlayStore
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            testCoverageEnabled false
+//        }
     }
     dexOptions {
         maxProcessCount 4
@@ -143,10 +148,10 @@ dependencies {
     compile "io.requery:requery-kotlin:$requeryVersion"
     kapt "io.requery:requery-processor:$requeryVersion"
 
-    releasePlayStoreCompile 'com.google.firebase:firebase-database:9.0.2'
-    releasePlayStoreCompile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
-    }
+//    releasePlayStoreCompile 'com.google.firebase:firebase-database:9.0.2'
+//    releasePlayStoreCompile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+//        transitive = true;
+//    }
 
     debugCompile 'com.facebook.stetho:stetho:1.4.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
