@@ -13,11 +13,12 @@ android:
     components:
         - build-tools-$BUILD_TOOLS    #Build tool version
         - android-$ANDROID_TARGET            #target api version
-        - extra-google-google_play_services
+        - extra
+        - add-on
+        #- extra-google-google_play_services
+        #- extra-google-m2repository
+        #- extra-android-m2repository
 
-        # Additional components
-        # - extra-google-m2repository
-        # - extra-android-m2repository
 
 licenses:
     - 'android-sdk-preview-license-52d11cd2'
