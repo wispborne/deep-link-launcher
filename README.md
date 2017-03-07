@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/davidwhitman/deep-link-launcher/tree/master.svg?style=shield)](https://circleci.com/gh/davidwhitman/deep-link-launcher/tree/master)
+[![codecov](https://codecov.io/gh/davidwhitman/deep-link-launcher/branch/master/graph/badge.svg)](https://codecov.io/gh/davidwhitman/deep-link-launcher)
 
 # Deep Link Launcher
 
