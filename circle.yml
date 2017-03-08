@@ -18,11 +18,8 @@ test:
     # Build debug apk.
     # Copy apk file to CircleCI artifacts dir
 
-    - case $CIRCLE_NODE_INDEX in 1) ./gradlew testDebugUnitTest ;; 0) ./gradlew assembleDebug ;; esac:
+    - case $CIRCLE_NODE_INDEX in 1) ./gradlew jacocoTestDebugUnitTestReport ;; 0) ./gradlew assembleDebug ;; esac:
         parallel: true
 
-    - case $CIRCLE_NODE_INDEX in 1) cp -r app/build/test-results/testDebugUnitTest/* $CIRCLE_TEST_REPORTS ;; 0)cp -r app/build/outputs $CIRCLE_ARTIFACTS ;; esac:
+    - case $CIRCLE_NODE_INDEX in 1) cp -r app/build/test-results/testDebugUnitTest/* $CIRCLE_TEST_REPORTS && bash <(curl -s https://codecov.io/bash) ;; 0)cp -r app/build/outputs $CIRCLE_ARTIFACTS ;; esac:
         parallel: true
-  
-  post:
-    - bash <(curl -s https://codecov.io/bash)
