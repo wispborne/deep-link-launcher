@@ -17,6 +17,23 @@ import javax.inject.Inject
 class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest, handlingAppsForUriFactory: HandlingAppsForUriFactory) : BaseObservable(), ViewModel {
     private val uri = deepLinkInfo.deepLink.asUri()!!
 
+    private val fullDeepLinkNotifierCallback: Observable.OnPropertyChangedCallback by lazy {
+        object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                notifyPropertyChanged(BR.fullDeepLink)
+
+                if (getFullDeepLink().isUri()) {
+                    val newApps = handlingAppsForUriFactory.build(getFullDeepLink().asUri()!!, defaultOnly = true)
+
+                    // Remove apps no longer in list. Can't use removeAll because it's not part of ObservableArrayList, doesn't notify
+                    handlingApps.minus(newApps).forEach { handlingApps.remove(it) }
+                    // Then add new apps that aren't already in the list
+                    handlingApps.addAll(newApps.minus(handlingApps))
+                }
+            }
+        }
+    }
+
     @Bindable val label = ObservableField(deepLinkInfo.label)
     @Bindable val scheme = ObservableField(uri.scheme)
     @Bindable val authority = ObservableField(uri.authority)
@@ -25,20 +42,6 @@ class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest, handlingAppsForUriF
     @Bindable val fragment = ObservableField(uri.fragment)
     val handlingApps = ObservableArrayList<AppViewModel>()
 
-    private val fullDeepLinkNotifierCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            notifyPropertyChanged(BR.fullDeepLink)
-
-            if (getFullDeepLink().isUri()) {
-                val newApps = handlingAppsForUriFactory.build(getFullDeepLink().asUri()!!, defaultOnly = true)
-
-                // Remove apps no longer in list. Can't use removeAll because it's not part of ObservableArrayList, doesn't notify
-                handlingApps.minus(newApps).forEach { handlingApps.remove(it) }
-                // Then add new apps that aren't already in the list
-                handlingApps.addAll(newApps.minus(handlingApps))
-            }
-        }
-    }
 
     @Bindable fun getFullDeepLink(): String = Uri.decode(Uri.Builder()
             .scheme(scheme.get())

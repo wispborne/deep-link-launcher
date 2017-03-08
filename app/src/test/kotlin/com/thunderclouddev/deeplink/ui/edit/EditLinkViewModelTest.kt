@@ -40,6 +40,20 @@ class EditLinkViewModelTest {
         viewModel = EditLinkViewModel(createDeepLinkRequest, handlingAppsForUriFactory)
     }
 
+    @Test fun `Has default query params`() {
+        val key1 = "key1"
+        val value1 = "value1"
+        val viewModelWithParams = EditLinkViewModel(CreateDeepLinkRequest(
+                deepLink = "http://google.com?$key1=$value1",
+                label = "Google",
+                updatedTime = 23423423,
+                deepLinkHandlers = listOf("com.chrome")
+        ), handlingAppsForUriFactory)
+
+        Assert.assertEquals(key1, viewModelWithParams.queryParams[0].key.get())
+        Assert.assertEquals(value1, viewModelWithParams.queryParams[0].value.get())
+    }
+
     @Test fun `OnCreate updates preview`() {
         val onPropertyChangedCallback = mock(Observable.OnPropertyChangedCallback::class.java)
         viewModel.addOnPropertyChangedCallback(onPropertyChangedCallback)
