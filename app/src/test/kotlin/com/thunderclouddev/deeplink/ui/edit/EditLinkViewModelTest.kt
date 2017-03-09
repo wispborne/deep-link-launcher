@@ -18,9 +18,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
-/**
- * Created by David Whitman on 01 Mar, 2017.
- */
 @RunWith(MockitoJUnitRunner::class)
 class EditLinkViewModelTest {
     @Mock lateinit var handlingAppsForUriFactory: HandlingAppsForUriFactory
@@ -37,7 +34,7 @@ class EditLinkViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = EditLinkViewModel(createDeepLinkRequest, handlingAppsForUriFactory)
+        viewModel = EditLinkViewModel.Factory(handlingAppsForUriFactory).build(createDeepLinkRequest)
     }
 
     @Test fun `Has default query params`() {
@@ -87,6 +84,13 @@ class EditLinkViewModelTest {
         viewModel.addQueryParam(ObservableField<String>("key2"), ObservableField<String>("value2"))
 
         Assert.assertEquals("http://google.com?key1=value1&key2=value2", viewModel.getFullDeepLink())
+    }
+
+    @Test fun `Empty query param key is shown as blank`() {
+        viewModel.addQueryParam(ObservableField<String>(null), ObservableField<String>("value1"))
+        viewModel.addQueryParam(ObservableField<String>(""), ObservableField<String>("value2"))
+
+        Assert.assertEquals("http://google.com", viewModel.getFullDeepLink())
     }
 
     @Test fun `Fragment change updates preview`() {

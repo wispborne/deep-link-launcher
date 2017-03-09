@@ -12,6 +12,7 @@ import com.thunderclouddev.deeplink.utils.isUri
 import javax.inject.Inject
 
 /**
+ * Represents an editable Uri on screen. May be observed and will notify when a part changes.
  * @author David Whitman on 2/5/2017.
  */
 class EditLinkViewModel(deepLinkInfo: CreateDeepLinkRequest, handlingAppsForUriFactory: HandlingAppsForUriFactory) : BaseObservable(), ViewModel {
