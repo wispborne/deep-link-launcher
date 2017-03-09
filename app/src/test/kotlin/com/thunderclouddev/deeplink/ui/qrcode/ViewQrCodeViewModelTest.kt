@@ -30,7 +30,7 @@ class ViewQrCodeViewModelTest {
     fun `Invalid uri doesn't set deep link string`() {
         val viewModel = ViewQrCodeViewModel(DeepLinkInfo(0, "invalidUri", null, 0, listOf()))
 
-  gitk      viewModel.onCreate()
+        viewModel.onCreate()
 
         Assert.assertNull(viewModel.deepLinkString.get())
     }
