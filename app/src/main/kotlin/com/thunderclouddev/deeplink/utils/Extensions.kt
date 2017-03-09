@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.view.View
 import com.thunderclouddev.deeplink.ui.Uri
-import java.net.URI
 
 
 fun Throwable.hasCause(type: Class<*>): Boolean {
@@ -65,8 +64,8 @@ var View.showing: Boolean
 fun String?.isUri(): Boolean {
     if (this != null) {
         try {
-            URI.create(this)
-            return true
+            val uri = Uri.parse(this)
+            return uri.scheme.isNotNullOrBlank() && uri.authority.isNotNullOrBlank()
         } catch (ignored: IllegalArgumentException) {
         }
     }
