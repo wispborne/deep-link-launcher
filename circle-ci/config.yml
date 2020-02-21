@@ -1,0 +1,36 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-25-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - run: ./gradlew assembleDebug
+
+# dependencies:
+#   pre:
+#     - cp -r "circle-ci/licenses/" "/usr/local/android-sdk-linux/"
+#   cache_directories:
+#     - ~/.android
+
+# test:
+#   override:
+#     # Runner 1
+#     # Run unit tests
+#     # Copy the test results to the test results dir
+
+#     # Runner 2
+#     # Build debug apk.
+#     # Copy apk file to CircleCI artifacts dir
+
+#     - case $CIRCLE_NODE_INDEX in 1) ./gradlew jacocoTestDebugUnitTestReport ;; 0) ./gradlew assembleDebug ;; esac:
+#         parallel: true
+
+#     - case $CIRCLE_NODE_INDEX in 1) cp -r app/build/test-results/testDebugUnitTest/* $CIRCLE_TEST_REPORTS && bash <(curl -s https://codecov.io/bash) ;; 0)cp -r app/build/outputs $CIRCLE_ARTIFACTS ;; esac:
+#         parallel: true
